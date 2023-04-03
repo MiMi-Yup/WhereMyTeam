@@ -2,15 +2,16 @@ import 'package:configuration/l10n/l10n.dart';
 import 'package:configuration/route/route_define.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:where_my_team/presentation/home_page/home_page_route.dart';
 import 'package:get/get.dart';
 import 'package:where_my_team/manifest.dart';
+import 'package:where_my_team/presentation/start_page/start_page_route.dart';
 
 final GlobalKey<ScaffoldMessengerState> rootScaffoldMessengerKey =
     GlobalKey<ScaffoldMessengerState>();
 
 class MainApplication extends StatefulWidget {
-  const MainApplication({Key? key}) : super(key: key);
+  final Type startRoute;
+  const MainApplication({Key? key, required this.startRoute}) : super(key: key);
   @override
   _MainApplicationState createState() => _MainApplicationState();
 }
@@ -18,8 +19,6 @@ class MainApplication extends StatefulWidget {
 class _MainApplicationState extends State<MainApplication>
     with WidgetsBindingObserver {
   bool canPopDialog = false;
-
-  final route = routerIds[HomePageRoute];
 
   @override
   void initState() {
@@ -68,7 +67,7 @@ class _MainApplicationState extends State<MainApplication>
       debugShowCheckedModeBanner: false,
       locale: Get.deviceLocale,
       fallbackLocale: const Locale('en'),
-      initialRoute: route,
+      initialRoute: routerIds[widget.startRoute],
       onGenerateRoute: (settings) =>
           manifest(
             generateRoutes,

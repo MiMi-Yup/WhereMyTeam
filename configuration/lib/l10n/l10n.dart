@@ -156,6 +156,7 @@ class AppLocalizationDelegate extends LocalizationsDelegate<MultiLanguage> {
 
   List<Locale> get supportedLocales {
     return const <Locale>[
+      Locale.fromSubtags(languageCode: 'vn'),
       Locale.fromSubtags(languageCode: 'en'),
     ];
   }

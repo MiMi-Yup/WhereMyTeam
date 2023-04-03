@@ -2,10 +2,7 @@ import 'dart:async';
 
 import 'package:injectable/injectable.dart';
 import 'package:location/location.dart';
-import 'package:where_my_team/domain/repositories/gps_repository.dart';
-import 'package:where_my_team/domain/repositories/location_repository.dart';
-import 'package:where_my_team/models/location_model.dart';
-import 'package:where_my_team/models/request/get_location_request.dart';
+import 'package:where_my_team/domain/repositories/unit_of_work.dart';
 
 // @injectable
 // class HomepageUseCases {
@@ -24,21 +21,26 @@ import 'package:where_my_team/models/request/get_location_request.dart';
 
 @injectable
 class HomepageUseCases {
-  final GPSRepository gpsRepo;
+  final UnitOfWork unitOfWork;
 
-  HomepageUseCases({required this.gpsRepo});
+  HomepageUseCases({required this.unitOfWork});
 
   FutureOr<LocationData?> getCurrentLocation() async {
-    LocationData? data = await gpsRepo.getCurrentLocation();
+    LocationData? data = await unitOfWork.gps.getCurrentLocation();
     return data;
   }
 
   Future<Stream<LocationData>?> getStreamLocation() async {
-    Stream<LocationData>? data = await gpsRepo.getStream();
+    Stream<LocationData>? data = await unitOfWork.gps.getStream();
     return data;
   }
 
-  Future checkPermission() async {
-    gpsRepo.checkPermission();
+  Future<bool> checkAndAskPermission() async {
+    bool? allow = await unitOfWork.gps.checkPermission();
+    return allow ?? false;
+  }
+
+  Future getLocation() async {
+    // unitOfWork.Location.getLocation(null);
   }
 }

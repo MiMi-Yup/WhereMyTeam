@@ -29,8 +29,9 @@ class HomePageCubit extends Cubit<HomePageState> {
     // }
   }
 
-  FutureOr<void> checkPermission() async {
-    homepageUseCases.checkPermission();
+  FutureOr<bool> checkPermission() {
+    // homepageUseCases.getLocation();
+    return homepageUseCases.checkAndAskPermission();
     // try {
     //   final res = await homepageUseCases.getSetting(param);
     //   emit(GetSettingSuccess(res?.test ?? ''));

@@ -6,8 +6,8 @@ import 'package:where_my_team/data/data_source/remote/api_service.dart';
 import 'package:where_my_team/domain/repositories/gps_repository.dart';
 import 'package:where_my_team/domain/repositories/location_repository.dart';
 import 'package:where_my_team/models/location_model.dart';
-import 'package:where_my_team/models/request/get_location_request.dart';
-import 'package:where_my_team/models/response/get_location_response.dart';
+import 'package:where_my_team/models/request/get_user_request.dart';
+import 'package:where_my_team/models/response/get_user_response.dart';
 
 @Injectable(as: GPSRepository)
 class GPSRepositoryImpl implements GPSRepository {

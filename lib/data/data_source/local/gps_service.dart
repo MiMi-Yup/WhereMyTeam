@@ -5,10 +5,6 @@ import 'package:location/location.dart';
 class GPSService {
   final Location _gpsService = Location();
 
-  GPSService() {
-    // _gpsService.changeSettings(interval: 10000, distanceFilter: 10);
-  }
-
   Future<bool> checkPermission() async {
     PermissionStatus _permissionGranted = await _gpsService.hasPermission();
     if (_permissionGranted == PermissionStatus.denied) {
@@ -17,6 +13,7 @@ class GPSService {
         return false;
       }
     }
+    _gpsService.changeSettings(interval: 10000, distanceFilter: 10);
     return true;
   }
 

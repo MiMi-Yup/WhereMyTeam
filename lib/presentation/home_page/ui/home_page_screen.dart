@@ -6,6 +6,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:searchable_paginated_dropdown/searchable_paginated_dropdown.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
+import 'package:where_my_team/utils/extensions/context_extension.dart';
 import '../cubit/home_page_cubit.dart';
 
 class HomePageScreen extends StatefulWidget {
@@ -19,11 +20,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
   final Completer<GoogleMapController> _controller =
       Completer<GoogleMapController>();
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
+  bool assignController = false;
 
   static const CameraPosition _kGooglePlex = CameraPosition(
     target: LatLng(37.42796133580664, -122.085749655962),
@@ -31,6 +28,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
   );
 
   Future<void> inits(Stream<LocationData> stream) async {
+    assignController = true;
     stream.listen((LocationData currentLocation) async {
       if (currentLocation.longitude != null &&
           currentLocation.latitude != null) {
@@ -45,37 +43,39 @@ class _HomePageScreenState extends State<HomePageScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final heightDevice = MediaQuery.of(context).size.height;
     return BlocConsumer<HomePageCubit, HomePageState>(
-        listener: (context, state) {},
+        listener: (context, state) {
+          if (state is GetStream && !assignController && state.locationStream != null)
+            inits(state.locationStream!);
+        },
         builder: (context, state) => Scaffold(
                 body: SlidingUpPanel(
-              maxHeight: heightDevice * 0.9,
-              minHeight: heightDevice * 0.1,
+              maxHeight: context.screenSize.height * 0.9,
+              minHeight: context.screenSize.height * 0.1,
               backdropEnabled: true,
               backdropColor: Colors.black,
               borderRadius: BorderRadius.vertical(top: Radius.circular(10)),
               body: Stack(
                 children: [
-                  if (state is GetStream && state.locationStream != null)
-                    GoogleMap(
-                      mapType: MapType.hybrid,
-                      initialCameraPosition: _kGooglePlex,
-                      onMapCreated: (GoogleMapController controller) {
-                        _controller.complete(controller);
-                        inits(state.locationStream!);
-                      },
-                      myLocationButtonEnabled: true,
-                      myLocationEnabled: true,
-                      zoomControlsEnabled: false,
-                    ),
+                  GoogleMap(
+                    mapType: MapType.hybrid,
+                    initialCameraPosition: _kGooglePlex,
+                    onMapCreated: (GoogleMapController controller) async {
+                      _controller.complete(controller);
+                      bool allow =
+                          await context.read<HomePageCubit>().checkPermission();
+                      if (allow) context.read<HomePageCubit>().getStream();
+                    },
+                    myLocationButtonEnabled: true,
+                    myLocationEnabled: true,
+                    zoomControlsEnabled: false,
+                  ),
                   Padding(
                     padding: const EdgeInsets.only(top: 16),
                     child: Row(
                       children: [
                         IconButton(
-                            onPressed: () =>
-                                context.read<HomePageCubit>().getStream(),
+                            onPressed: () => null,
                             icon: Icon(Icons.search),
                             iconSize: 50,
                             color: Colors.red),
@@ -127,7 +127,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
                                 color: Colors.deepPurple,
                                 fontSize: 18)),
                         TextButton(
-                            onPressed: ()=> context.read<HomePageCubit>().checkPermission(),
+                            onPressed: () => null,
                             child: Container(
                               padding: EdgeInsets.all(8.0),
                               decoration: BoxDecoration(
