@@ -1,7 +1,5 @@
 import 'dart:async';
 import 'dart:io';
-
-import 'package:configuration/network/http_overrides.dart';
 import 'package:flutter/material.dart';
 
 abstract class Env {
@@ -27,7 +25,6 @@ abstract class Env {
 
   Future? _onCreate() async {
     WidgetsFlutterBinding.ensureInitialized();
-    HttpOverrides.global = MyHttpOverrides();
 
     await onInjection();
     await onCreate();

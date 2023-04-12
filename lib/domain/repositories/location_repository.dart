@@ -1,9 +1,9 @@
-import 'dart:async';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:where_my_team/models/model_location.dart';
 
-import '../../models/request/get_user_request.dart';
-import '../../models/response/get_user_response.dart';
+import 'generic_repository.dart';
 
-abstract class LocationRepository{
-  // FutureOr<GetLocationResponse?> getLocation(GetLocationRequest? request);
-  // FutureOr<GetLocationResponse?> updateLocation(GetLocationRequest? request);
+abstract class LocationRepository extends GenericRepository {
+  Future<ModelLocation?> getLocation({required String id});
+  Future<List<ModelLocation>?> getDetailRoute({required String id});
 }

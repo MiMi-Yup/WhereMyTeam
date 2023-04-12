@@ -149,6 +149,136 @@ class MultiLanguage {
       args: [],
     );
   }
+
+  /// `Something wrong! Please try later.`
+  String get systemError {
+    return Intl.message(
+      'Something wrong! Please try later.',
+      name: 'systemError',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Login`
+  String get login {
+    return Intl.message(
+      'Login',
+      name: 'login',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Try it`
+  String get tryIt {
+    return Intl.message(
+      'Try it',
+      name: 'tryIt',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Email`
+  String get email {
+    return Intl.message(
+      'Email',
+      name: 'email',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Password`
+  String get password {
+    return Intl.message(
+      'Password',
+      name: 'password',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `or continue with`
+  String get otherLogin {
+    return Intl.message(
+      'or continue with',
+      name: 'otherLogin',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sign up`
+  String get signUp {
+    return Intl.message(
+      'Sign up',
+      name: 'signUp',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Login to Your Account`
+  String get loginTitle {
+    return Intl.message(
+      'Login to Your Account',
+      name: 'loginTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Create Your Account`
+  String get signUpTitle {
+    return Intl.message(
+      'Create Your Account',
+      name: 'signUpTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Already have an account? `
+  String get loginSuggest {
+    return Intl.message(
+      'Already have an account? ',
+      name: 'loginSuggest',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Don't hae an account? `
+  String get signUpSuggest {
+    return Intl.message(
+      'Don\'t hae an account? ',
+      name: 'signUpSuggest',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Remember me`
+  String get rememberAccount {
+    return Intl.message(
+      'Remember me',
+      name: 'rememberAccount',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Email or password is invalid`
+  String get inValidInput {
+    return Intl.message(
+      'Email or password is invalid',
+      name: 'inValidInput',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<MultiLanguage> {
@@ -156,7 +286,6 @@ class AppLocalizationDelegate extends LocalizationsDelegate<MultiLanguage> {
 
   List<Locale> get supportedLocales {
     return const <Locale>[
-      Locale.fromSubtags(languageCode: 'vn'),
       Locale.fromSubtags(languageCode: 'en'),
     ];
   }

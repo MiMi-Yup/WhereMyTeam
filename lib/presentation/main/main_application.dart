@@ -4,16 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 import 'package:where_my_team/manifest.dart';
-import 'package:where_my_team/presentation/start_page/start_page_route.dart';
+import 'package:where_my_team/presentation/welcome/welcome_route.dart';
 
 final GlobalKey<ScaffoldMessengerState> rootScaffoldMessengerKey =
     GlobalKey<ScaffoldMessengerState>();
 
 class MainApplication extends StatefulWidget {
-  final Type startRoute;
-  const MainApplication({Key? key, required this.startRoute}) : super(key: key);
+  const MainApplication({Key? key}) : super(key: key);
   @override
-  _MainApplicationState createState() => _MainApplicationState();
+  State<MainApplication> createState() => _MainApplicationState();
 }
 
 class _MainApplicationState extends State<MainApplication>
@@ -23,14 +22,16 @@ class _MainApplicationState extends State<MainApplication>
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance?.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
   }
 
   @override
   void dispose() {
-    WidgetsBinding.instance?.removeObserver(this);
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
+
+  Type initRoute = WelcomeRoute;
 
   /// inactive - The application is in an inactive state and is not receiving user input. iOS only
   /// paused - The application is not currently visible to the user, not responding to user input, and running in the background.
@@ -67,12 +68,11 @@ class _MainApplicationState extends State<MainApplication>
       debugShowCheckedModeBanner: false,
       locale: Get.deviceLocale,
       fallbackLocale: const Locale('en'),
-      initialRoute: routerIds[widget.startRoute],
-      onGenerateRoute: (settings) =>
-          manifest(
-            generateRoutes,
-            settings,
-          ),
+      initialRoute: routerIds[initRoute],
+      onGenerateRoute: (settings) => manifest(
+        generateRoutes,
+        settings,
+      ),
     );
   }
 }

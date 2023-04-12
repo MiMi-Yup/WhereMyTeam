@@ -1,10 +1,14 @@
 import 'dart:async';
 
-import 'package:where_my_team/models/request/login_user_request.dart';
-import 'package:where_my_team/models/request/new_user_request.dart';
-import 'package:where_my_team/models/response/login_user_response.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
-abstract class AuthRepository{
-  FutureOr<LoginUserResponse?> signUp(NewUserRequest signUp);
-  FutureOr<LoginUserResponse?> loginByPassword(LoginUserRequest login);
+abstract class AuthRepository {
+  Future<UserCredential?> signUpByPassword(
+      {required String email, required String password});
+  Future<UserCredential?> loginByPassword(
+      {required String email, required String password});
+  Future<UserCredential?> loginByGoogle();
+  Future<UserCredential?> loginByCredentail(
+      {required AuthCredential credential});
+  Future<bool> signOut();
 }
