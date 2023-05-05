@@ -1,12 +1,8 @@
 import 'dart:async';
 import 'package:configuration/l10n/l10n.dart';
-import 'package:configuration/route/xmd_router.dart';
 import 'package:flutter/material.dart';
 import 'package:configuration/style/style.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:where_my_team/manifest.dart';
-import 'package:where_my_team/presentation/home/home_route.dart';
-import 'package:where_my_team/presentation/introduction/introduction_route.dart';
 import 'package:where_my_team/presentation/welcome/cubit/welcome_cubit.dart';
 import 'package:where_my_team/utils/alert_util.dart';
 

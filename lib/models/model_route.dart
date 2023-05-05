@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:where_my_team/di/di.dart';
 import 'package:where_my_team/domain/repositories/location_repository.dart';
-import 'package:where_my_team/domain/repositories/route_repository.dart';
 import 'package:where_my_team/models/model_location.dart';
 import 'model.dart';
 

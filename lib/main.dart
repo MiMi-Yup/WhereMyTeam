@@ -7,7 +7,6 @@ import 'package:configuration/style/style.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:get_it/get_it.dart';
 import 'package:where_my_team/di/di.dart';
 import 'package:where_my_team/presentation/welcome/welcome_route.dart';
 import 'manifest.dart';

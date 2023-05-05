@@ -2,6 +2,7 @@ part of 'login_cubit.dart';
 
 enum LoginStatus { initial, submitting, success, error }
 
+@immutable
 abstract class ALoginState extends Equatable {
   final String email;
   final String password;
@@ -46,7 +47,7 @@ class LoginState extends ALoginState {
         email: '',
         password: '',
         status: LoginStatus.initial,
-        rememberAccount: false,
+        rememberAccount: true,
         log: null);
   }
 
@@ -79,7 +80,7 @@ class SignUpState extends ALoginState {
         email: '',
         password: '',
         status: LoginStatus.initial,
-        rememberAccount: false,
+        rememberAccount: true,
         log: null);
   }
 

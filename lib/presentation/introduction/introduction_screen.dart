@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:where_my_team/common/widgets/m_primary_button.dart';
 import 'package:where_my_team/manifest.dart';
 import 'package:where_my_team/presentation/auth/login/login_route.dart';
-import 'package:where_my_team/presentation/home/home_route.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class IntroductionModel {
@@ -131,16 +130,6 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
                 onPressed: () =>
                     XMDRouter.pushNamed(routerIds[LoginRoute]!),
                 background: mCPrimary),
-          ),
-          Container(
-            width: double.maxFinite,
-            height: 50,
-            margin: EdgeInsets.all(10),
-            child: MPrimaryButton(
-                text: MultiLanguage.of(context).tryIt,
-                onPressed: () =>
-                    XMDRouter.pushNamed(routerIds[HomeRoute]!),
-                background: mCSecondary),
           )
         ],
       ),

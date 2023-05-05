@@ -1,4 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:location/location.dart';
 import 'package:where_my_team/di/di.dart';
 import 'package:where_my_team/domain/repositories/route_repository.dart';
 import 'package:where_my_team/domain/repositories/user_repository.dart';
@@ -70,4 +72,6 @@ extension ExtensionModelLocation on ModelLocation {
   Future<ModelRoute?> get routeM async => route == null
       ? null
       : await getIt<RouteRepository>().getModelByRef(route!) as ModelRoute;
+
+  LatLng get coordinate => LatLng(latitude ?? 0, longitude ?? 0);
 }

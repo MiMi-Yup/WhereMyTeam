@@ -135,4 +135,16 @@ class UserRepositoryImpl extends UserRepository {
   Future<ModelUser?> getUser({required String userId}) {
     return getModelByRef(getRefById(userId));
   }
+
+  @override
+  Future<List<ModelUser>?> getUsers() async {
+    QuerySnapshot<ModelUser> query = await firestoreService
+        .collection(getPath(null))
+        .withConverter(
+            fromFirestore: ModelUser.fromFirestore,
+            toFirestore: (ModelUser model, _) => model.toFirestore())
+        .get();
+
+    return query.size > 0 ? query.docs.map((e) => e.data()).toList() : null;
+  }
 }

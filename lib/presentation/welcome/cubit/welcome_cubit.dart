@@ -7,8 +7,8 @@ import 'package:where_my_team/di/di.dart';
 import 'package:where_my_team/domain/use_cases/login_page_usecases.dart';
 import 'package:where_my_team/manifest.dart';
 import 'package:where_my_team/models/model_user.dart';
-import 'package:where_my_team/presentation/home/home_route.dart';
 import 'package:where_my_team/presentation/introduction/introduction_route.dart';
+import 'package:where_my_team/presentation/nav/nav_route.dart';
 
 part 'welcome_state.dart';
 
@@ -33,7 +33,7 @@ class WelcomeCubit extends Cubit<WelcomeState> {
           XMDRouter.pushNamedAndRemoveUntil(routerIds[IntroductionRoute]!);
         } else {
           getIt<LocationServiceImpl>().updateLocation();
-          XMDRouter.pushNamedAndRemoveUntil(routerIds[HomeRoute]!);
+          XMDRouter.pushNamedAndRemoveUntil(routerIds[NavRoute]!);
         }
       }, onError: (error) {});
     }

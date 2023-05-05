@@ -1,18 +1,18 @@
-part of 'home_cubit.dart';
+part of 'team_map_cubit.dart';
 
 @immutable
-class HomeState extends Equatable {
+class TeamMapState extends Equatable {
   final ModelUser? user;
   final ModelTeam? currentTeam;
   final List<ModelMember>? teamMembers;
 
-  const HomeState(
+  const TeamMapState(
       {required this.user,
       required this.currentTeam,
       required this.teamMembers});
 
-  factory HomeState.initial() =>
-      const HomeState(user: null, currentTeam: null, teamMembers: null);
+  factory TeamMapState.initial() =>
+      const TeamMapState(user: null, currentTeam: null, teamMembers: null);
 
   @override
   bool? get stringify => true;
@@ -20,11 +20,11 @@ class HomeState extends Equatable {
   @override
   List<Object?> get props => [user, currentTeam, teamMembers];
 
-  HomeState copyWith(
+  TeamMapState copyWith(
           {ModelUser? user,
           ModelTeam? currentTeam,
           List<ModelMember>? teamMembers}) =>
-      HomeState(
+      TeamMapState(
           user: user ?? this.user,
           currentTeam: currentTeam ?? this.currentTeam,
           teamMembers: teamMembers ?? this.teamMembers);

@@ -35,7 +35,7 @@ import 'package:where_my_team/data/repo_impl/team_user_repository_impl.dart'
     as _i27;
 import 'package:where_my_team/data/repo_impl/unit_of_work_impl.dart' as _i29;
 import 'package:where_my_team/data/repo_impl/user_repository_impl.dart' as _i23;
-import 'package:where_my_team/data/services/location_service.dart' as _i31;
+import 'package:where_my_team/data/services/location_service.dart' as _i30;
 import 'package:where_my_team/domain/repositories/auth_repository.dart' as _i16;
 import 'package:where_my_team/domain/repositories/gps_repository.dart' as _i6;
 import 'package:where_my_team/domain/repositories/location_repository.dart'
@@ -52,15 +52,25 @@ import 'package:where_my_team/domain/repositories/team_user_repository.dart'
     as _i26;
 import 'package:where_my_team/domain/repositories/unit_of_work.dart' as _i28;
 import 'package:where_my_team/domain/repositories/user_repository.dart' as _i22;
-import 'package:where_my_team/domain/use_cases/home_page_usecases.dart' as _i30;
 import 'package:where_my_team/domain/use_cases/login_page_usecases.dart'
-    as _i32;
+    as _i31;
+import 'package:where_my_team/domain/use_cases/team_usecases.dart' as _i32;
 import 'package:where_my_team/presentation/auth/account_setup/cubit/account_setup_cubit.dart'
     as _i34;
 import 'package:where_my_team/presentation/auth/login/cubit/login_cubit.dart'
+    as _i37;
+import 'package:where_my_team/presentation/detail_route/cubit/detail_route_cubit.dart'
+    as _i35;
+import 'package:where_my_team/presentation/detail_team/cubit/detail_team_cubit.dart'
     as _i36;
-import 'package:where_my_team/presentation/home/cubit/home_cubit.dart' as _i35;
-import 'package:where_my_team/presentation/home/cubit/map_cubit.dart' as _i37;
+import 'package:where_my_team/presentation/map/cubit/map_cubit.dart' as _i42;
+import 'package:where_my_team/presentation/map/cubit/team_map_cubit.dart'
+    as _i41;
+import 'package:where_my_team/presentation/new_team/cubit/new_team_cubit.dart'
+    as _i38;
+import 'package:where_my_team/presentation/route/cubit/route_cubit.dart'
+    as _i39;
+import 'package:where_my_team/presentation/team/cubit/team_cubit.dart' as _i40;
 import 'package:where_my_team/presentation/welcome/cubit/welcome_cubit.dart'
     as _i33;
 
@@ -127,25 +137,35 @@ extension GetItInjectableX on _i1.GetIt {
           teamUser: gh<_i26.TeamUserRepository>(),
           memberTeam: gh<_i24.MemberRepository>(),
         ));
-    gh.factory<_i30.HomepageUseCases>(
-        () => _i30.HomepageUseCases(unitOfWork: gh<_i28.UnitOfWork>()));
-    gh.singleton<_i31.LocationServiceImpl>(
-        _i31.LocationServiceImpl(unitOfWork: gh<_i28.UnitOfWork>()));
-    gh.factory<_i32.LoginUseCases>(() => _i32.LoginUseCases(
+    gh.singleton<_i30.LocationServiceImpl>(
+        _i30.LocationServiceImpl(unitOfWork: gh<_i28.UnitOfWork>()));
+    gh.factory<_i31.LoginUseCases>(() => _i31.LoginUseCases(
           unitOfWork: gh<_i28.UnitOfWork>(),
           authService: gh<_i4.FirebaseAuthService>(),
         ));
+    gh.factory<_i32.TeamUsercase>(
+        () => _i32.TeamUsercase(unitOfWork: gh<_i28.UnitOfWork>()));
     gh.factory<_i33.WelcomeCubit>(
-        () => _i33.WelcomeCubit(loginUseCases: gh<_i32.LoginUseCases>()));
+        () => _i33.WelcomeCubit(loginUseCases: gh<_i31.LoginUseCases>()));
     gh.factory<_i34.AccountSetupCubit>(() =>
-        _i34.AccountSetupCubit(homepageUseCases: gh<_i30.HomepageUseCases>()));
-    gh.factory<_i35.HomeCubit>(
-        () => _i35.HomeCubit(homepageUseCases: gh<_i30.HomepageUseCases>()));
-    gh.factory<_i36.LoginCubit>(
-        () => _i36.LoginCubit(loginUserCases: gh<_i32.LoginUseCases>()));
-    gh.factory<_i37.MapCubit>(() => _i37.MapCubit(
-          homepageUseCases: gh<_i30.HomepageUseCases>(),
-          userCubit: gh<_i35.HomeCubit>(),
+        _i34.AccountSetupCubit(homepageUseCases: gh<_i32.TeamUsercase>()));
+    gh.factory<_i35.DetailRouteCubit>(
+        () => _i35.DetailRouteCubit(homepageUseCases: gh<_i32.TeamUsercase>()));
+    gh.factory<_i36.DetailTeamCubit>(
+        () => _i36.DetailTeamCubit(homepageUseCases: gh<_i32.TeamUsercase>()));
+    gh.factory<_i37.LoginCubit>(
+        () => _i37.LoginCubit(loginUserCases: gh<_i31.LoginUseCases>()));
+    gh.factory<_i38.NewTeamCubit>(
+        () => _i38.NewTeamCubit(teamUsercase: gh<_i32.TeamUsercase>()));
+    gh.factory<_i39.RouteCubit>(
+        () => _i39.RouteCubit(homepageUseCases: gh<_i32.TeamUsercase>()));
+    gh.factory<_i40.TeamCubit>(
+        () => _i40.TeamCubit(teamUsercase: gh<_i32.TeamUsercase>()));
+    gh.factory<_i41.TeamMapCubit>(
+        () => _i41.TeamMapCubit(homepageUseCases: gh<_i32.TeamUsercase>()));
+    gh.factory<_i42.MapCubit>(() => _i42.MapCubit(
+          homepageUseCases: gh<_i32.TeamUsercase>(),
+          userCubit: gh<_i41.TeamMapCubit>(),
         ));
     return this;
   }

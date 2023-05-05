@@ -11,7 +11,6 @@ import 'package:where_my_team/common/widgets/m_text_field.dart';
 import 'package:where_my_team/manifest.dart';
 import 'package:where_my_team/presentation/auth/account_setup/account_setup_route.dart';
 import 'package:where_my_team/presentation/auth/login/cubit/login_cubit.dart';
-import 'package:where_my_team/presentation/home/home_route.dart';
 import 'package:where_my_team/utils/alert_util.dart';
 import 'package:where_my_team/utils/extensions/context_extension.dart';
 

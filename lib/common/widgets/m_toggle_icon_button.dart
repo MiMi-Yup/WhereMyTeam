@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 
 class MToggleIconButton extends StatefulWidget {
   final IconData activeIcon;
-  final IconData unactiveIcon;
+  final IconData icon;
   final bool initState;
   final bool Function()? onPressed;
   const MToggleIconButton(
       {super.key,
       required this.activeIcon,
-      required this.unactiveIcon,
+      required this.icon,
       this.initState = false,
       this.onPressed});
 
@@ -33,6 +33,6 @@ class _MToggleIconButtonState extends State<MToggleIconButton> {
   Widget build(BuildContext context) {
     return IconButton(
         onPressed: toogleEvent,
-        icon: Icon(state ? widget.activeIcon : widget.unactiveIcon));
+        icon: Icon(state ? widget.activeIcon : widget.icon));
   }
 }

@@ -6,6 +6,7 @@ import 'generic_repository.dart';
 abstract class UserRepository extends GenericRepository {
   Future<ModelUser?> getCurrentUser();
   Future<ModelUser?> getUser({required String userId});
+  Future<List<ModelUser>?> getUsers();
 
   Future<ModelUser?> postUserInitial();
 

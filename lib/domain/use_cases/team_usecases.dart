@@ -11,10 +11,10 @@ import 'package:where_my_team/models/model_team_user.dart';
 import 'package:where_my_team/models/model_user.dart';
 
 @injectable
-class HomepageUseCases {
+class TeamUsercase {
   final UnitOfWork unitOfWork;
 
-  HomepageUseCases({required this.unitOfWork});
+  TeamUsercase({required this.unitOfWork});
 
   FutureOr<LocationData?> getCurrentLocation() async {
     LocationData? data = await unitOfWork.gps.getCurrentLocation();
@@ -53,5 +53,20 @@ class HomepageUseCases {
 
   Future<void> logOut() async {
     await getIt<LoginUseCases>().signOut();
+  }
+
+  Future<List<ModelUser>> searchUser(String? query) async {
+    if (query == null || query.isEmpty) return [];
+    List<ModelUser>? result = await unitOfWork.user.getUsers();
+    if (result == null) return [];
+    RegExp regex = RegExp(r"^\d+$");
+    if (regex.hasMatch(query)) {
+      return result
+          .where((element) => element.phoneNumber?.startsWith(query, 0) == true)
+          .toList();
+    }
+    return result
+        .where((element) => element.name?.startsWith(query, 0) == true)
+        .toList();
   }
 }
