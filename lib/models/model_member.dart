@@ -32,12 +32,12 @@ class ModelMember extends IModel {
   }
 
   @override
-  Map<String, dynamic> toFirestore() {
-    return {'role': role, 'nickname': nickname};
-  }
+  Map<String, dynamic> toFirestore() =>
+      {'role': role, 'nickname': nickname, 'joinTime': joinTime, 'team': team};
 
   @override
-  Map<String, dynamic> updateFirestore() => toFirestore();
+  Map<String, dynamic> updateFirestore() =>
+      {'role': role, 'nickname': nickname};
 
   ModelMember copyWith({DocumentReference? role, String? nickname}) =>
       ModelMember(

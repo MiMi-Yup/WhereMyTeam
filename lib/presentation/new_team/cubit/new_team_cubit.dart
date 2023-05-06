@@ -42,4 +42,12 @@ class NewTeamCubit extends Cubit<NewTeamState> {
     final find = state.members.firstWhere((element) => element.id == user.id);
     emit(state.copyWith(members: List.from(state.members)..remove(find)));
   }
+
+  Future createTeam() async {
+    teamUsercase.createTeam(
+        name: state.name ?? 'yolo',
+        avatar: state.avatar ??
+            'https://www.rd.com/wp-content/uploads/2020/11/redo-cat-meme6.jpg?w=1414',
+        members: state.members);
+  }
 }

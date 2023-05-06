@@ -1,11 +1,13 @@
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:injectable/injectable.dart';
 import 'package:location/location.dart';
 import 'package:where_my_team/di/di.dart';
 import 'package:where_my_team/domain/repositories/unit_of_work.dart';
 import 'package:where_my_team/domain/use_cases/login_page_usecases.dart';
 import 'package:where_my_team/models/model_member.dart';
+import 'package:where_my_team/models/model_role.dart';
 import 'package:where_my_team/models/model_team.dart';
 import 'package:where_my_team/models/model_team_user.dart';
 import 'package:where_my_team/models/model_user.dart';
@@ -68,5 +70,37 @@ class TeamUsercase {
     return result
         .where((element) => element.name?.startsWith(query, 0) == true)
         .toList();
+  }
+
+  Stream<QuerySnapshot<ModelTeamUser>> getStream() {
+    return unitOfWork.teamUser.getStream();
+  }
+
+  Stream<QuerySnapshot<ModelMember>> getDetailStream(
+      {required ModelTeam team}) {
+    return unitOfWork.team.getStream(team: team);
+  }
+
+  Future createTeam(
+      {required String name,
+      required String avatar,
+      List<ModelUser>? members}) async {
+    final team = ModelTeam(
+        id: null, name: name, createdAt: Timestamp.now(), avatar: avatar);
+    if (await unitOfWork.team.postTeam(team: team)) {
+      unitOfWork.user.getCurrentUser().then((author) {
+        ModelRole admin =
+            ModelRole(id: 'NtU957r3xX70qa260YeL', name: 'Admin', weightNo: 1);
+        unitOfWork.memberTeam
+            .postMember(team: team, user: author!, role: admin);
+      });
+
+      ModelRole member =
+          ModelRole(id: 'Iaxzg3yMsu6IaXivpfZd', name: 'Member', weightNo: 2);
+      Future.wait(members?.map((e) => unitOfWork.memberTeam.postMember(
+          team: team, user: e, role: member)) as Iterable<Future<bool>>);
+
+      unitOfWork.teamUser.addFavourite(team: team, users: members);
+    }
   }
 }

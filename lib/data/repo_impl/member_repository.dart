@@ -117,24 +117,12 @@ class MemberRepositoryImpl implements MemberRepository {
       required ModelUser user,
       required ModelRole role,
       String? nickname}) async {
-    ModelUser? addBy = await userRepo.getCurrentUser();
-    if (addBy != null) {
-      ModelMember? member = await getMember(team: team, user: addBy);
-      if (member != null) {
-        ModelRole? roleMemberAdd =
-            (await roleRepo.getModelByRef(member.role!)) as ModelRole?;
-        if (roleMemberAdd != null &&
-            await roleRepo.allowExecute(source: roleMemberAdd, target: role)) {
-          await insert(ModelMember(
-              id: user.id,
-              role: roleRepo.getRef(role),
-              joinTime: Timestamp.now(),
-              team: teamRepo.getRef(team)));
-          return true;
-        }
-      }
-    }
-    return false;
+    await insert(ModelMember(
+        id: user.id,
+        role: roleRepo.getRef(role),
+        joinTime: Timestamp.now(),
+        team: teamRepo.getRef(team)));
+    return true;
   }
 
   @override

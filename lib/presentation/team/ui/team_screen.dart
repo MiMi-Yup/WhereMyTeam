@@ -1,13 +1,18 @@
 import 'dart:math';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:configuration/route/xmd_router.dart';
 import 'package:configuration/style/style.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:where_my_team/common/widgets/m_section.dart';
 import 'package:where_my_team/common/widgets/m_team_component.dart';
 import 'package:where_my_team/manifest.dart';
+import 'package:where_my_team/models/model_team.dart';
+import 'package:where_my_team/models/model_team_user.dart';
 import 'package:where_my_team/presentation/detail_team/detail_team_route.dart';
 import 'package:where_my_team/presentation/new_team/new_team_route.dart';
+import 'package:where_my_team/presentation/team/cubit/team_cubit.dart';
 import 'package:where_my_team/utils/extensions/context_extension.dart';
 
 class TeamScreen extends StatefulWidget {
@@ -167,25 +172,67 @@ class _TeamScreenState extends State<TeamScreen> {
                   title: "Teams",
                   titleColor: Colors.black,
                   headerColor: Colors.white,
-                  content: ListView.separated(
-                      physics: const BouncingScrollPhysics(),
-                      padding: const EdgeInsets.only(left: 10, right: 10),
-                      shrinkWrap: true,
-                      itemCount: 10,
-                      separatorBuilder: (context, index) => SizedBox(width: 20),
-                      itemBuilder: (context, index) => MTeamComponent(
-                            avatar:
-                                'https://www.rd.com/wp-content/uploads/2020/11/redo-cat-meme6.jpg?w=1414',
-                            name: 'fdgfd',
-                            members: 46,
-                            isEditable: true,
-                            onTap: () => XMDRouter.pushNamed(
-                                routerIds[DetailTeamRoute]!),
-                          ))).builder(),
+                  content: StreamBuilder<QuerySnapshot<ModelTeamUser>>(
+                    stream: context.read<TeamCubit>().getStreamTeam(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        List<ModelTeamUser>? teams =
+                            snapshot.data?.docs.map((e) => e.data()).toList();
+                        if (teams == null || teams.length == 0) {
+                          return const Center(child: Text("No teams"));
+                        }
+
+                        return FutureBuilder<List<TeamModel?>>(
+                            future: Future.wait(teams.map((e) async {
+                              final team = await e.teamEx;
+                              final count = await team?.getNumberOfMembers;
+                              return team != null && count != null
+                                  ? TeamModel(team: team, count: count)
+                                  : null;
+                            }).toList()),
+                            builder: (context, snapshot) {
+                              if (snapshot.hasData) {
+                                List<TeamModel> models = snapshot.data!
+                                    .where((element) => element != null)
+                                    .cast<TeamModel>()
+                                    .toList();
+                                return ListView.separated(
+                                    physics: const BouncingScrollPhysics(),
+                                    padding: const EdgeInsets.only(
+                                        left: 10, right: 10),
+                                    shrinkWrap: true,
+                                    itemCount: models.length,
+                                    separatorBuilder: (context, index) =>
+                                        SizedBox(width: 20),
+                                    itemBuilder: (context, index) => MTeamComponent(
+                                        avatar: models[index].team.avatar ??
+                                            'https://www.rd.com/wp-content/uploads/2020/11/redo-cat-meme6.jpg?w=1414',
+                                        name: models[index].team.name ?? '',
+                                        members: models[index].count,
+                                        isEditable: true,
+                                        onTap: () => XMDRouter.pushNamed(
+                                                routerIds[DetailTeamRoute]!,
+                                                arguments: {
+                                                  'team': models[index].team
+                                                })));
+                              }
+                              return const LinearProgressIndicator();
+                            });
+                      }
+                      return const LinearProgressIndicator();
+                    },
+                  )).builder(),
             ],
           ))
         ],
       ),
     );
   }
+}
+
+class TeamModel {
+  final ModelTeam team;
+  final int count;
+
+  const TeamModel({required this.team, required this.count});
 }

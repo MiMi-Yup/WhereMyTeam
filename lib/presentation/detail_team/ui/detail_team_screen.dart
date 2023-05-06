@@ -1,6 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:configuration/style/style.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:where_my_team/common/widgets/m_member_component.dart';
+import 'package:where_my_team/models/model_member.dart';
+import 'package:where_my_team/models/model_user.dart';
+import 'package:where_my_team/presentation/detail_team/cubit/detail_team_cubit.dart';
 
 class DetailTeamScreen extends StatelessWidget {
   const DetailTeamScreen({super.key});
@@ -88,22 +93,37 @@ class DetailTeamScreen extends StatelessWidget {
                 icon: Icon(Icons.more_horiz),
               )
             ]),
-        body: ListView.separated(
-            physics: BouncingScrollPhysics(),
-            padding: EdgeInsets.only(left: 10, right: 10),
-            itemBuilder: (context, index) => MMemberComponent(
-                  avatar:
-                      'https://www.rd.com/wp-content/uploads/2020/11/redo-cat-meme6.jpg?w=1414',
-                  batteryLevel: 79,
-                  name: 'Doan xem',
-                  nickname: 'Captain meo',
-                  lastOnline: 'Online 38 mins ago',
-                  isEditable: true,
-                  isAdmin: true,
-                ),
-            separatorBuilder: (context, index) => SizedBox(
-                  height: 10,
-                ),
-            itemCount: 10));
+        body: StreamBuilder<QuerySnapshot<ModelMember>>(
+            stream: context.read<DetailTeamCubit>().getStream(),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                List<ModelMember> members =
+                    snapshot.data!.docs.map((e) => e.data()).toList();
+                return ListView.separated(
+                    physics: BouncingScrollPhysics(),
+                    padding: EdgeInsets.only(left: 10, right: 10),
+                    itemBuilder: (context, index) => FutureBuilder<ModelUser?>(
+                        future: members[index].userEx,
+                        builder: (context, snapshot) => snapshot.hasData
+                            ? MMemberComponent(
+                                avatar: snapshot.data?.avatar ??
+                                    'https://www.rd.com/wp-content/uploads/2020/11/redo-cat-meme6.jpg?w=1414',
+                                batteryLevel:
+                                    snapshot.data?.percentBatteryDevice ?? 100,
+                                name: snapshot.data?.name ?? 'Doan xem',
+                                nickname:
+                                    members[index].nickname ?? 'Captain meo',
+                                lastOnline: 'Online 38 mins ago',
+                                isEditable: true,
+                                isAdmin: true,
+                              )
+                            : const SizedBox.shrink()),
+                    separatorBuilder: (context, index) => SizedBox(
+                          height: 10,
+                        ),
+                    itemCount: members.length);
+              }
+              return const LinearProgressIndicator();
+            }));
   }
 }

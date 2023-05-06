@@ -5,6 +5,7 @@ import 'package:where_my_team/data/data_source/remote/firebase_auth_service.dart
 import 'package:where_my_team/data/data_source/remote/firestore_service.dart';
 import 'package:where_my_team/domain/repositories/team_user_repository.dart';
 import 'package:where_my_team/domain/repositories/user_repository.dart';
+import 'package:where_my_team/models/model_team.dart';
 import 'package:where_my_team/models/model_team_user.dart';
 import 'package:where_my_team/models/model_user.dart';
 import 'package:where_my_team/models/model.dart';
@@ -21,9 +22,22 @@ class TeamUserRepositoryImpl extends TeamUserRepository {
       required this.userRepo});
 
   @override
-  Future<bool> addFavourite({required String teamId, required ModelUser user}) {
-    // TODO: implement addFavourite
-    throw UnimplementedError();
+  Future<bool> addFavourite(
+      {required ModelTeam team, List<ModelUser>? users}) async {
+    Iterable<DocumentReference>? usersRef = users?.map((e) => getRef(e));
+    ModelTeamUser? teamUser = await getModelByRef(getRefById(team.id ?? ''));
+    if (usersRef != null &&
+        teamUser != null &&
+        teamUser.favourite != null &&
+        teamUser.favourite?.isNotEmpty == true) {
+      usersRef = usersRef.where((element) =>
+          teamUser.favourite!.any((current) => element.id == current.id));
+      teamUser.favourite!.addAll(usersRef);
+      await update(teamUser, teamUser);
+    } else {
+      insert(ModelTeamUser(id: team.id, favourite: usersRef?.toSet()));
+    }
+    return true;
   }
 
   @override
@@ -45,30 +59,21 @@ class TeamUserRepositoryImpl extends TeamUserRepository {
   Future<Set<ModelUser>?> getFavourites({required String teamId}) async {
     ModelTeamUser? teamUser = await getModelByRef(getRefById(teamId));
     if (teamUser != null) {
-      DocumentSnapshot<ModelTeamUser> snapshot = await firestore.service
-          .collection(getPath(user?.uid))
-          .doc(teamUser.id)
-          .withConverter(
-              fromFirestore: ModelTeamUser.fromFirestore,
-              toFirestore: (ModelTeamUser model, _) => model.toFirestore())
-          .get();
-      if (snapshot.exists) {
-        Set<DocumentReference>? ref = snapshot.data()?.favourite;
-        if (ref != null && ref.isNotEmpty) {
-          return (await Future.wait<ModelUser?>(ref
-                  .map((e) => userRepo.getModelByRef(e))
-                  .cast<Future<ModelUser?>>()))
-              .where((element) => element != null)
-              .cast<ModelUser>()
-              .toSet();
-        }
+      Set<DocumentReference>? ref = teamUser.favourite;
+      if (ref != null && ref.isNotEmpty) {
+        return (await Future.wait<ModelUser?>(ref
+                .map((e) => userRepo.getModelByRef(e))
+                .cast<Future<ModelUser?>>()))
+            .where((element) => element != null)
+            .cast<ModelUser>()
+            .toSet();
       }
     }
     return null;
   }
 
   @override
-  Future<ModelTeamUser?> getModelByRef(DocumentReference<Object?> ref) async{
+  Future<ModelTeamUser?> getModelByRef(DocumentReference<Object?> ref) async {
     try {
       DocumentSnapshot<ModelTeamUser> snapshot = await ref
           .withConverter(
@@ -112,4 +117,14 @@ class TeamUserRepositoryImpl extends TeamUserRepository {
 
   @override
   User? get user => authService.service.currentUser;
+
+  @override
+  Stream<QuerySnapshot<ModelTeamUser>> getStream() {
+    return firestoreService
+        .collection(getPath(user?.uid))
+        .withConverter(
+            fromFirestore: ModelTeamUser.fromFirestore,
+            toFirestore: (ModelTeamUser model, _) => model.toFirestore())
+        .snapshots(includeMetadataChanges: true);
+  }
 }

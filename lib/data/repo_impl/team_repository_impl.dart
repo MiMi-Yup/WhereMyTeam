@@ -126,4 +126,27 @@ class TeamRepositoryImpl extends TeamRepository {
   @override
   // TODO: implement user
   User? get user => null;
+
+  @override
+  Future<int> getNumberOfMembers({required String teamId}) async {
+    ModelTeam? team = await getModelByRef(getRefById(teamId));
+    if (team != null) {
+      final count = await firestoreService
+          .collection('${getPath(null)}/${team.id}/member')
+          .count()
+          .get();
+      return count.count;
+    }
+    return 0;
+  }
+
+  @override
+  Stream<QuerySnapshot<ModelMember>> getStream({required ModelTeam team}) {
+    return firestoreService
+        .collection('${getPath(null)}/${team.id}/member')
+        .withConverter(
+            fromFirestore: ModelMember.fromFirestore,
+            toFirestore: (ModelMember model, _) => model.toFirestore())
+        .snapshots(includeMetadataChanges: true);
+  }
 }

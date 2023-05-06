@@ -44,4 +44,7 @@ class ModelTeam extends IModel {
 extension ModelTeamExtension on ModelTeam {
   Future<List<ModelMember>?> get membersEx async =>
       id == null ? null : await getIt<TeamRepository>().getMembers(teamId: id!);
+  Future<int> get getNumberOfMembers async => id == null
+      ? 0
+      : await getIt<TeamRepository>().getNumberOfMembers(teamId: id!);
 }

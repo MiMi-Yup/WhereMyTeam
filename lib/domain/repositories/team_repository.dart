@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:where_my_team/domain/repositories/generic_repository.dart';
 import 'package:where_my_team/models/model_member.dart';
 import 'package:where_my_team/models/model_team.dart';
@@ -5,6 +6,8 @@ import 'package:where_my_team/models/model_team.dart';
 abstract class TeamRepository extends GenericRepository {
   Future<ModelTeam?> getTeam({required String teamId});
   Future<List<ModelMember>?> getMembers({required String teamId});
+  Stream<QuerySnapshot<ModelMember>> getStream({required ModelTeam team});
+  Future<int> getNumberOfMembers({required String teamId});
 
   Future<bool> postTeam({required ModelTeam team});
 
