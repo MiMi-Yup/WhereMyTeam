@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:where_my_team/common/widgets/m_member_component.dart';
 import 'package:where_my_team/models/model_member.dart';
+import 'package:where_my_team/models/model_team.dart';
 import 'package:where_my_team/models/model_user.dart';
 import 'package:where_my_team/presentation/detail_team/cubit/detail_team_cubit.dart';
 
@@ -15,27 +16,33 @@ class DetailTeamScreen extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(
             elevation: 0,
-            title: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text("Con meo den"),
-                Row(
-                  children: [
-                    Icon(
-                      Icons.notifications,
-                      size: 16,
-                    ),
-                    SizedBox(
-                      width: 4,
-                    ),
-                    Text(
-                      "No receive notification",
-                      style: mST10R,
-                    )
-                  ],
-                )
-              ],
-            ),
+            title: FutureBuilder(
+                future: context.read<DetailTeamCubit>().getFullInfo(),
+                builder: (context, snapshot) => snapshot.hasData
+                    ? Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(snapshot.data?.name ?? ""),
+                          Row(
+                            children: [
+                              Icon(
+                                Icons.notifications,
+                                size: 16,
+                              ),
+                              SizedBox(
+                                width: 4,
+                              ),
+                              FutureBuilder<int>(
+                                  future: snapshot.data?.getNumberOfMembers,
+                                  builder: (context, snapshot) => Text(
+                                        "${snapshot.data ?? 1} members",
+                                        style: mST10R,
+                                      ))
+                            ],
+                          )
+                        ],
+                      )
+                    : SizedBox.shrink()),
             actions: [
               IconButton(onPressed: () => null, icon: Icon(Icons.add)),
               PopupMenuButton<int>(

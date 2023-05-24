@@ -75,7 +75,7 @@ class _MMemberComponentState extends State<MMemberComponent>
   @override
   Widget build(BuildContext context) {
     final content = Container(
-      height: 80,
+      height: 75,
       decoration: const BoxDecoration(color: Colors.transparent),
       child: Row(
         children: [
@@ -86,8 +86,8 @@ class _MMemberComponentState extends State<MMemberComponent>
                 alignment: Alignment.center,
                 children: [
                   SizedBox(
-                    height: 80,
-                    width: 80,
+                    height: 75,
+                    width: 75,
                     child: CircleAvatar(
                         foregroundImage: NetworkImage(widget.avatar)),
                   ),

@@ -43,6 +43,7 @@ class _NewTeamScreenState extends State<NewTeamScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        elevation: 0.0,
         title: Text("New team"),
         actions: [
           IconButton(

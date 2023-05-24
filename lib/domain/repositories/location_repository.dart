@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:where_my_team/models/model_location.dart';
 
 import 'generic_repository.dart';

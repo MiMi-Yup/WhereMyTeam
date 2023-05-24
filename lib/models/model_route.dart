@@ -1,7 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:where_my_team/di/di.dart';
 import 'package:where_my_team/domain/repositories/location_repository.dart';
+import 'package:where_my_team/domain/repositories/type_route_repository.dart';
 import 'package:where_my_team/models/model_location.dart';
+import 'package:where_my_team/models/model_type_route.dart';
+import 'package:where_my_team/utils/time_util.dart';
 import 'model.dart';
 
 class ModelRoute extends IModel {
@@ -9,15 +12,21 @@ class ModelRoute extends IModel {
   Timestamp? startTime;
   Timestamp? endTime;
   bool? isShared;
+  DocumentReference? typeRoute;
+  late double distance;
+  late double maxSpeed;
 
   ModelRoute(
       {required super.id,
       this.name,
       required this.startTime,
-      required this.endTime,
-      this.isShared = false}) {
+      this.endTime,
+      this.isShared = false,
+      this.typeRoute,
+      this.distance = 0.0,
+      this.maxSpeed = 0.0}) {
     if (name == null || name!.isEmpty) {
-      name = 'Route ${startTime.toString()}';
+      name = 'Route ${startTime?.toShortDateTime}';
     }
   }
 
@@ -29,6 +38,19 @@ class ModelRoute extends IModel {
     startTime = data?['startTime'];
     endTime = data?['endTime'];
     isShared = data?['isShared'];
+    typeRoute = data?['typeRoute'];
+    final _distance = data?['distance'];
+    final _maxSpeed = data?['maxSpeed'];
+    distance = _distance != null
+        ? _distance is double
+            ? _distance
+            : _distance * 1.0
+        : 0.0;
+    maxSpeed = _maxSpeed != null
+        ? _maxSpeed is double
+            ? _maxSpeed
+            : _maxSpeed * 1.0
+        : 0.0;
   }
 
   @override
@@ -37,28 +59,48 @@ class ModelRoute extends IModel {
       'name': name,
       'startTime': startTime,
       'endTime': endTime,
-      'isShared': isShared
+      'isShared': isShared,
+      'distance': distance,
+      'maxSpeed': maxSpeed,
+      'typeRoute': typeRoute,
     };
   }
 
   @override
-  Map<String, dynamic> updateFirestore() =>
-      {'isShared': isShared, 'endTime': endTime, 'name': name};
+  Map<String, dynamic> updateFirestore() => {
+        'isShared': isShared,
+        'endTime': endTime,
+        'name': name,
+        'distance': distance,
+        'maxSpeed': maxSpeed,
+      };
 
   ModelRoute copyWith(
           {String? id,
-          Timestamp? startTime,
+          String? name,
           Timestamp? endTime,
-          bool? isShared}) =>
+          bool? isShared,
+          double? distance,
+          double? maxSpeed}) =>
       ModelRoute(
           id: id ?? this.id,
-          startTime: startTime ?? this.startTime,
+          startTime: startTime,
           endTime: endTime ?? this.endTime,
-          isShared: isShared ?? this.isShared);
+          isShared: isShared ?? this.isShared,
+          distance: distance ?? this.distance,
+          maxSpeed: maxSpeed ?? this.maxSpeed,
+          typeRoute: typeRoute,
+          name: name ?? this.name);
 }
 
 extension ModelRouteExtension on ModelRoute {
   Future<List<ModelLocation>?> get detailRouteEx async => id == null
       ? null
       : await getIt<LocationRepository>().getDetailRoute(id: id!);
+
+  Future<ModelTypeRoute?> get typeRouteEx async =>
+      id == null || typeRoute == null
+          ? null
+          : (await getIt<TypeRouteRepository>().getModelByRef(typeRoute!))
+              as ModelTypeRoute;
 }

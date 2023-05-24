@@ -7,6 +7,7 @@ import 'package:where_my_team/data/data_source/remote/firebase_auth_service.dart
 import 'package:where_my_team/data/data_source/remote/firestore_service.dart';
 import 'package:where_my_team/domain/repositories/location_repository.dart';
 import 'package:where_my_team/domain/repositories/user_repository.dart';
+import 'package:where_my_team/models/model_team_user.dart';
 import 'package:where_my_team/models/model_user.dart';
 import 'package:where_my_team/models/model_location.dart';
 import 'package:where_my_team/models/model.dart';
@@ -51,9 +52,13 @@ class UserRepositoryImpl extends UserRepository {
   String getPath(String? uid) => '/user';
 
   @override
-  Future<ModelUser?> postUserInitial() {
-    // TODO: implement postUserInitial
-    throw UnimplementedError();
+  Future<void> postUserInitial() {
+    return insert(ModelUser(
+        id: user?.uid,
+        email: user?.email,
+        name: user?.displayName,
+        phoneNumber: user?.phoneNumber,
+        avatar: user?.photoURL));
   }
 
   @override
@@ -146,5 +151,33 @@ class UserRepositoryImpl extends UserRepository {
         .get();
 
     return query.size > 0 ? query.docs.map((e) => e.data()).toList() : null;
+  }
+
+  @override
+  Future<ModelTeamUser?> getFamilyTeam() async {
+    final teamQuery = await firestoreService
+        .collection('team')
+        .where('isFamilyTeam', isEqualTo: true)
+        .get();
+    final userQuery = firestoreService
+        .collection('${getPath(null)}/${user?.uid}/team')
+        .where(FieldPath.documentId, whereIn: [
+      for (final doc in teamQuery.docs) doc.id
+    ]).withConverter(
+            fromFirestore: ModelTeamUser.fromFirestore,
+            toFirestore: (ModelTeamUser model, _) => model.toFirestore());
+    final teamDoc = await userQuery.get();
+    if (teamDoc.size == 1) return teamDoc.docs.first.data();
+    return null;
+  }
+
+  @override
+  Stream<DocumentSnapshot<ModelUser>> snapshot({required String userId}) {
+    return firestoreService
+        .doc('${getPath(null)}/$userId')
+        .withConverter(
+            fromFirestore: ModelUser.fromFirestore,
+            toFirestore: (ModelUser model, _) => model.toFirestore())
+        .snapshots(includeMetadataChanges: true);
   }
 }

@@ -125,10 +125,12 @@ class _LoginScreenState extends State<LoginScreen> {
                     listener: (context, state) {
                       switch (state.status) {
                         case LoginStatus.error:
+                          AlertUtil.hideLoading();
                           AlertUtil.showToast(
                               MultiLanguage.of(context).inValidInput);
                           break;
-                        //Handled by firebase auth event authChanged
+                        // Handled by firebase auth event authChanged
+                        // move to WelcomeCubit
                         // case LoginStatus.success:
                         //   if (state is SignUpState) {
                         //     XMDRouter.pushNamed(routerIds[AccountSetupRoute]!);

@@ -6,6 +6,7 @@ import 'package:location/location.dart';
 import 'package:where_my_team/di/di.dart';
 import 'package:where_my_team/domain/repositories/unit_of_work.dart';
 import 'package:where_my_team/domain/use_cases/login_page_usecases.dart';
+import 'package:where_my_team/models/model.dart';
 import 'package:where_my_team/models/model_member.dart';
 import 'package:where_my_team/models/model_role.dart';
 import 'package:where_my_team/models/model_team.dart';
@@ -17,21 +18,6 @@ class TeamUsercase {
   final UnitOfWork unitOfWork;
 
   TeamUsercase({required this.unitOfWork});
-
-  FutureOr<LocationData?> getCurrentLocation() async {
-    LocationData? data = await unitOfWork.gps.getCurrentLocation();
-    return data;
-  }
-
-  Future<Stream<LocationData>?> getStreamLocation() async {
-    Stream<LocationData>? data = await unitOfWork.gps.getStream();
-    return data;
-  }
-
-  Future<bool> checkAndAskPermission() async {
-    bool? allow = await unitOfWork.gps.checkPermission();
-    return allow ?? false;
-  }
 
   Future<ModelUser?> getCurrentUser() {
     return unitOfWork.user.getCurrentUser();
@@ -76,17 +62,33 @@ class TeamUsercase {
     return unitOfWork.teamUser.getStream();
   }
 
+  Future<List> getFamilyStream() async {
+    ModelTeamUser? teamUser = await unitOfWork.user.getFamilyTeam();
+    ModelTeam? team = await teamUser?.teamEx;
+    if (teamUser == null || team == null) return [];
+    return [unitOfWork.team.getStream(team: team), team];
+  }
+
   Stream<QuerySnapshot<ModelMember>> getDetailStream(
       {required ModelTeam team}) {
     return unitOfWork.team.getStream(team: team);
   }
 
+  Future<IModel?> getInfo(String id) {
+    return unitOfWork.team.getModelByRef(unitOfWork.team.getRefById(id));
+  }
+
   Future createTeam(
       {required String name,
       required String avatar,
-      List<ModelUser>? members}) async {
+      List<ModelUser>? members,
+      bool isFamilyTeam = false}) async {
     final team = ModelTeam(
-        id: null, name: name, createdAt: Timestamp.now(), avatar: avatar);
+        id: null,
+        name: name,
+        createdAt: Timestamp.now(),
+        avatar: avatar,
+        isFamilyTeam: isFamilyTeam);
     if (await unitOfWork.team.postTeam(team: team)) {
       unitOfWork.user.getCurrentUser().then((author) {
         ModelRole admin =
@@ -97,8 +99,10 @@ class TeamUsercase {
 
       ModelRole member =
           ModelRole(id: 'Iaxzg3yMsu6IaXivpfZd', name: 'Member', weightNo: 2);
-      Future.wait(members?.map((e) => unitOfWork.memberTeam.postMember(
-          team: team, user: e, role: member)) as Iterable<Future<bool>>);
+      if (members != null && members.isNotEmpty) {
+        Future.wait(members.map((e) => unitOfWork.memberTeam
+            .postMember(team: team, user: e, role: member)));
+      }
 
       unitOfWork.teamUser.addFavourite(team: team, users: members);
     }

@@ -1,18 +1,17 @@
 part of 'route_cubit.dart';
 
-@immutable
 class RouteState extends Equatable {
-  const RouteState();
+  final SplayTreeMap<String, List<ModelRoute>?> routes;
+  const RouteState({required this.routes});
 
-  factory RouteState.initial() =>
-      const RouteState();
+  factory RouteState.initial() => RouteState(routes: SplayTreeMap.from({}));
 
   @override
   bool? get stringify => true;
 
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [routes];
 
-  RouteState copyWith() =>
-      RouteState();
+  RouteState copyWith({SplayTreeMap<String, List<ModelRoute>?>? routes}) =>
+      RouteState(routes: routes ?? this.routes);
 }

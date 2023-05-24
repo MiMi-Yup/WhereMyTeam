@@ -22,26 +22,36 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+        "cancel": MessageLookupByLibrary.simpleMessage("Cancel"),
         "cancelled": MessageLookupByLibrary.simpleMessage("Cancelled"),
+        "confirm": MessageLookupByLibrary.simpleMessage("Confirm"),
         "connectTimeout":
             MessageLookupByLibrary.simpleMessage("Connect timeout"),
         "connectionProblem":
             MessageLookupByLibrary.simpleMessage("Không có kết nối mạng"),
         "connectionProblemDesc": MessageLookupByLibrary.simpleMessage(
             "Vui lòng kiểm tra lại tín hiệu Wifi hoặc 3G/4G của bạn."),
+        "darkTheme": MessageLookupByLibrary.simpleMessage("Dark theme"),
         "databaseException":
             MessageLookupByLibrary.simpleMessage("Database exception"),
+        "editProfile": MessageLookupByLibrary.simpleMessage("Edit Profile"),
         "email": MessageLookupByLibrary.simpleMessage("Email"),
         "getSetting": MessageLookupByLibrary.simpleMessage("Get setting"),
+        "helpCenter": MessageLookupByLibrary.simpleMessage("Help Center"),
         "inValidInput": MessageLookupByLibrary.simpleMessage(
             "Email or password is invalid"),
+        "language": MessageLookupByLibrary.simpleMessage("Language"),
+        "languageName": MessageLookupByLibrary.simpleMessage("English"),
         "login": MessageLookupByLibrary.simpleMessage("Login"),
         "loginSuggest":
             MessageLookupByLibrary.simpleMessage("Already have an account? "),
         "loginTitle":
             MessageLookupByLibrary.simpleMessage("Login to Your Account"),
+        "logout": MessageLookupByLibrary.simpleMessage("Logout"),
+        "mapPage": MessageLookupByLibrary.simpleMessage("Map"),
         "otherLogin": MessageLookupByLibrary.simpleMessage("or continue with"),
         "password": MessageLookupByLibrary.simpleMessage("Password"),
+        "profile": MessageLookupByLibrary.simpleMessage("Profile"),
         "receiveTimeout":
             MessageLookupByLibrary.simpleMessage("Receive timeout"),
         "rememberAccount": MessageLookupByLibrary.simpleMessage("Remember me"),
@@ -57,6 +67,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Create Your Account"),
         "systemError": MessageLookupByLibrary.simpleMessage(
             "Something wrong! Please try later."),
+        "teamPage": MessageLookupByLibrary.simpleMessage("Team"),
         "tryIt": MessageLookupByLibrary.simpleMessage("Try it")
       };
 }

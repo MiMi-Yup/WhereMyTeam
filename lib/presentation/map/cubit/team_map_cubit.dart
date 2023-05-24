@@ -42,7 +42,7 @@ class TeamMapCubit extends Cubit<TeamMapState> {
         'name': user?.name,
         'avatar': user?.avatar,
         'battery': user?.percentBatteryDevice,
-        'lastOnline': lastLocation?.timestamp?.toShortTime,
+        'lastOnline': lastLocation?.timestamp?.toShortDateTime,
         'location:': 'Near somewhere',
         // 'isFavourite': member.isFavourite
       };
@@ -50,7 +50,7 @@ class TeamMapCubit extends Cubit<TeamMapState> {
     return null;
   }
 
-  Future<void> logOut() async {
-    await homepageUseCases.logOut();
+  Future<void> logOut() {
+    return homepageUseCases.logOut();
   }
 }

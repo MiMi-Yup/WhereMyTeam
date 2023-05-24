@@ -1,17 +1,17 @@
 import 'dart:async';
 
 import 'package:configuration/route/xmd_router.dart';
-import 'package:flutter/gestures.dart';
+import 'package:configuration/style/style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:searchable_paginated_dropdown/searchable_paginated_dropdown.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
-import 'package:where_my_team/common/widgets/m_member_component.dart';
 import 'package:where_my_team/common/widgets/m_member_route_component.dart';
 import 'package:where_my_team/common/widgets/m_team_component.dart';
 import 'package:where_my_team/manifest.dart';
+import 'package:where_my_team/models/model_member.dart';
 import 'package:where_my_team/models/model_team.dart';
 import 'package:where_my_team/presentation/map/cubit/map_cubit.dart';
 import 'package:where_my_team/presentation/route/route_route.dart';
@@ -61,18 +61,14 @@ class _MapScreenState extends State<MapScreen>
       body: Stack(
         children: [
           BlocConsumer<MapCubit, MapState>(
+            listenWhen: (previous, current) =>
+                previous.cameraMap != current.cameraMap,
             listener: (context, state) async {
               if (_controller.isCompleted) {
                 if (state.status != MapStatus.initial &&
                     state.cameraMap != null) {
                   final GoogleMapController controller =
                       await _controller.future;
-                  // controller.animateCamera(
-                  //     CameraUpdate.newCameraPosition(CameraPosition(
-                  //   target: LatLng(state.focusLocation!.latitude!,
-                  //       state.focusLocation!.longitude!),
-                  //   zoom: 16,
-                  // )));
                   controller.animateCamera(state.cameraMap!);
                 }
               }
@@ -83,14 +79,10 @@ class _MapScreenState extends State<MapScreen>
               myLocationEnabled: true,
               onMapCreated: (GoogleMapController controller) async {
                 _controller.complete(controller);
-                inits(await context.read<MapCubit>().getCurrentLocation());
-                // bool allow =
-                //     await context.read<MapCubit>().checkPermission();
-                // if (allow) {
-                //   Stream<LocationData>? stream =
-                //       await context.read<MapCubit>().getStream();
-                //   if (stream != null) inits(stream);
-                // }
+                bool allow = await context.read<MapCubit>().checkPermission();
+                if (allow) {
+                  inits(context.read<MapCubit>().currentLocation);
+                }
               },
               markers: state.members,
               polylines: state.polylines,
@@ -129,10 +121,8 @@ class _MapScreenState extends State<MapScreen>
                 onChanged: (ModelTeam? value) {
                   debugPrint(value?.id);
                   if (value != null) {
-                    context
-                        .read<TeamMapCubit>()
-                        .changeTeam(value)
-                        .then((_) => context.read<MapCubit>().showMembers());
+                    context.read<TeamMapCubit>().changeTeam(value);
+                    context.read<MapCubit>().changeTeam(value);
                   }
                 },
               ),
@@ -151,7 +141,7 @@ class _MapScreenState extends State<MapScreen>
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 GestureDetector(
-                  onTap: () => null,
+                  onTap: context.read<MapCubit>().goToMyLocation,
                   child: Container(
                     padding: EdgeInsets.all(10.0),
                     decoration: BoxDecoration(
@@ -185,13 +175,19 @@ class _MapScreenState extends State<MapScreen>
                     direction: Axis.horizontal,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('People',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.deepPurple,
-                              fontSize: 18)),
+                      BlocBuilder<TeamMapCubit, TeamMapState>(
+                          buildWhen: (previous, current) =>
+                              previous.currentTeam?.id !=
+                              current.currentTeam?.id,
+                          builder: (context, state) => Text(
+                              state.currentTeam?.name ?? "",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.deepPurple,
+                                  fontSize: 18))),
                       TextButton(
-                          onPressed: context.read<MapCubit>().showRoute,
+                          onPressed: null,
+                          // onPressed: context.read<MapCubit>().showRoute,
                           child: Container(
                             padding: EdgeInsets.all(8.0),
                             decoration: BoxDecoration(
@@ -216,7 +212,17 @@ class _MapScreenState extends State<MapScreen>
                           ))
                     ],
                   ),
-                  Text('38 members'),
+                  BlocBuilder<TeamMapCubit, TeamMapState>(
+                      buildWhen: (previous, current) =>
+                          previous.currentTeam?.id != current.currentTeam?.id,
+                      builder: (context, state) => FutureBuilder<int>(
+                          future: state.currentTeam?.getNumberOfMembers,
+                          builder: (context, snapshot) => snapshot.hasData
+                              ? Text(
+                                  "${snapshot.data ?? 1} members",
+                                  style: mST10R,
+                                )
+                              : const SizedBox.shrink())),
                   Expanded(
                       child: BlocBuilder<TeamMapCubit, TeamMapState>(
                     builder: (context, state) => MediaQuery.removeViewPadding(
@@ -255,112 +261,15 @@ class _MapScreenState extends State<MapScreen>
                                               .read<MapCubit>()
                                               .focusToMember(index);
                                         },
-                                        routeSlidableAction: (_) =>
+                                        routeSlidableAction: (_) async =>
                                             XMDRouter.pushNamed(
-                                                routerIds[RouteRoute]!),
+                                                routerIds[RouteRoute]!,
+                                                arguments: {
+                                              'user': await state
+                                                  .teamMembers?[index].userEx
+                                            }),
                                       )
-
-                                    // GestureDetector(
-                                    //     onTap: () {
-                                    //       //TODO focus to member when click
-                                    //       _panelController.close();
-                                    //       context.read<MapCubit>().focusToMember(index);
-                                    //     },
-                                    //     child: Container(
-                                    //       height: 100,
-                                    //       decoration:
-                                    //           BoxDecoration(color: Colors.transparent),
-                                    //       child: Row(
-                                    //         children: [
-                                    //           Expanded(
-                                    //               child: Row(
-                                    //             children: [
-                                    //               Stack(
-                                    //                 alignment: Alignment.center,
-                                    //                 children: [
-                                    //                   SizedBox(
-                                    //                     height: 80,
-                                    //                     width: 80,
-                                    //                     child: CircleAvatar(
-                                    //                         foregroundImage: NetworkImage(
-                                    //                             'https://www.rd.com/wp-content/uploads/2020/11/redo-cat-meme6.jpg?w=1414')),
-                                    //                   ),
-                                    //                   Align(
-                                    //                     alignment:
-                                    //                         Alignment.bottomCenter,
-                                    //                     child: Container(
-                                    //                       padding: EdgeInsets.only(
-                                    //                           left: 2.0, right: 2.0),
-                                    //                       decoration: BoxDecoration(
-                                    //                           color: Colors.white,
-                                    //                           borderRadius:
-                                    //                               BorderRadius.all(
-                                    //                                   Radius.circular(
-                                    //                                       8.0)),
-                                    //                           boxShadow: [
-                                    //                             BoxShadow(
-                                    //                               color: Colors.grey,
-                                    //                               blurRadius: 4,
-                                    //                               offset: Offset(2,
-                                    //                                   2), // Shadow position
-                                    //                             )
-                                    //                           ]),
-                                    //                       child: Row(
-                                    //                         children: [
-                                    //                           Icon(Icons.battery_5_bar),
-                                    //                           Text(
-                                    //                               '${snapshot.data!['battery']}%')
-                                    //                         ],
-                                    //                       ),
-                                    //                     ),
-                                    //                   )
-                                    //                 ],
-                                    //               ),
-                                    //               SizedBox(width: 10.0),
-                                    //               Column(
-                                    //                 crossAxisAlignment:
-                                    //                     CrossAxisAlignment.start,
-                                    //                 mainAxisSize: MainAxisSize.min,
-                                    //                 children: [
-                                    //                   Text(
-                                    //                       snapshot.data!['name']
-                                    //                           .toString(),
-                                    //                       style: TextStyle(
-                                    //                           fontWeight:
-                                    //                               FontWeight.bold,
-                                    //                           fontSize: 16,
-                                    //                           color:
-                                    //                               Colors.deepPurple)),
-                                    //                   Text(
-                                    //                       snapshot.data!['location']
-                                    //                           .toString(),
-                                    //                       style: TextStyle(
-                                    //                           fontSize: 16,
-                                    //                           color:
-                                    //                               Colors.deepPurple)),
-                                    //                   Text(
-                                    //                       snapshot.data!['lastOnline']
-                                    //                           .toString(),
-                                    //                       style: TextStyle(
-                                    //                           fontSize: 16,
-                                    //                           color: Colors.deepPurple))
-                                    //                 ],
-                                    //               )
-                                    //             ],
-                                    //           )),
-                                    //           MToggleIconButton(
-                                    //             activeIcon: Icons.favorite,
-                                    //             unactiveIcon: Icons.favorite_outline,
-                                    //             initState: snapshot.data!['isFavourite']
-                                    //                     as bool? ??
-                                    //                 false,
-                                    //             onPressed: null,
-                                    //           )
-                                    //         ],
-                                    //       ),
-                                    //     ),
-                                    //   )
-                                    : const Placeholder());
+                                    : const LinearProgressIndicator());
                           },
                           separatorBuilder: (context, index) {
                             return Divider(

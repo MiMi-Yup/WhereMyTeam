@@ -279,6 +279,116 @@ class MultiLanguage {
       args: [],
     );
   }
+
+  /// `Cancel`
+  String get cancel {
+    return Intl.message(
+      'Cancel',
+      name: 'cancel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Confirm`
+  String get confirm {
+    return Intl.message(
+      'Confirm',
+      name: 'confirm',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Profile`
+  String get profile {
+    return Intl.message(
+      'Profile',
+      name: 'profile',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Logout`
+  String get logout {
+    return Intl.message(
+      'Logout',
+      name: 'logout',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Edit Profile`
+  String get editProfile {
+    return Intl.message(
+      'Edit Profile',
+      name: 'editProfile',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Language`
+  String get language {
+    return Intl.message(
+      'Language',
+      name: 'language',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `English`
+  String get languageName {
+    return Intl.message(
+      'English',
+      name: 'languageName',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Dark theme`
+  String get darkTheme {
+    return Intl.message(
+      'Dark theme',
+      name: 'darkTheme',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Help Center`
+  String get helpCenter {
+    return Intl.message(
+      'Help Center',
+      name: 'helpCenter',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Team`
+  String get teamPage {
+    return Intl.message(
+      'Team',
+      name: 'teamPage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Map`
+  String get mapPage {
+    return Intl.message(
+      'Map',
+      name: 'mapPage',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<MultiLanguage> {

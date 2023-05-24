@@ -21,5 +21,16 @@
     "loginSuggest": "Already have an account? ",
     "signUpSuggest": "Don't hae an account? ",
     "rememberAccount": "Remember me",
-    "inValidInput": "Email or password is invalid"
+    "inValidInput": "Email or password is invalid",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "profile": "Profile",
+    "logout": "Logout",
+    "editProfile": "Edit Profile",
+    "language": "Language",
+    "languageName": "English",
+    "darkTheme": "Dark theme",
+    "helpCenter": "Help Center",
+    "teamPage": "Team",
+    "mapPage": "Map"
 }

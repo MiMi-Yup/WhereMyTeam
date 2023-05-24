@@ -7,6 +7,7 @@ import 'package:where_my_team/domain/repositories/route_repository.dart';
 import 'package:where_my_team/models/model_route.dart';
 import 'package:where_my_team/models/model_location.dart';
 import 'package:where_my_team/models/model.dart';
+import 'package:where_my_team/models/model_user.dart';
 
 @Injectable(as: RouteRepository)
 class RouteRepositoryImpl extends RouteRepository {
@@ -49,22 +50,44 @@ class RouteRepositoryImpl extends RouteRepository {
   }
 
   @override
-  Future<List<ModelRoute>?> getRoutes() async {
-    QuerySnapshot<ModelRoute> snapshot = await firestore.service
-        .collection(getPath(user?.uid))
-        .withConverter(
-            fromFirestore: ModelRoute.fromFirestore,
-            toFirestore: (ModelRoute model, _) => model.toFirestore())
-        .get();
+  Future<List<ModelRoute>?> getRoutes({String? id}) async {
+    late QuerySnapshot<ModelRoute> snapshot;
+    if (id == null || user?.uid == id) {
+      snapshot = await firestore.service
+          .collection(getPath(user?.uid))
+          .withConverter(
+              fromFirestore: ModelRoute.fromFirestore,
+              toFirestore: (ModelRoute model, _) => model.toFirestore())
+          .get();
+    } else {
+      snapshot = await firestore.service
+          .collection(getPath(id))
+          .where('isShared', isEqualTo: true)
+          .withConverter(
+              fromFirestore: ModelRoute.fromFirestore,
+              toFirestore: (ModelRoute model, _) => model.toFirestore())
+          .get();
+    }
     return snapshot.size > 0
         ? snapshot.docs.map((e) => e.data()).toList()
         : null;
   }
 
   @override
+  Future<void> insert(IModel model) async {
+    DocumentReference ref = await firestore.service
+        .collection(getPath(user?.uid))
+        .withConverter(
+            fromFirestore: ModelRoute.fromFirestore,
+            toFirestore: (ModelRoute model, _) => model.toFirestore())
+        .add(model as ModelRoute);
+    model.id = ref.id;
+  }
+
+  @override
   Future<ModelRoute?> postRoute({required ModelRoute newRoute}) async {
     await insert(newRoute);
-    return null;
+    return newRoute;
   }
 
   @override

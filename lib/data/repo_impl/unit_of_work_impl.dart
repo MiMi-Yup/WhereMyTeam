@@ -5,8 +5,10 @@ import 'package:where_my_team/domain/repositories/location_repository.dart';
 import 'package:where_my_team/domain/repositories/member_repository.dart';
 import 'package:where_my_team/domain/repositories/preferences_repository.dart';
 import 'package:where_my_team/domain/repositories/role_repository.dart';
+import 'package:where_my_team/domain/repositories/route_repository.dart';
 import 'package:where_my_team/domain/repositories/team_user_repository.dart';
 import 'package:where_my_team/domain/repositories/team_repository.dart';
+import 'package:where_my_team/domain/repositories/type_route_repository.dart';
 import 'package:where_my_team/domain/repositories/unit_of_work.dart';
 import 'package:where_my_team/domain/repositories/user_repository.dart';
 
@@ -39,6 +41,12 @@ class UnitOfWorkImpl implements UnitOfWork {
   @override
   final TeamUserRepository teamUser;
 
+  @override
+  final RouteRepository route;
+
+  @override
+  final TypeRouteRepository typeRoute;
+
   UnitOfWorkImpl(
       {required this.location,
       required this.user,
@@ -48,5 +56,7 @@ class UnitOfWorkImpl implements UnitOfWork {
       required this.role,
       required this.team,
       required this.teamUser,
-      required this.memberTeam});
+      required this.memberTeam,
+      required this.route,
+      required this.typeRoute});
 }

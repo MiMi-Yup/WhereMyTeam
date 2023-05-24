@@ -5,6 +5,7 @@ import 'package:where_my_team/presentation/team/cubit/team_cubit.dart';
 import 'package:where_my_team/presentation/team/ui/team_screen.dart';
 
 class TeamPage extends StatelessWidget {
+  
   const TeamPage({super.key});
 
   @override

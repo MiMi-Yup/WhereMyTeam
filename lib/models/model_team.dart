@@ -8,12 +8,14 @@ class ModelTeam extends IModel {
   String? name;
   String? avatar;
   Timestamp? createdAt;
+  bool? isFamilyTeam;
 
   ModelTeam(
       {required super.id,
       required this.name,
       required this.createdAt,
-      this.avatar});
+      this.avatar,
+      this.isFamilyTeam});
 
   ModelTeam.fromFirestore(
       DocumentSnapshot<Map<String, dynamic>> snapshot, SnapshotOptions? options)
@@ -22,23 +24,34 @@ class ModelTeam extends IModel {
     name = data?['name'];
     createdAt = data?['createdAt'];
     avatar = data?['avatar'];
+    isFamilyTeam = data?['isFamilyTeam'];
   }
 
   @override
   Map<String, dynamic> toFirestore() {
-    return {'name': name, 'createdAt': createdAt, 'avatar': avatar};
+    return {
+      'name': name,
+      'createdAt': createdAt,
+      'avatar': avatar,
+      'isFamilyTeam': isFamilyTeam
+    };
   }
 
   @override
   Map<String, dynamic> updateFirestore() => {'name': name, 'avatar': avatar};
 
   ModelTeam copyWith(
-          {String? id, String? name, Timestamp? createdAt, String? avatar}) =>
+          {String? id,
+          String? name,
+          Timestamp? createdAt,
+          String? avatar,
+          bool? isFamilyTeam}) =>
       ModelTeam(
           id: id ?? this.id,
           name: name ?? this.name,
           createdAt: createdAt ?? this.createdAt,
-          avatar: avatar ?? this.avatar);
+          avatar: avatar ?? this.avatar,
+          isFamilyTeam: isFamilyTeam ?? this.isFamilyTeam);
 }
 
 extension ModelTeamExtension on ModelTeam {

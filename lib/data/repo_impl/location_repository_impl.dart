@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:injectable/injectable.dart';
+import 'package:location_platform_interface/location_platform_interface.dart';
 import 'package:where_my_team/data/data_source/remote/firebase_auth_service.dart';
 import 'package:where_my_team/data/data_source/remote/firestore_service.dart';
 import 'package:where_my_team/domain/repositories/location_repository.dart';

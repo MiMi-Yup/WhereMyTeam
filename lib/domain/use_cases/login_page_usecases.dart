@@ -76,10 +76,10 @@ class LoginUseCases {
         credential = EmailAuthProvider.credential(
             email: token['email'], password: token['password']);
         break;
-      case 'google':
-        credential = GoogleAuthProvider.credential(
-            accessToken: token['accessToken'], idToken: token['idToken']);
-        break;
+      // case 'google':
+      //   credential = GoogleAuthProvider.credential(
+      //       accessToken: token['accessToken'], idToken: token['idToken'].toString());
+      //   break;
       default:
         return null;
     }
@@ -96,6 +96,15 @@ class LoginUseCases {
   Future<void> signOut() async {
     await unitOfWork.auth.signOut();
     await unitOfWork.preferences.clear();
+  }
+
+  Future<bool> checkAlreadyUser(String uid) async {
+    final check = await unitOfWork.user.getRefById(uid).get();
+    return check.exists;
+  }
+
+  Future<void> initUser() {
+    return unitOfWork.user.postUserInitial();
   }
 
   Future _initFirestore(UserCredential? credential) async {
