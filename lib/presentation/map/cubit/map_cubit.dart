@@ -63,13 +63,14 @@ class MapCubit extends Cubit<MapState> {
     emit(state.copyWith(status: MapStatus.initial));
   }
 
-  void focusToMember(int index) async {
+  void focusToMember(ModelMember? member) async {
+    final ModelUser? user = await member?.userEx;
+    focusToUser(user);
+  }
+
+  void focusToUser(ModelUser? user) async {
     _disposeFocus();
-    if (userCubit.state.teamMembers != null &&
-        userCubit.state.teamMembers!.length > index) {
-      ModelMember member = userCubit.state.teamMembers![index];
-      ModelUser? user = await member.userEx;
-      if (user == null) return;
+    if (user != null) {
       _focusSubcription = mapUseCases.snapshot(user)?.listen((event) async {
         final user = event.data();
         if (!event.exists || user == null) return;
@@ -141,7 +142,9 @@ class MapCubit extends Cubit<MapState> {
           position: lastLocation.coordinate),
     );
 
-    emit(state.copyWith(members: updatedMarkers));
+    try {
+      emit(state.copyWith(members: updatedMarkers));
+    } catch (ex) {}
   }
 
   void changeTeam(ModelTeam team) async {
@@ -153,13 +156,15 @@ class MapCubit extends Cubit<MapState> {
       final lastLocations = await Future.wait(users
           .where((element) => element != null)
           .map((e) => e!.lastLocationEx));
-      CameraUpdate cameraUpdate = CameraUpdate.newLatLngBounds(
-          LatLngBoundsExtension.routeLatLngBounds(lastLocations
-              .where((element) => element != null)
-              .map((e) => e!.coordinate)
-              .toList()),
-          50);
-      emit(state.copyWith(cameraMap: cameraUpdate, status: MapStatus.bound));
+      final listCoordinate = lastLocations
+          .where((element) => element != null)
+          .map((e) => e!.coordinate)
+          .toList();
+      if (listCoordinate.isNotEmpty) {
+        CameraUpdate cameraUpdate = CameraUpdate.newLatLngBounds(
+            LatLngBoundsExtension.routeLatLngBounds(listCoordinate), 50);
+        emit(state.copyWith(cameraMap: cameraUpdate, status: MapStatus.bound));
+      }
       final snapshots = users
           .map((e) => mapUseCases.snapshot(e))
           .where((element) => element != null)

@@ -49,6 +49,11 @@ class RouteScreen extends StatelessWidget {
                     .entries
                     .map((e) => MSection(
                         title: e.key,
+                        headerColor: Theme.of(context).scaffoldBackgroundColor,
+                        titleColor:
+                            Theme.of(context).brightness == Brightness.dark
+                                ? Colors.white
+                                : Colors.black,
                         content: Column(
                           children: e.value!
                               .map<Widget>((e) =>

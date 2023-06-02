@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:configuration/route/xmd_router.dart';
@@ -8,6 +9,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:where_my_team/common/widgets/m_section.dart';
 import 'package:where_my_team/common/widgets/m_team_component.dart';
 import 'package:where_my_team/common/widgets/m_user_component.dart';
+import 'package:where_my_team/data/data_source/remote/cloud_storage_service.dart';
+import 'package:where_my_team/di/di.dart';
+import 'package:where_my_team/domain/repositories/user_repository.dart';
 import 'package:where_my_team/manifest.dart';
 import 'package:where_my_team/models/model_member.dart';
 import 'package:where_my_team/models/model_team.dart';
@@ -37,35 +41,44 @@ class _TeamScreenState extends State<TeamScreen>
         automaticallyImplyLeading: false,
         toolbarHeight: 80,
         elevation: 0.0,
-        title: Row(
-          children: [
-            SizedBox(
-                height: 60,
-                width: 60,
-                child: CircleAvatar(
-                  foregroundImage: NetworkImage(
-                      'https://www.rd.com/wp-content/uploads/2020/11/redo-cat-meme6.jpg?w=1414',
-                      scale: 1.0),
-                  backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-                )),
-            SizedBox(
-              width: 10.0,
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "Good morning",
-                  style: mST16R.copyWith(color: Colors.grey),
-                ),
-                Text(
-                  "Andrew Ainsley",
-                  style: mST18M,
-                )
-              ],
-            ),
-          ],
-        ),
+        title: FutureBuilder<ModelUser?>(
+            future: getIt<UserRepository>().getCurrentUser(),
+            builder: (context, snapshot) => snapshot.hasData
+                ? Row(
+                    children: [
+                      FutureBuilder<Uint8List?>(
+                          future: CloudStorageService.downloadFile(
+                              snapshot.data!.avatar!),
+                          builder: (context, snapshot) => snapshot.hasData
+                              ? SizedBox(
+                                  height: 60,
+                                  width: 60,
+                                  child: CircleAvatar(
+                                    foregroundImage:
+                                        MemoryImage(snapshot.data!, scale: 1.0),
+                                    backgroundColor: Theme.of(context)
+                                        .scaffoldBackgroundColor,
+                                  ))
+                              : const SizedBox.shrink()),
+                      SizedBox(
+                        width: 10.0,
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Good morning",
+                            style: mST16R.copyWith(color: Colors.grey),
+                          ),
+                          Text(
+                            snapshot.data?.name ?? '',
+                            style: mST18M,
+                          )
+                        ],
+                      ),
+                    ],
+                  )
+                : const SizedBox.shrink()),
         actions: [
           IconButton(
               onPressed: () => XMDRouter.pushNamed(routerIds[NewTeamRoute]!),
@@ -79,8 +92,10 @@ class _TeamScreenState extends State<TeamScreen>
         slivers: [
           MSection(
               title: "People Nearby",
-              titleColor: Colors.black,
-              headerColor: Colors.white,
+              headerColor: Theme.of(context).scaffoldBackgroundColor,
+              titleColor: Theme.of(context).brightness == Brightness.dark
+                  ? Colors.white
+                  : Colors.black,
               headerPressable: false,
               content: SizedBox(
                 height: 120,
@@ -93,14 +108,20 @@ class _TeamScreenState extends State<TeamScreen>
                     itemCount: 10,
                     separatorBuilder: (context, index) => SizedBox(width: 20),
                     itemBuilder: (context, index) => MUserComponent(
-                        avatar:
-                            'https://www.vhv.rs/dpng/f/429-4290135_moon-emoji-png.png',
+                        onPressed: () {
+                          BlocProvider.of<MapCubit>(context).focusToUser(null);
+                          BlocProvider.of<BottomBarCubit>(context)
+                              .changePage(1);
+                        },
+                        avatar: 'avatar/fqAueJqQeKcgMJwJFCjsC2atiHj2/image.png',
                         name: 'John')),
               )).builder(),
           MSection(
               title: "Your family",
-              titleColor: Colors.black,
-              headerColor: Colors.white,
+              headerColor: Theme.of(context).scaffoldBackgroundColor,
+              titleColor: Theme.of(context).brightness == Brightness.dark
+                  ? Colors.white
+                  : Colors.black,
               headerPressable: false,
               action: Text('more'),
               onPressed: () {
@@ -167,8 +188,10 @@ class _TeamScreenState extends State<TeamScreen>
                   })).builder(),
           MSection(
               title: "Teams",
-              titleColor: Colors.black,
-              headerColor: Colors.white,
+              headerColor: Theme.of(context).scaffoldBackgroundColor,
+              titleColor: Theme.of(context).brightness == Brightness.dark
+                  ? Colors.white
+                  : Colors.black,
               content: StreamBuilder<QuerySnapshot<ModelTeamUser>>(
                 stream: context.read<TeamCubit>().getStreamTeam(),
                 builder: (context, snapshot) {
@@ -211,7 +234,7 @@ class _TeamScreenState extends State<TeamScreen>
                                           .changeTeam(models[index].team);
                                     },
                                     avatar: models[index].team.avatar ??
-                                        'https://www.rd.com/wp-content/uploads/2020/11/redo-cat-meme6.jpg?w=1414',
+                                        'avatar/fqAueJqQeKcgMJwJFCjsC2atiHj2/image.png',
                                     name: models[index].team.name ?? '',
                                     members: models[index].count,
                                     isEditable: true,

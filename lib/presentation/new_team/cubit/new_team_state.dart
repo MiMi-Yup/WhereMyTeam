@@ -24,7 +24,7 @@ class NewTeamState extends Equatable {
   bool? get stringify => true;
 
   @override
-  List<Object?> get props => [avatar, name, search, members];
+  List<Object?> get props => [avatar, name, search, members, state];
 
   NewTeamState copyWith(
           {String? avatar,

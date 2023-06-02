@@ -25,10 +25,12 @@ class MRouteOverview extends StatelessWidget {
   );
 
   void drawRoute() async {
-    final GoogleMapController _control = await _controller.future;
-    _control.moveCamera(CameraUpdate.newLatLngBounds(
-        LatLngBoundsExtension.routeLatLngBounds(coordinates), 50));
-    _control.dispose();
+    final GoogleMapController control = await _controller.future;
+    if (coordinates.isNotEmpty) {
+      control.moveCamera(CameraUpdate.newLatLngBounds(
+          LatLngBoundsExtension.routeLatLngBounds(coordinates), 50));
+    }
+    control.dispose();
   }
 
   @override

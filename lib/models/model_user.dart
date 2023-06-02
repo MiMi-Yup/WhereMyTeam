@@ -44,21 +44,26 @@ class ModelUser extends IModel {
   }
 
   @override
-  Map<String, dynamic> toFirestore() {
-    return {
-      'lastLocation': lastLocation,
-      'email': email,
-      'freezeLocation': freezeLocation,
-      'name': name,
-      'phoneNumber': phoneNumber,
-      'shareNotification': shareNotification,
-      'avatar': avatar,
-      'percentBatteryDevice': percentBatteryDevice
-    };
-  }
-
+  Map<String, dynamic> toFirestore() => {
+        'lastLocation': lastLocation,
+        'email': email,
+        'freezeLocation': freezeLocation,
+        'name': name,
+        'phoneNumber': phoneNumber,
+        'shareNotification': shareNotification,
+        'avatar': avatar,
+        'percentBatteryDevice': percentBatteryDevice
+      };
   @override
-  Map<String, dynamic> updateFirestore() => toFirestore();
+  Map<String, dynamic> updateFirestore() => {
+        'lastLocation': lastLocation,
+        'freezeLocation': freezeLocation,
+        'name': name,
+        'phoneNumber': phoneNumber,
+        'shareNotification': shareNotification,
+        'avatar': avatar,
+        'percentBatteryDevice': percentBatteryDevice
+      };
 
   @override
   bool operator ==(dynamic other) =>
@@ -70,7 +75,6 @@ class ModelUser extends IModel {
   ModelUser copyWith(
           {String? id,
           DocumentReference? lastLocation,
-          String? email,
           bool? freezeLocation,
           String? name,
           String? phoneNumber,
@@ -79,7 +83,7 @@ class ModelUser extends IModel {
           int? percentBatteryDevice}) =>
       ModelUser(
           id: id ?? this.id,
-          email: email ?? this.email,
+          email: email,
           name: name ?? this.name,
           phoneNumber: phoneNumber ?? this.phoneNumber,
           freezeLocation: freezeLocation ?? this.freezeLocation,

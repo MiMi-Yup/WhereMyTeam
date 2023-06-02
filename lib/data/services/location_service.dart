@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:collection';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:location/location.dart';
 import 'package:where_my_team/domain/repositories/unit_of_work.dart';
@@ -115,25 +116,16 @@ class LocationServiceImpl implements LocationService {
             .compareTo(_checkDuration) >=
         0) {
       final List<LocationData> listCheck = queue.toList();
-      double distance = 0.0;
-      double avgSpeed = 0.0;
-      double maxSpeed = 0.0;
-      final length = listCheck.length - 1; //-1 becasuse [index + 1]
-      for (int index = 0; index < length; index++) {
-        distance += listCheck[index].distance(listCheck[index + 1]);
-        maxSpeed = (listCheck[index].speed ?? 0) > maxSpeed
-            ? listCheck[index].speed ?? 0
-            : maxSpeed;
-      }
-      avgSpeed = distance / _checkDuration.inSeconds;
+      final resultCal = await compute(calRoute, listCheck);
+      final avgSpeed = resultCal[0] / _checkDuration.inSeconds;
       //condition trigger
-      if (distance < _triggerDistance) {
+      if (resultCal[0] < _triggerDistance) {
         if (_currentRoute != null) {
           await _endRoute();
         }
       } else if (_currentRoute == null) {
-        final typeRoute = minSpeedOfTypeRoute.entries.lastWhere(
-            (element) => element.value < avgSpeed || element.value < maxSpeed);
+        final typeRoute = minSpeedOfTypeRoute.entries.lastWhere((element) =>
+            element.value < avgSpeed || element.value < resultCal[2]);
         if (typeRoute.key != TypeRoute.nothing) {
           //start route
           await _newRoute(typeRoute.key, queueLocation: listCheck);
@@ -177,8 +169,31 @@ class LocationServiceImpl implements LocationService {
     _subscriptionLocation?.cancel();
     _subscriptionRoute?.cancel();
     _timer?.cancel();
+    _subscriptionLocation = null;
+    _subscriptionRoute = null;
+    _timer = null;
   }
 
   @override
   ModelRoute? get currentRoute => _currentRoute;
+  
+  @override
+  void userLogout() {
+    dispose();
+  }
+}
+
+//top-level function to isolate computing
+FutureOr<List<double>> calRoute(List<LocationData> listCheck) {
+  double distance = 0.0;
+  double avgSpeed = 0.0;
+  double maxSpeed = 0.0;
+  final length = listCheck.length - 1; //-1 becasuse [index + 1]
+  for (int index = 0; index < length; index++) {
+    distance += listCheck[index].distance(listCheck[index + 1]);
+    maxSpeed = (listCheck[index].speed ?? 0) > maxSpeed
+        ? listCheck[index].speed ?? 0
+        : maxSpeed;
+  }
+  return [distance, avgSpeed, maxSpeed];
 }

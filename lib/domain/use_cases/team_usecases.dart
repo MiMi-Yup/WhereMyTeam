@@ -1,8 +1,10 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:injectable/injectable.dart';
 import 'package:location/location.dart';
+import 'package:where_my_team/data/data_source/remote/cloud_storage_service.dart';
 import 'package:where_my_team/di/di.dart';
 import 'package:where_my_team/domain/repositories/unit_of_work.dart';
 import 'package:where_my_team/domain/use_cases/login_page_usecases.dart';
@@ -90,6 +92,9 @@ class TeamUsercase {
         avatar: avatar,
         isFamilyTeam: isFamilyTeam);
     if (await unitOfWork.team.postTeam(team: team)) {
+      final updateAvatar = 'team/${team.id}/image.png';
+      await CloudStorageService.uploadFile(File(avatar), updateAvatar);
+      await unitOfWork.team.putAvatar(team: team, path: updateAvatar);
       unitOfWork.user.getCurrentUser().then((author) {
         ModelRole admin =
             ModelRole(id: 'NtU957r3xX70qa260YeL', name: 'Admin', weightNo: 1);

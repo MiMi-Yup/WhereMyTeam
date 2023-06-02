@@ -8,6 +8,7 @@ import 'package:where_my_team/common/widgets/m_confirm_bottom_modal.dart';
 import 'package:where_my_team/di/di.dart';
 import 'package:where_my_team/domain/repositories/shared_preferences_repository.dart';
 import 'package:get/get.dart';
+import 'package:where_my_team/domain/repositories/user_repository.dart';
 import 'package:where_my_team/domain/use_cases/login_page_usecases.dart';
 import 'package:where_my_team/manifest.dart';
 import 'package:where_my_team/presentation/auth/account_setup/account_setup_route.dart';
@@ -123,8 +124,8 @@ class ProfileScreen extends StatelessWidget {
               MButtonSetting(
                 title: MultiLanguage.of(context).editProfile,
                 icon: Icon(Icons.person_outline),
-                onPressed: (_) =>
-                    XMDRouter.pushNamed(routerIds[AccountSetupRoute]!),
+                onPressed: (_) async=>
+                    XMDRouter.pushNamed(routerIds[AccountSetupRoute]!, arguments: {'model':await getIt<UserRepository>().getCurrentUser()}),
               ),
               MButtonSetting(
                 title: MultiLanguage.of(context).language,

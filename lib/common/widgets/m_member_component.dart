@@ -1,6 +1,9 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:where_my_team/common/widgets/m_toggle_icon_button.dart';
+import 'package:where_my_team/data/data_source/remote/cloud_storage_service.dart';
 
 class MMemberComponent extends StatefulWidget {
   final void Function()? onTap;
@@ -88,8 +91,13 @@ class _MMemberComponentState extends State<MMemberComponent>
                   SizedBox(
                     height: 75,
                     width: 75,
-                    child: CircleAvatar(
-                        foregroundImage: NetworkImage(widget.avatar)),
+                    child: FutureBuilder<Uint8List?>(
+                        future: CloudStorageService.downloadFile(widget.avatar),
+                        builder: (context, snapshot) => snapshot.hasData
+                            ? CircleAvatar(
+                                foregroundImage:
+                                    MemoryImage(snapshot.data!, scale: 1.0))
+                            : const SizedBox.shrink()),
                   ),
                   Align(
                     alignment: Alignment.bottomCenter,

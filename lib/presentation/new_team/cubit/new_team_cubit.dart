@@ -47,7 +47,7 @@ class NewTeamCubit extends Cubit<NewTeamState> {
     return teamUsercase.createTeam(
         name: state.name ?? 'yolo',
         avatar: state.avatar ??
-            'https://www.rd.com/wp-content/uploads/2020/11/redo-cat-meme6.jpg?w=1414',
+            'avatar/fqAueJqQeKcgMJwJFCjsC2atiHj2/image.png',
         members: state.members);
   }
 }

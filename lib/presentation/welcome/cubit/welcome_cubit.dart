@@ -2,12 +2,14 @@ import 'package:configuration/route/xmd_router.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
+import 'package:where_my_team/data/services/battery_service.dart';
 import 'package:where_my_team/data/services/location_service.dart';
 import 'package:where_my_team/di/di.dart';
 import 'package:where_my_team/domain/use_cases/login_page_usecases.dart';
 import 'package:where_my_team/domain/use_cases/team_usecases.dart';
 import 'package:where_my_team/manifest.dart';
 import 'package:where_my_team/models/model_user.dart';
+import 'package:where_my_team/presentation/auth/account_setup/account_setup_route.dart';
 import 'package:where_my_team/presentation/bottom_bar/bottom_bar_route.dart';
 import 'package:where_my_team/presentation/introduction/introduction_route.dart';
 
@@ -36,14 +38,18 @@ class WelcomeCubit extends Cubit<WelcomeState> {
           XMDRouter.pushNamedAndRemoveUntil(routerIds[IntroductionRoute]!);
         } else {
           if (!await loginUseCases.checkAlreadyUser(user.uid)) {
-            await loginUseCases.initUser();
-            await teamUsercase.createTeam(
-                isFamilyTeam: true,
-                name: 'Family',
-                avatar:
-                    'https://www.rd.com/wp-content/uploads/2020/11/redo-cat-meme6.jpg?w=1414');
+            // await loginUseCases.initUser(user);
+            final ModelUser? resultUser = await XMDRouter.pushNamedForResult(
+                routerIds[AccountSetupRoute]!,
+                arguments: {'auth': user});
+            if (resultUser != null) {
+              resultUser.id = user.uid;
+              resultUser.email = user.email;
+              await loginUseCases.initUser(resultUser);
+            }
           }
           getIt<LocationServiceImpl>().updateLocation();
+          getIt<BatteryServiceImpl>().updateBattery();
           XMDRouter.pushNamedAndRemoveUntil(routerIds[BottomBarRoute]!);
         }
       }, onError: (error) {});

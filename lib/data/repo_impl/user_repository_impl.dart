@@ -107,7 +107,7 @@ class UserRepositoryImpl extends UserRepository {
   @override
   Future<bool> putBattery({required int level}) async {
     ModelUser? user = await getCurrentUser();
-    if (user != null) {
+    if (user != null && user.percentBatteryDevice != level) {
       await update(user, user.copyWith(percentBatteryDevice: level));
       return true;
     }

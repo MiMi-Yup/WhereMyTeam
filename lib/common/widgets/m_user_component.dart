@@ -1,7 +1,9 @@
 import 'dart:math';
+import 'dart:typed_data';
 
 import 'package:configuration/style/style.dart';
 import 'package:flutter/material.dart';
+import 'package:where_my_team/data/data_source/remote/cloud_storage_service.dart';
 
 class MUserComponent extends StatelessWidget {
   final String avatar;
@@ -19,29 +21,33 @@ class MUserComponent extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onPressed,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            padding: const EdgeInsets.all(10.0),
-            margin: const EdgeInsets.only(bottom: 10),
-            decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors
-                    .primaries[Random().nextInt(Colors.primaries.length)]
-                    .withAlpha(120)),
-            child: Image(
-                height: 40.0,
-                width: 40.0,
-                image: NetworkImage(avatar, scale: 1.0)),
-          ),
-          Text(name, style: mST16R),
-          if (title != null)
-            Text(
-              title!,
-              style: mST14R.copyWith(color: Colors.grey),
-            )
-        ],
+      child: SizedBox(
+        width: 75,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SizedBox(
+              height: 75,
+              width: 75,
+              child: FutureBuilder<Uint8List?>(
+                  future: CloudStorageService.downloadFile(avatar),
+                  builder: (context, snapshot) => snapshot.hasData
+                      ? CircleAvatar(
+                          foregroundImage:
+                              MemoryImage(snapshot.data!, scale: 1.0))
+                      : const SizedBox.shrink()),
+            ),
+            Expanded(child: Text(name, style: mST16R, overflow: TextOverflow.ellipsis,)),
+            if (title != null)
+              Expanded(
+                child: Text(
+                  title!,
+                  style: mST14R.copyWith(color: Colors.grey),
+                  overflow: TextOverflow.ellipsis,
+                ),
+              )
+          ],
+        ),
       ),
     );
   }

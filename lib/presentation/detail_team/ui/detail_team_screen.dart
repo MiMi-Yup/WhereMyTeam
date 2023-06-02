@@ -114,7 +114,7 @@ class DetailTeamScreen extends StatelessWidget {
                         builder: (context, snapshot) => snapshot.hasData
                             ? MMemberComponent(
                                 avatar: snapshot.data?.avatar ??
-                                    'https://www.rd.com/wp-content/uploads/2020/11/redo-cat-meme6.jpg?w=1414',
+                                    'avatar/fqAueJqQeKcgMJwJFCjsC2atiHj2/image.png',
                                 batteryLevel:
                                     snapshot.data?.percentBatteryDevice ?? 100,
                                 name: snapshot.data?.name ?? 'Doan xem',

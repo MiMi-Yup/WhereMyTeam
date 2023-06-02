@@ -109,8 +109,8 @@ class _MapScreenState extends State<MapScreen>
                         .map((e) => SearchableDropdownMenuItem<ModelTeam>(
                             label: e.name!,
                             child: MTeamComponent(
-                                avatar:
-                                    'https://www.rd.com/wp-content/uploads/2020/11/redo-cat-meme6.jpg?w=1414',
+                                avatar: e.avatar ??
+                                    'avatar/fqAueJqQeKcgMJwJFCjsC2atiHj2/image.png',
                                 name: e.name!,
                                 isEditable: false),
                             value: e))
@@ -239,8 +239,9 @@ class _MapScreenState extends State<MapScreen>
                                             .hasData &&
                                         snapshot.data != null
                                     ? MMemberRouteComponent(
-                                        avatar:
-                                            'https://www.rd.com/wp-content/uploads/2020/11/redo-cat-meme6.jpg?w=1414',
+                                        avatar: snapshot.data!['avatar']
+                                                as String? ??
+                                            'avatar/fqAueJqQeKcgMJwJFCjsC2atiHj2/image.png',
                                         batteryLevel:
                                             snapshot.data!['battery'] as int? ??
                                                 0,
@@ -259,7 +260,8 @@ class _MapScreenState extends State<MapScreen>
                                           _panelController.close();
                                           context
                                               .read<MapCubit>()
-                                              .focusToMember(index);
+                                              .focusToMember(
+                                                  state.teamMembers?[index]);
                                         },
                                         routeSlidableAction: (_) async =>
                                             XMDRouter.pushNamed(

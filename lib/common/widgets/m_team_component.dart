@@ -1,5 +1,8 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:where_my_team/data/data_source/remote/cloud_storage_service.dart';
 
 class MTeamComponent extends StatefulWidget {
   final void Function()? onTap;
@@ -68,8 +71,13 @@ class _MTeamComponentState extends State<MTeamComponent>
               SizedBox(
                 height: 80,
                 width: 80,
-                child:
-                    CircleAvatar(foregroundImage: NetworkImage(widget.avatar)),
+                child: FutureBuilder<Uint8List?>(
+                    future: CloudStorageService.downloadFile(widget.avatar),
+                    builder: (context, snapshot) => snapshot.hasData
+                        ? CircleAvatar(
+                            foregroundImage:
+                                MemoryImage(snapshot.data!, scale: 1.0))
+                        : const SizedBox.shrink()),
               ),
               SizedBox(width: 10.0),
               Column(

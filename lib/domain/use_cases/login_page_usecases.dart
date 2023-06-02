@@ -1,22 +1,30 @@
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:injectable/injectable.dart';
+import 'package:where_my_team/data/data_source/remote/cloud_storage_service.dart';
 import 'package:where_my_team/data/data_source/remote/firebase_auth_service.dart';
 import 'package:where_my_team/domain/repositories/unit_of_work.dart';
+import 'package:where_my_team/domain/use_cases/team_usecases.dart';
 import 'package:where_my_team/models/model_user.dart';
 
 @injectable
 class LoginUseCases {
   final UnitOfWork unitOfWork;
   final FirebaseAuthService authService;
+  final TeamUsercase teamUsercase;
 
-  LoginUseCases({required this.unitOfWork, required this.authService});
+  LoginUseCases(
+      {required this.unitOfWork,
+      required this.authService,
+      required this.teamUsercase});
 
   Future<ModelUser?> loginPassword(String email, String password,
       {bool remember = false}) async {
     try {
       UserCredential? credential = await unitOfWork.auth
           .loginByPassword(email: email, password: password);
-      await _initFirestore(credential);
+      // await _initFirestore(credential);
       if (credential != null) {
         if (remember) {
           unitOfWork.preferences.setToken(email: email, password: password);
@@ -28,12 +36,13 @@ class LoginUseCases {
     } on FirebaseException {
       return null;
     }
+    return null;
   }
 
   Future<ModelUser?> loginGoogle({bool remember = false}) async {
     try {
       UserCredential? credential = await unitOfWork.auth.loginByGoogle();
-      await _initFirestore(credential);
+      // await _initFirestore(credential);
       if (credential != null) {
         if (remember && credential.credential != null) {
           unitOfWork.preferences.setToken(
@@ -46,6 +55,7 @@ class LoginUseCases {
     } on FirebaseException {
       return null;
     }
+    return null;
   }
 
   Future<ModelUser?> signUpPassword(
@@ -53,7 +63,7 @@ class LoginUseCases {
     try {
       UserCredential? credential = await unitOfWork.auth
           .signUpByPassword(email: email, password: password);
-      await _initFirestore(credential);
+      // await _initFirestore(credential);
       await credential?.user?.updateDisplayName(name);
       if (credential != null) {
         return ModelUser(
@@ -65,6 +75,7 @@ class LoginUseCases {
     } on FirebaseException {
       return null;
     }
+    return null;
   }
 
   Future<ModelUser?> loginRemember() async {
@@ -85,7 +96,7 @@ class LoginUseCases {
     }
     UserCredential resultCredential =
         await authService.service.signInWithCredential(credential);
-    await _initFirestore(resultCredential);
+    // await _initFirestore(resultCredential);
     return resultCredential.user == null
         ? null
         : ModelUser(
@@ -103,18 +114,16 @@ class LoginUseCases {
     return check.exists;
   }
 
-  Future<void> initUser() {
-    return unitOfWork.user.postUserInitial();
-  }
-
-  Future _initFirestore(UserCredential? credential) async {
-    if (credential?.additionalUserInfo?.isNewUser == true) {
-      await unitOfWork.user.insert(ModelUser(
-        id: credential?.user?.uid,
-        email: credential?.user?.email,
-        avatar: credential?.user?.photoURL,
-        phoneNumber: credential?.user?.phoneNumber,
-      ));
+  Future<void> initUser(ModelUser? user) async {
+    if (user != null && !await checkAlreadyUser(user.id!)) {
+      final newAvatarPath = 'avatar/${user.id}/image.png';
+      if (user.avatar?.isNotEmpty == true) {
+        await CloudStorageService.uploadFile(File(user.avatar!), newAvatarPath);
+        user.avatar = newAvatarPath;
+      }
+      await unitOfWork.user.insert(user);
+      await teamUsercase.createTeam(
+          isFamilyTeam: true, name: 'Family', avatar: newAvatarPath);
     }
   }
 }

@@ -1,3 +1,4 @@
+import 'package:configuration/style/style.dart';
 import 'package:flutter/material.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 import 'dart:math' as math;
@@ -5,8 +6,8 @@ import 'dart:math' as math;
 class MSection {
   Key? key;
   String? title;
-  Color headerColor;
-  Color titleColor;
+  Color? headerColor;
+  Color? titleColor;
   double? height;
   Widget content;
   bool headerPressable;
@@ -17,23 +18,29 @@ class MSection {
   MSection(
       {this.key,
       this.title,
-      this.headerColor = Colors.white,
-      this.titleColor = Colors.black,
+      required this.headerColor,
+      required this.titleColor,
       required this.content,
       this.height,
       this.headerPressable = false,
       this.onPressed,
       this.action,
-      this.controller});
+      this.controller}) {
+    headerColor ??= Colors.white;
+    titleColor ??= Colors.black;
+  }
 
   MultiSliver builder() {
     final header = Text(
       title ?? "",
-      style: TextStyle(fontSize: 16, color: titleColor),
+      style: mST18M.copyWith(color: titleColor),
+      maxLines: 2,
+      softWrap: true,
+      overflow: TextOverflow.ellipsis,
     );
 
-    final _action = action == null
-        ? controller == null
+    final _action = action ??
+        (controller == null
             ? null
             : AnimatedBuilder(
                 animation: controller!,
@@ -42,12 +49,11 @@ class MSection {
                           Matrix4.rotationZ(controller!.value * -math.pi),
                       alignment: FractionalOffset.center,
                       child: const Icon(Icons.keyboard_arrow_up),
-                    ))
-        : TextButton(onPressed: onPressed, child: action!);
+                    )));
 
     final structure = Container(
       color: headerColor,
-      height: height ?? 50,
+      height: height ?? 75,
       alignment: Alignment.centerLeft,
       padding: const EdgeInsets.all(10.0),
       child: title == null
