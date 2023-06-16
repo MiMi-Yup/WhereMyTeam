@@ -110,9 +110,9 @@ class TeamUserRepositoryImpl extends TeamUserRepository {
 
   @override
   Future<bool> removeFavourite(
-      {required String teamId, required ModelUser user}) {
-    // TODO: implement removeFavourite
-    throw UnimplementedError();
+      {required ModelTeam team, required ModelUser user}) async {
+    await firestore.service.collection(getPath(user.id)).doc(team.id).delete();
+    return true;
   }
 
   @override
@@ -126,5 +126,42 @@ class TeamUserRepositoryImpl extends TeamUserRepository {
             fromFirestore: ModelTeamUser.fromFirestore,
             toFirestore: (ModelTeamUser model, _) => model.toFirestore())
         .snapshots(includeMetadataChanges: true);
+  }
+
+  @override
+  Future<bool> unFavourite(
+      {required ModelTeam team, required ModelUser user}) async {
+    final snapshot = await firestore.service
+        .collection(getPath(this.user?.uid))
+        .doc(team.id)
+        .withConverter(
+            fromFirestore: ModelTeamUser.fromFirestore,
+            toFirestore: (ModelTeamUser model, _) => model.toFirestore())
+        .get();
+    ModelTeamUser? model = snapshot.exists ? snapshot.data() : null;
+    if (model == null || model.favourite == null) return false;
+    DocumentReference userRef = userRepo.getRef(user);
+    if (model.favourite!.contains(userRef)) {
+      model.favourite!.remove(userRef);
+      update(model, model);
+    }
+    return true;
+  }
+
+  @override
+  Future<bool> deleteTeam({required ModelTeam team}) async {
+    final snapshot = await firestore.service
+        .collection('/user')
+        .withConverter(
+            fromFirestore: ModelUser.fromFirestore,
+            toFirestore: (ModelUser model, _) => model.toFirestore())
+        .get();
+    final users = snapshot.docs.map((e) => e.data());
+    await Future.wait(users.map((e) async {
+      final ref = firestore.service.doc('/user/${e.id}/team/${team.id}');
+      final data = await ref.get();
+      if (data.exists) await ref.delete();
+    }));
+    return true;
   }
 }

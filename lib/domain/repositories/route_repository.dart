@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:where_my_team/models/model.dart';
 import 'package:where_my_team/models/model_route.dart';
 import 'package:where_my_team/models/model_user.dart';
@@ -13,4 +14,7 @@ abstract class RouteRepository extends GenericRepository {
   Future<ModelRoute?> postRoute({required ModelRoute newRoute});
 
   Future<bool> deleteRoute({required IModel model});
+
+  DocumentReference<Map<String, dynamic>> getRefEx(
+      {required String idUser, required String idRouter});
 }

@@ -1,5 +1,7 @@
 import 'dart:typed_data';
 
+import 'package:configuration/l10n/l10n.dart';
+import 'package:configuration/style/style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:where_my_team/data/data_source/remote/cloud_storage_service.dart';
@@ -11,7 +13,7 @@ class MTeamComponent extends StatefulWidget {
   final int? members;
   final bool isEditable;
   final AnimationController? parentController;
-  final void Function(BuildContext)? leaveSlidableAction;
+  final Future<bool> Function(BuildContext)? leaveSlidableAction;
   final void Function(BuildContext)? inviteSlidableAction;
   final void Function(BuildContext)? viewInMapSlidableAction;
 
@@ -86,14 +88,14 @@ class _MTeamComponentState extends State<MTeamComponent>
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Text(widget.name,
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                          color: Colors.deepPurple)),
+                      style: mST18M.copyWith(
+                          color: Theme.of(context).brightness == Brightness.dark
+                              ? null
+                              : mCPrimary)),
                   if (widget.members != null)
-                    Text("${widget.members} members",
-                        style:
-                            TextStyle(fontSize: 16, color: Colors.deepPurple)),
+                    Text(
+                        "${widget.members} ${MultiLanguage.of(context).members}",
+                        style: mST16R),
                 ],
               )
             ],
@@ -119,10 +121,15 @@ class _MTeamComponentState extends State<MTeamComponent>
                         motion: const ScrollMotion(),
                         children: [
                           SlidableAction(
-                              onPressed: (context) {
-                                _controller!.forward();
+                              onPressed: (context) async {
                                 if (widget.leaveSlidableAction != null) {
-                                  widget.leaveSlidableAction!(context);
+                                  final result = await widget
+                                      .leaveSlidableAction!(context);
+                                  if (result) {
+                                    _controller?.forward();
+                                  }
+                                } else {
+                                  _controller?.forward();
                                 }
                               },
                               backgroundColor: Color.fromARGB(255, 34, 72, 2),

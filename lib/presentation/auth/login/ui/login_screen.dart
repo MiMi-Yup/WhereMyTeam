@@ -1,5 +1,4 @@
 import 'package:configuration/l10n/l10n.dart';
-import 'package:configuration/route/xmd_router.dart';
 import 'package:configuration/style/style.dart';
 import 'package:configuration/utility/constants/asset_constants.dart';
 import 'package:flutter/gestures.dart';
@@ -8,8 +7,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:where_my_team/common/widgets/m_primary_button.dart';
 import 'package:where_my_team/common/widgets/m_secondary_button.dart';
 import 'package:where_my_team/common/widgets/m_text_field.dart';
-import 'package:where_my_team/manifest.dart';
-import 'package:where_my_team/presentation/auth/account_setup/account_setup_route.dart';
 import 'package:where_my_team/presentation/auth/login/cubit/login_cubit.dart';
 import 'package:where_my_team/utils/alert_util.dart';
 import 'package:where_my_team/utils/extensions/context_extension.dart';
@@ -139,7 +136,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         //   }
                         //   break;
                         case LoginStatus.error:
-                          AlertUtil.showToast('Login failed');
+                          AlertUtil.showToast(
+                              MultiLanguage.of(context).loginFailed);
                           break;
                         case LoginStatus.submitting:
                           AlertUtil.showLoading();

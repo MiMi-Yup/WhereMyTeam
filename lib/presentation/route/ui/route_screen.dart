@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:configuration/l10n/l10n.dart';
 import 'package:configuration/route/xmd_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -30,7 +30,7 @@ class RouteScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         elevation: 0.0,
-        title: Text("Route"),
+        title: Text(MultiLanguage.of(context).route),
         actions: [
           IconButton(onPressed: () => null, icon: Icon(Icons.analytics))
         ],
@@ -40,13 +40,10 @@ class RouteScreen extends StatelessWidget {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             if (snapshot.data!) {
+              final cubit = context.read<RouteCubit>();
               return CustomScrollView(
                 physics: const BouncingScrollPhysics(),
-                slivers: context
-                    .read<RouteCubit>()
-                    .state
-                    .routes
-                    .entries
+                slivers: cubit.state.routes.entries
                     .map((e) => MSection(
                         title: e.key,
                         headerColor: Theme.of(context).scaffoldBackgroundColor,
@@ -77,7 +74,7 @@ class RouteScreen extends StatelessWidget {
                     .toList(),
               );
             }
-            return Center(child: Text("Empty"));
+            return Center(child: Text(MultiLanguage.of(context).empty));
           }
           return const LinearProgressIndicator();
         },

@@ -9,10 +9,10 @@ part 'new_team_state.dart';
 
 @injectable
 class NewTeamCubit extends Cubit<NewTeamState> {
-  final TeamUsercase teamUsercase;
+  final TeamUseCases usecase;
 
   NewTeamCubit({
-    required this.teamUsercase,
+    required this.usecase,
   }) : super(NewTeamState.initial());
 
   void searchUser(String? search) {
@@ -20,7 +20,7 @@ class NewTeamCubit extends Cubit<NewTeamState> {
   }
 
   Future<List<ModelUser>> searchResult() {
-    return teamUsercase.searchUser(state.search);
+    return usecase.searchUser(state.search);
   }
 
   void changeAvatar(String avatar) {
@@ -32,10 +32,12 @@ class NewTeamCubit extends Cubit<NewTeamState> {
   }
 
   void addMember(ModelUser user) {
-    emit(state.copyWith(
-        members: List.from(state.members)..add(user),
-        search: '',
-        state: NewTeamEnum.completed));
+    if (!state.members.contains(user)) {
+      emit(state.copyWith(
+          members: List.from(state.members)..add(user),
+          search: '',
+          state: NewTeamEnum.completed));
+    }
   }
 
   void removeMember(ModelUser user) {
@@ -44,10 +46,9 @@ class NewTeamCubit extends Cubit<NewTeamState> {
   }
 
   Future createTeam() {
-    return teamUsercase.createTeam(
+    return usecase.createTeam(
         name: state.name ?? 'yolo',
-        avatar: state.avatar ??
-            'avatar/fqAueJqQeKcgMJwJFCjsC2atiHj2/image.png',
+        avatar: state.avatar ?? 'avatar/fqAueJqQeKcgMJwJFCjsC2atiHj2/image.png',
         members: state.members);
   }
 }

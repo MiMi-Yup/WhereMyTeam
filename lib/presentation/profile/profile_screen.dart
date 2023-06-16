@@ -44,16 +44,16 @@ class ProfileScreen extends StatelessWidget {
                   )
                 ],
                 offset: Offset(0, 50),
-                onSelected: (index) {
+                onSelected: (index) async {
                   switch (index) {
                     case 0:
-                      showConfirmBottomModal(
-                          context, "Are you sure you want to log out?",
-                          whenConfirm: () {
-                            getIt<LoginUseCases>().signOut();
-                            XMDRouter.pushNamedAndRemoveUntil(
-                              routerIds[LoginRoute]!);
-                          });
+                      bool? result = await showConfirmBottomModal(
+                          context, MultiLanguage.of(context).confirmLogout);
+                      if (result == true) {
+                        await getIt<LoginUseCases>().signOut();
+                        XMDRouter.pushNamedAndRemoveUntil(
+                            routerIds[LoginRoute]!);
+                      }
                       break;
                     default:
                       break;
@@ -124,8 +124,11 @@ class ProfileScreen extends StatelessWidget {
               MButtonSetting(
                 title: MultiLanguage.of(context).editProfile,
                 icon: Icon(Icons.person_outline),
-                onPressed: (_) async=>
-                    XMDRouter.pushNamed(routerIds[AccountSetupRoute]!, arguments: {'model':await getIt<UserRepository>().getCurrentUser()}),
+                onPressed: (_) async => XMDRouter.pushNamed(
+                    routerIds[AccountSetupRoute]!,
+                    arguments: {
+                      'model': await getIt<UserRepository>().getCurrentUser()
+                    }),
               ),
               MButtonSetting(
                 title: MultiLanguage.of(context).language,

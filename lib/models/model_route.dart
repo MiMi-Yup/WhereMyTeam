@@ -13,6 +13,7 @@ class ModelRoute extends IModel {
   Timestamp? endTime;
   bool? isShared;
   DocumentReference? typeRoute;
+  DocumentReference? user;
   late double distance;
   late double maxSpeed;
 
@@ -23,6 +24,7 @@ class ModelRoute extends IModel {
       this.endTime,
       this.isShared = false,
       this.typeRoute,
+      this.user,
       this.distance = 0.0,
       this.maxSpeed = 0.0}) {
     if (name == null || name!.isEmpty) {
@@ -39,6 +41,7 @@ class ModelRoute extends IModel {
     endTime = data?['endTime'];
     isShared = data?['isShared'];
     typeRoute = data?['typeRoute'];
+    user = data?['user'];
     final _distance = data?['distance'];
     final _maxSpeed = data?['maxSpeed'];
     distance = _distance != null
@@ -63,6 +66,7 @@ class ModelRoute extends IModel {
       'distance': distance,
       'maxSpeed': maxSpeed,
       'typeRoute': typeRoute,
+      'user': user,
     };
   }
 
@@ -94,9 +98,11 @@ class ModelRoute extends IModel {
 }
 
 extension ModelRouteExtension on ModelRoute {
-  Future<List<ModelLocation>?> get detailRouteEx async => id == null
-      ? null
-      : await getIt<LocationRepository>().getDetailRoute(id: id!);
+  Future<List<ModelLocation>?> get detailRouteEx async =>
+      id == null || user == null
+          ? null
+          : await getIt<LocationRepository>()
+              .getDetailRoute(this);
 
   Future<ModelTypeRoute?> get typeRouteEx async =>
       id == null || typeRoute == null

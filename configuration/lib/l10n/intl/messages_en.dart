@@ -20,11 +20,16 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'en';
 
+  static String m0(name) => "Route ${name}";
+
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+        "addMember": MessageLookupByLibrary.simpleMessage("Add Member"),
         "cancel": MessageLookupByLibrary.simpleMessage("Cancel"),
         "cancelled": MessageLookupByLibrary.simpleMessage("Cancelled"),
         "confirm": MessageLookupByLibrary.simpleMessage("Confirm"),
+        "confirmLogout": MessageLookupByLibrary.simpleMessage(
+            "Are you sure you want to log out?"),
         "connectTimeout":
             MessageLookupByLibrary.simpleMessage("Connect timeout"),
         "connectionProblem":
@@ -34,27 +39,54 @@ class MessageLookup extends MessageLookupByLibrary {
         "darkTheme": MessageLookupByLibrary.simpleMessage("Dark theme"),
         "databaseException":
             MessageLookupByLibrary.simpleMessage("Database exception"),
+        "delete": MessageLookupByLibrary.simpleMessage("Delete"),
+        "distance": MessageLookupByLibrary.simpleMessage("Distance"),
         "editProfile": MessageLookupByLibrary.simpleMessage("Edit Profile"),
         "email": MessageLookupByLibrary.simpleMessage("Email"),
+        "empty": MessageLookupByLibrary.simpleMessage("Empty"),
+        "family": MessageLookupByLibrary.simpleMessage("Family"),
         "getSetting": MessageLookupByLibrary.simpleMessage("Get setting"),
+        "goodAfternoon": MessageLookupByLibrary.simpleMessage("Good Afternoon"),
+        "goodEvening": MessageLookupByLibrary.simpleMessage("Good Evening"),
+        "goodMorning": MessageLookupByLibrary.simpleMessage("Good Morning"),
+        "goodNight": MessageLookupByLibrary.simpleMessage("Good Night"),
         "helpCenter": MessageLookupByLibrary.simpleMessage("Help Center"),
+        "hide": MessageLookupByLibrary.simpleMessage("Hide"),
         "inValidInput": MessageLookupByLibrary.simpleMessage(
             "Email or password is invalid"),
+        "kickMember": MessageLookupByLibrary.simpleMessage("Kick member"),
         "language": MessageLookupByLibrary.simpleMessage("Language"),
         "languageName": MessageLookupByLibrary.simpleMessage("English"),
+        "leave": MessageLookupByLibrary.simpleMessage("Leave"),
+        "leaveTeam": MessageLookupByLibrary.simpleMessage("Leave Team"),
         "login": MessageLookupByLibrary.simpleMessage("Login"),
+        "loginFailed": MessageLookupByLibrary.simpleMessage("Login Failed"),
         "loginSuggest":
             MessageLookupByLibrary.simpleMessage("Already have an account? "),
         "loginTitle":
             MessageLookupByLibrary.simpleMessage("Login to Your Account"),
         "logout": MessageLookupByLibrary.simpleMessage("Logout"),
         "mapPage": MessageLookupByLibrary.simpleMessage("Map"),
+        "members": MessageLookupByLibrary.simpleMessage("members"),
+        "mins": MessageLookupByLibrary.simpleMessage("mins"),
+        "missingSomething":
+            MessageLookupByLibrary.simpleMessage("Missing something in form"),
+        "more": MessageLookupByLibrary.simpleMessage("more"),
+        "nameTeam": MessageLookupByLibrary.simpleMessage("Name team"),
+        "newTeam": MessageLookupByLibrary.simpleMessage("New team"),
+        "nickname": MessageLookupByLibrary.simpleMessage("Nickname"),
+        "noTeams": MessageLookupByLibrary.simpleMessage("No Teams"),
+        "notFound": MessageLookupByLibrary.simpleMessage("Not Found"),
         "otherLogin": MessageLookupByLibrary.simpleMessage("or continue with"),
         "password": MessageLookupByLibrary.simpleMessage("Password"),
+        "peopleNearby": MessageLookupByLibrary.simpleMessage("People Nearby"),
         "profile": MessageLookupByLibrary.simpleMessage("Profile"),
         "receiveTimeout":
             MessageLookupByLibrary.simpleMessage("Receive timeout"),
         "rememberAccount": MessageLookupByLibrary.simpleMessage("Remember me"),
+        "route": MessageLookupByLibrary.simpleMessage("Route"),
+        "routerName": m0,
+        "searchPerson": MessageLookupByLibrary.simpleMessage("Search person"),
         "sendTimeout": MessageLookupByLibrary.simpleMessage("Send timeout"),
         "serverNotFound":
             MessageLookupByLibrary.simpleMessage("Server not found"),
@@ -62,12 +94,17 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Hệ thống có chút vấn đề"),
         "signUp": MessageLookupByLibrary.simpleMessage("Sign up"),
         "signUpSuggest":
-            MessageLookupByLibrary.simpleMessage("Don\'t hae an account? "),
+            MessageLookupByLibrary.simpleMessage("Don\'t have an account? "),
         "signUpTitle":
             MessageLookupByLibrary.simpleMessage("Create Your Account"),
         "systemError": MessageLookupByLibrary.simpleMessage(
             "Something wrong! Please try later."),
         "teamPage": MessageLookupByLibrary.simpleMessage("Team"),
-        "tryIt": MessageLookupByLibrary.simpleMessage("Try it")
+        "teams": MessageLookupByLibrary.simpleMessage("Teams"),
+        "topSpeed": MessageLookupByLibrary.simpleMessage("Top speed"),
+        "tryIt": MessageLookupByLibrary.simpleMessage("Try it"),
+        "username": MessageLookupByLibrary.simpleMessage("User name"),
+        "yourFamily": MessageLookupByLibrary.simpleMessage("Your Family"),
+        "yourTeams": MessageLookupByLibrary.simpleMessage("Your teams")
       };
 }

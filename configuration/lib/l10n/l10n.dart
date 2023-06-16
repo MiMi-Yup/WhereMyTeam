@@ -250,10 +250,10 @@ class MultiLanguage {
     );
   }
 
-  /// `Don't hae an account? `
+  /// `Don't have an account? `
   String get signUpSuggest {
     return Intl.message(
-      'Don\'t hae an account? ',
+      'Don\'t have an account? ',
       name: 'signUpSuggest',
       desc: '',
       args: [],
@@ -389,6 +389,336 @@ class MultiLanguage {
       args: [],
     );
   }
+
+  /// `Add Member`
+  String get addMember {
+    return Intl.message(
+      'Add Member',
+      name: 'addMember',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Search person`
+  String get searchPerson {
+    return Intl.message(
+      'Search person',
+      name: 'searchPerson',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Not Found`
+  String get notFound {
+    return Intl.message(
+      'Not Found',
+      name: 'notFound',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Missing something in form`
+  String get missingSomething {
+    return Intl.message(
+      'Missing something in form',
+      name: 'missingSomething',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Login Failed`
+  String get loginFailed {
+    return Intl.message(
+      'Login Failed',
+      name: 'loginFailed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Route {name}`
+  String routerName(String name) {
+    return Intl.message(
+      'Route $name',
+      name: 'routerName',
+      desc: 'Name of route',
+      args: [name],
+    );
+  }
+
+  /// `Hide`
+  String get hide {
+    return Intl.message(
+      'Hide',
+      name: 'hide',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Delete`
+  String get delete {
+    return Intl.message(
+      'Delete',
+      name: 'delete',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `mins`
+  String get mins {
+    return Intl.message(
+      'mins',
+      name: 'mins',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Top speed`
+  String get topSpeed {
+    return Intl.message(
+      'Top speed',
+      name: 'topSpeed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Distance`
+  String get distance {
+    return Intl.message(
+      'Distance',
+      name: 'distance',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `members`
+  String get members {
+    return Intl.message(
+      'members',
+      name: 'members',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Leave`
+  String get leave {
+    return Intl.message(
+      'Leave',
+      name: 'leave',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Nickname`
+  String get nickname {
+    return Intl.message(
+      'Nickname',
+      name: 'nickname',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Kick member`
+  String get kickMember {
+    return Intl.message(
+      'Kick member',
+      name: 'kickMember',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Your teams`
+  String get yourTeams {
+    return Intl.message(
+      'Your teams',
+      name: 'yourTeams',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Family`
+  String get family {
+    return Intl.message(
+      'Family',
+      name: 'family',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `New team`
+  String get newTeam {
+    return Intl.message(
+      'New team',
+      name: 'newTeam',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Name team`
+  String get nameTeam {
+    return Intl.message(
+      'Name team',
+      name: 'nameTeam',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Are you sure you want to log out?`
+  String get confirmLogout {
+    return Intl.message(
+      'Are you sure you want to log out?',
+      name: 'confirmLogout',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Route`
+  String get route {
+    return Intl.message(
+      'Route',
+      name: 'route',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Empty`
+  String get empty {
+    return Intl.message(
+      'Empty',
+      name: 'empty',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `User name`
+  String get username {
+    return Intl.message(
+      'User name',
+      name: 'username',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Good Morning`
+  String get goodMorning {
+    return Intl.message(
+      'Good Morning',
+      name: 'goodMorning',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Good Afternoon`
+  String get goodAfternoon {
+    return Intl.message(
+      'Good Afternoon',
+      name: 'goodAfternoon',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Good Evening`
+  String get goodEvening {
+    return Intl.message(
+      'Good Evening',
+      name: 'goodEvening',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Good Night`
+  String get goodNight {
+    return Intl.message(
+      'Good Night',
+      name: 'goodNight',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `People Nearby`
+  String get peopleNearby {
+    return Intl.message(
+      'People Nearby',
+      name: 'peopleNearby',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Your Family`
+  String get yourFamily {
+    return Intl.message(
+      'Your Family',
+      name: 'yourFamily',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `more`
+  String get more {
+    return Intl.message(
+      'more',
+      name: 'more',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Teams`
+  String get teams {
+    return Intl.message(
+      'Teams',
+      name: 'teams',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No Teams`
+  String get noTeams {
+    return Intl.message(
+      'No Teams',
+      name: 'noTeams',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Leave Team`
+  String get leaveTeam {
+    return Intl.message(
+      'Leave Team',
+      name: 'leaveTeam',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<MultiLanguage> {
@@ -397,6 +727,7 @@ class AppLocalizationDelegate extends LocalizationsDelegate<MultiLanguage> {
   List<Locale> get supportedLocales {
     return const <Locale>[
       Locale.fromSubtags(languageCode: 'en'),
+      Locale.fromSubtags(languageCode: 'vi'),
     ];
   }
 

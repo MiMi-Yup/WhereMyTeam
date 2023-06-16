@@ -14,22 +14,26 @@ part 'team_state.dart';
 
 @injectable
 class TeamCubit extends Cubit<TeamState> {
-  final TeamUsercase teamUsercase;
+  final TeamUseCases usecase;
 
   TeamCubit({
-    required this.teamUsercase,
+    required this.usecase,
   }) : super(TeamState.initial());
 
   Stream<QuerySnapshot<ModelTeamUser>> getStreamTeam() {
-    return teamUsercase.getStream();
+    return usecase.getStream();
   }
 
   Future<Stream<QuerySnapshot<ModelMember>>?> getMembersOfPrimaryTeam() async {
-    final result = await teamUsercase.getFamilyStream();
+    final result = await usecase.getFamilyStream();
     if (result.length == 2) {
       emit(state.copyWith(familyTeam: result.last));
       return result.first;
     }
     return null;
+  }
+
+  Future leaveTeam(ModelTeam team) {
+    return usecase.outTeam(team: team);
   }
 }

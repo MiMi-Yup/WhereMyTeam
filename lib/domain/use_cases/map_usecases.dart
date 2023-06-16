@@ -7,10 +7,10 @@ import 'package:where_my_team/domain/repositories/unit_of_work.dart';
 import 'package:where_my_team/models/model_user.dart';
 
 @injectable
-class MapUsercase {
+class MapUseCases {
   final UnitOfWork unitOfWork;
 
-  MapUsercase({required this.unitOfWork});
+  MapUseCases({required this.unitOfWork});
 
   FutureOr<LocationData?> getCurrentLocation() async {
     LocationData? data = await unitOfWork.gps.getCurrentLocation();

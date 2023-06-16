@@ -1,3 +1,4 @@
+import 'package:where_my_team/presentation/add_member/add_member_route.dart';
 import 'package:where_my_team/presentation/auth/account_setup/account_setup_route.dart';
 import 'package:where_my_team/presentation/auth/login/login_route.dart';
 import 'package:where_my_team/presentation/bottom_bar/bottom_bar_route.dart';
@@ -17,7 +18,8 @@ const routerIds = {
   RouteRoute: 'RouteRoute',
   DetailRouteRoute: 'DetailRouteRoute',
   NewTeamRoute: 'NewTeamRoute',
-  AccountSetupRoute: "AccountSetupRoute"
+  AccountSetupRoute: "AccountSetupRoute",
+  AddMemberRoute: "AddMemberRoute"
 };
 
 void generateRoutes() {
@@ -30,4 +32,5 @@ void generateRoutes() {
   DetailRouteRoute();
   NewTeamRoute();
   AccountSetupRoute();
+  AddMemberRoute();
 }

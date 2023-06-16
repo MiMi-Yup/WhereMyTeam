@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:configuration/l10n/l10n.dart';
 import 'package:configuration/route/xmd_router.dart';
 import 'package:configuration/utility/constants/asset_constants.dart';
 import 'package:flutter/material.dart';
@@ -48,7 +49,7 @@ class _NewTeamScreenState extends State<NewTeamScreen> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0.0,
-        title: Text("New team"),
+        title: Text(MultiLanguage.of(context).newTeam),
         actions: [
           IconButton(
               onPressed: () async {
@@ -64,8 +65,7 @@ class _NewTeamScreenState extends State<NewTeamScreen> {
         children: [
           GestureDetector(
             onTap: () async {
-              final file =
-                  await _picker.pickImage(source: ImageSource.gallery);
+              final file = await _picker.pickImage(source: ImageSource.gallery);
               if (file != null) {
                 context.read<NewTeamCubit>().changeAvatar(file.path);
               }
@@ -105,26 +105,27 @@ class _NewTeamScreenState extends State<NewTeamScreen> {
               listener: (context, state) {
                 if (state.name != _nameController.text) {
                   _nameController.text = state.name ?? '';
-                  _nameController.selection = TextSelection.collapsed(
-                      offset: state.name?.length ?? 0);
+                  _nameController.selection =
+                      TextSelection.collapsed(offset: state.name?.length ?? 0);
                 }
               },
               child: MTextField(
                 controller: _nameController,
-                hintText: "Name team",
+                hintText: MultiLanguage.of(context).nameTeam,
               )),
           SizedBox(height: 10),
           BlocBuilder<NewTeamCubit, NewTeamState>(
               buildWhen: (previous, current) =>
                   previous.members != current.members,
               builder: (context, state) => SizedBox(
-                width: double.maxFinite,
-                height: 150,
-                child: ListView.separated(
-                  scrollDirection: Axis.horizontal,
+                    width: double.maxFinite,
+                    height: 150,
+                    child: ListView.separated(
+                      scrollDirection: Axis.horizontal,
                       shrinkWrap: true,
                       itemCount: state.members.length,
-                      separatorBuilder: (context, index) => const SizedBox(width: 10.0),
+                      separatorBuilder: (context, index) =>
+                          const SizedBox(width: 10.0),
                       itemBuilder: (context, index) => MUserComponent(
                           onPressed: () => context
                               .read<NewTeamCubit>()
@@ -132,7 +133,7 @@ class _NewTeamScreenState extends State<NewTeamScreen> {
                           avatar: state.members[index].avatar ?? '',
                           name: state.members[index].name ?? ''),
                     ),
-              )),
+                  )),
           BlocListener<NewTeamCubit, NewTeamState>(
               listener: (context, state) {
                 if (state.search != _searchController.text) {
@@ -143,7 +144,7 @@ class _NewTeamScreenState extends State<NewTeamScreen> {
               },
               child: MTextField(
                 controller: _searchController,
-                hintText: "Search person",
+                hintText: MultiLanguage.of(context).searchPerson,
               )),
           SizedBox(
             height: 10,
@@ -155,8 +156,8 @@ class _NewTeamScreenState extends State<NewTeamScreen> {
                   future: context.read<NewTeamCubit>().searchResult(),
                   builder: (context, snapshot) => snapshot.hasData
                       ? (snapshot.data!.isEmpty
-                          ? const Center(
-                              child: Text("Not found"),
+                          ? Center(
+                              child: Text(MultiLanguage.of(context).notFound),
                             )
                           : Expanded(
                               child: ListView.builder(
@@ -177,9 +178,8 @@ class _NewTeamScreenState extends State<NewTeamScreen> {
                                           avatar: snapshot
                                                   .data?[index].avatar ??
                                               'avatar/fqAueJqQeKcgMJwJFCjsC2atiHj2/image.png',
-                                          name:
-                                              snapshot.data?[index].name ??
-                                                  '')),
+                                          name: snapshot.data?[index].name ??
+                                              '')),
                             ))
                       : const SizedBox(
                           height: 4, child: LinearProgressIndicator())))

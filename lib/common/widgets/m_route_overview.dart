@@ -1,57 +1,64 @@
 import 'dart:async';
 
+import 'package:configuration/l10n/l10n.dart';
 import 'package:configuration/style/style.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:where_my_team/models/model_route.dart';
+import 'package:where_my_team/models/model_type_route.dart';
 import 'package:where_my_team/utils/extensions/context_extension.dart';
 import 'package:where_my_team/utils/latlngbounds_extension.dart';
 import 'package:where_my_team/utils/time_util.dart';
 
-class MRouteOverview extends StatelessWidget {
+class MRouteOverview extends StatefulWidget {
   final List<LatLng> coordinates;
   final ModelRoute route;
+  final Set<Polyline> polylines = {};
 
-  MRouteOverview({super.key, required this.coordinates, required this.route});
+  MRouteOverview({super.key, required this.coordinates, required this.route}) {}
 
+  @override
+  State<MRouteOverview> createState() => _MRouteOverviewState();
+}
+
+class _MRouteOverviewState extends State<MRouteOverview>
+    with SingleTickerProviderStateMixin {
   final Completer<GoogleMapController> _controller =
       Completer<GoogleMapController>();
-
-  final Set<Polyline> polylines = {};
 
   static const CameraPosition _kGooglePlex = CameraPosition(
     target: LatLng(37.42796133580664, -122.085749655962),
     zoom: 15,
   );
 
-  void drawRoute() async {
-    final GoogleMapController control = await _controller.future;
-    if (coordinates.isNotEmpty) {
-      control.moveCamera(CameraUpdate.newLatLngBounds(
-          LatLngBoundsExtension.routeLatLngBounds(coordinates), 50));
-    }
-    control.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
-    polylines.add(Polyline(
-        polylineId: PolylineId(route.id!),
-        color: Colors.red,
-        width: 5,
-        patterns: [PatternItem.dot, PatternItem.dot],
-        points: coordinates));
-    Future.delayed(const Duration(milliseconds: 250), drawRoute);
-
     return Column(
       children: [
         Row(mainAxisAlignment: MainAxisAlignment.start, children: [
           SizedBox(
             width: 10.0,
           ),
-          Icon(
-            Icons.motorcycle,
-            size: 48,
+          SizedBox(
+            height: 48,
+            width: 48,
+            child: FutureBuilder<ModelTypeRoute?>(
+                future: widget.route.typeRouteEx,
+                builder: (context, snapshot) {
+                  switch (snapshot.data?.name) {
+                    case 'walk':
+                      return const Icon(Icons.directions_walk, size: 48);
+                    case 'cycle':
+                      return const Icon(Icons.directions_bike, size: 48);
+                    case 'bike':
+                      return const Icon(Icons.motorcycle, size: 48);
+                    case 'roll':
+                      return const Icon(Icons.directions_car, size: 48);
+                    case 'nothing':
+                    default:
+                      return const SizedBox.shrink();
+                  }
+                }),
           ),
           SizedBox(
             width: 10.0,
@@ -60,11 +67,11 @@ class MRouteOverview extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "${route.endTime?.toDate().difference(route.startTime!.toDate()).inMinutes} mins Drive",
+                "${widget.route.endTime?.toDate().difference(widget.route.startTime!.toDate()).inMinutes} ${MultiLanguage.of(context).mins}",
                 style: mST20M,
               ),
               Text(
-                  "${route.startTime?.toShortDateTime} - ${route.endTime?.toShortDateTime}")
+                  "${widget.route.startTime?.toShortDateTime} - ${widget.route.endTime?.toShortDateTime}")
             ],
           ),
         ]),
@@ -74,18 +81,18 @@ class MRouteOverview extends StatelessWidget {
             margin: const EdgeInsets.all(10.0),
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10.0),
-                border: Border.all()),
+                border: Border.all(color: Colors.grey)),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               mainAxisSize: MainAxisSize.max,
               children: [
                 Column(
                   children: [
-                    Text("Top speed"),
+                    Text(MultiLanguage.of(context).topSpeed),
                     SizedBox(
                       height: 10.0,
                     ),
-                    Text("${route.maxSpeed}km/h")
+                    Text("${widget.route.maxSpeed.toStringAsFixed(2)}m/s")
                   ],
                 ),
                 VerticalDivider(
@@ -95,11 +102,11 @@ class MRouteOverview extends StatelessWidget {
                 ),
                 Column(
                   children: [
-                    Text("Distance"),
+                    Text(MultiLanguage.of(context).distance),
                     SizedBox(
                       height: 10.0,
                     ),
-                    Text("${route.distance}km")
+                    Text("${widget.route.distance.toStringAsFixed(2)}m")
                   ],
                 ),
               ],
@@ -115,9 +122,27 @@ class MRouteOverview extends StatelessWidget {
               liteModeEnabled: true,
               mapToolbarEnabled: false,
               mapType: MapType.hybrid,
-              polylines: polylines,
+              polylines: widget.polylines,
               onMapCreated: (controller) {
                 _controller.complete(controller);
+                Future.delayed(const Duration(seconds: 1), () {
+                  if (widget.coordinates.isNotEmpty) {
+                    CameraUpdate cameraUpdate = CameraUpdate.newLatLngBounds(
+                        LatLngBoundsExtension.routeLatLngBounds(
+                            widget.coordinates),
+                        1);
+                    controller.animateCamera(cameraUpdate);
+                    setState(() {
+                      if (widget.coordinates.isNotEmpty) {
+                        widget.polylines.add(Polyline(
+                            polylineId: PolylineId(widget.route.id!),
+                            color: Colors.red,
+                            width: 5,
+                            points: widget.coordinates));
+                      }
+                    });
+                  }
+                });
               },
             ),
           ),

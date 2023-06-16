@@ -14,20 +14,20 @@ part 'team_map_state.dart';
 
 @injectable
 class TeamMapCubit extends Cubit<TeamMapState> {
-  final TeamUsercase homepageUseCases;
+  final TeamUseCases usecase;
   
   TeamMapCubit({
-    required this.homepageUseCases,
+    required this.usecase,
   }) : super(TeamMapState.initial());
 
   Future<List<ModelTeam>?> getTeams() {
-    return homepageUseCases.getTeams();
+    return usecase.getTeams();
   }
 
   Future<void> changeTeam(ModelTeam team) async {
     emit(state.copyWith(
         currentTeam: team,
-        teamMembers: await homepageUseCases.getTeamMembers(team)));
+        teamMembers: await usecase.getTeamMembers(team)));
   }
 
   Future<Map<String, Object?>?> getInfoMember(int index) async {
@@ -51,6 +51,6 @@ class TeamMapCubit extends Cubit<TeamMapState> {
   }
 
   Future<void> logOut() {
-    return homepageUseCases.logOut();
+    return usecase.logOut();
   }
 }

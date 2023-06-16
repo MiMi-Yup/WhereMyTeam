@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:injectable/injectable.dart';
 import 'package:where_my_team/data/data_source/remote/firestore_service.dart';
+import 'package:where_my_team/domain/repositories/role_repository.dart';
 import 'package:where_my_team/domain/repositories/team_repository.dart';
 import 'package:where_my_team/models/model_team.dart';
 import 'package:where_my_team/models/model_member.dart';
@@ -10,8 +11,9 @@ import 'package:where_my_team/models/model.dart';
 @Injectable(as: TeamRepository)
 class TeamRepositoryImpl extends TeamRepository {
   final FirestoreService firestore;
+  final RoleRepository roleRepo;
 
-  TeamRepositoryImpl({required this.firestore});
+  TeamRepositoryImpl({required this.firestore, required this.roleRepo});
 
   @override
   Future<void> delete(IModel model) {
@@ -148,5 +150,20 @@ class TeamRepositoryImpl extends TeamRepository {
             fromFirestore: ModelMember.fromFirestore,
             toFirestore: (ModelMember model, _) => model.toFirestore())
         .snapshots(includeMetadataChanges: true);
+  }
+
+  @override
+  Future<ModelMember?> adminOfTeam({required ModelTeam team}) async {
+    final members = await firestore.service
+        .collection('${getPath(null)}/${team.id}/member')
+        .where('role', isEqualTo: roleRepo.getRefById('NtU957r3xX70qa260YeL'))
+        .withConverter(
+            fromFirestore: ModelMember.fromFirestore,
+            toFirestore: (ModelMember model, _) => model.toFirestore())
+        .get();
+    if (members.size == 1) {
+      return members.docs.first.data();
+    }
+    return null;
   }
 }

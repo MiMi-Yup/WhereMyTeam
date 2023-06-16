@@ -16,7 +16,7 @@ class DetailTeamRoute extends RouteDefine {
             providers: [
               BlocProvider<DetailTeamCubit>(
                   create: (_) => DetailTeamCubit(
-                      teamUseCases: getIt<TeamUsercase>(),
+                      usecase: getIt<TeamUseCases>(),
                       team: arguments?['team'])),
             ],
             child: const DetailTeamScreen(),

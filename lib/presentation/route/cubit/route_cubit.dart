@@ -1,6 +1,5 @@
 import 'dart:collection';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
@@ -13,9 +12,9 @@ part 'route_state.dart';
 
 @injectable
 class RouteCubit extends Cubit<RouteState> {
-  final RouteUsercase routeUsercase;
+  final RouteUseCases usecase;
   final ModelUser? user;
-  RouteCubit({required this.routeUsercase, required this.user})
+  RouteCubit({required this.usecase, required this.user})
       : super(RouteState.initial());
 
   Future<bool> loadRoutes() async {

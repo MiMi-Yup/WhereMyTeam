@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:where_my_team/domain/use_cases/team_usecases.dart';
-import 'package:where_my_team/models/model.dart';
 import 'package:where_my_team/models/model_member.dart';
 import 'package:where_my_team/models/model_team.dart';
 
@@ -12,22 +11,36 @@ part 'detail_team_state.dart';
 
 @injectable
 class DetailTeamCubit extends Cubit<DetailTeamState> {
-  final TeamUsercase teamUseCases;
+  final TeamUseCases usecase;
   late ModelTeam team;
 
-  DetailTeamCubit({required this.teamUseCases, required this.team})
-      : super(DetailTeamState.initial());
-
-  Future<ModelTeam?> getFullInfo() async {
-    IModel? model = await teamUseCases.getInfo(team.id!);
-    if (model is ModelTeam) {
-      team = model;
-      return team;
-    }
-    return null;
+  DetailTeamCubit({required this.usecase, required this.team})
+      : super(DetailTeamState.initial()) {
+    usecase
+        .isAdminOfTeam(team: team)
+        .then((value) => emit(state.copyWith(isAdminOfTeam: value)));
+    usecase.getInfo(team.id!).then((value) {
+      if (value is ModelTeam) {
+        emit(state.copyWith(team: value));
+      }
+    });
   }
 
   Stream<QuerySnapshot<ModelMember>> getStream() {
-    return teamUseCases.getDetailStream(team: team);
+    return usecase.getDetailStream(team: team);
+  }
+
+  void changeNickname(ModelMember member, String nickname) {
+    usecase.setNickname(member: member, nickname: nickname);
+  }
+
+  Future<bool> kick(ModelMember? member) async {
+    final removeUser = await member?.userEx;
+    await usecase.outTeam(team: team, user: removeUser);
+    return true;
+  }
+
+  Future deleteTeam() {
+    return usecase.deleteTeam(team: team);
   }
 }

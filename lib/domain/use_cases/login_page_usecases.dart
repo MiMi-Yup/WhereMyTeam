@@ -12,7 +12,7 @@ import 'package:where_my_team/models/model_user.dart';
 class LoginUseCases {
   final UnitOfWork unitOfWork;
   final FirebaseAuthService authService;
-  final TeamUsercase teamUsercase;
+  final TeamUseCases teamUsercase;
 
   LoginUseCases(
       {required this.unitOfWork,

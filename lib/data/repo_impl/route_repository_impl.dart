@@ -131,4 +131,10 @@ class RouteRepositoryImpl extends RouteRepository {
       return null;
     }
   }
+
+  @override
+  DocumentReference<Map<String, dynamic>> getRefEx(
+      {required String idUser, required String idRouter}) {
+    return firestoreService.collection(getPath(idUser)).doc(idRouter);
+  }
 }

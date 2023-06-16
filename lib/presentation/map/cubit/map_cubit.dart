@@ -19,20 +19,20 @@ part 'map_state.dart';
 
 @injectable
 class MapCubit extends Cubit<MapState> {
-  final MapUsercase mapUseCases;
+  final MapUseCases usecase;
   final TeamMapCubit userCubit;
   LocationData? _currentLocation;
   StreamSubscription? subscriptionStreamLocation;
   final List<StreamSubscription> _markersSubcription = [];
   StreamSubscription? _focusSubcription = null;
 
-  MapCubit({required this.mapUseCases, required this.userCubit})
+  MapCubit({required this.usecase, required this.userCubit})
       : super(MapState.initial()) {
     getStream();
   }
 
   FutureOr<Stream<LocationData>?> getStream() async {
-    final stream = await mapUseCases.getStreamLocation();
+    final stream = await usecase.getStreamLocation();
     if (subscriptionStreamLocation == null && stream != null) {
       subscriptionStreamLocation =
           stream.listen((event) => _currentLocation = event);
@@ -54,7 +54,7 @@ class MapCubit extends Cubit<MapState> {
   }
 
   FutureOr<bool> checkPermission() {
-    return mapUseCases.checkAndAskPermission();
+    return usecase.checkAndAskPermission();
   }
 
   void _disposeFocus() {
@@ -71,7 +71,7 @@ class MapCubit extends Cubit<MapState> {
   void focusToUser(ModelUser? user) async {
     _disposeFocus();
     if (user != null) {
-      _focusSubcription = mapUseCases.snapshot(user)?.listen((event) async {
+      _focusSubcription = usecase.snapshot(user)?.listen((event) async {
         final user = event.data();
         if (!event.exists || user == null) return;
         final lastLocation = await user.lastLocationEx;
@@ -166,7 +166,7 @@ class MapCubit extends Cubit<MapState> {
         emit(state.copyWith(cameraMap: cameraUpdate, status: MapStatus.bound));
       }
       final snapshots = users
-          .map((e) => mapUseCases.snapshot(e))
+          .map((e) => usecase.snapshot(e))
           .where((element) => element != null)
           .cast<Stream<DocumentSnapshot<ModelUser>>>()
           .toList();

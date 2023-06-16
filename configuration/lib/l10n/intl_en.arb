@@ -19,7 +19,7 @@
     "loginTitle": "Login to Your Account",
     "signUpTitle": "Create Your Account",
     "loginSuggest": "Already have an account? ",
-    "signUpSuggest": "Don't hae an account? ",
+    "signUpSuggest": "Don't have an account? ",
     "rememberAccount": "Remember me",
     "inValidInput": "Email or password is invalid",
     "cancel": "Cancel",
@@ -32,5 +32,46 @@
     "darkTheme": "Dark theme",
     "helpCenter": "Help Center",
     "teamPage": "Team",
-    "mapPage": "Map"
+    "mapPage": "Map",
+    "addMember": "Add Member",
+    "searchPerson": "Search person",
+    "notFound": "Not Found",
+    "missingSomething": "Missing something in form",
+    "loginFailed": "Login Failed",
+    "routerName": "Route {name}",
+    "@routerName": {
+        "description": "Name of route",
+        "placeholders": {
+            "name": {
+                "type": "String"
+            }
+        }
+    },
+    "hide": "Hide",
+    "delete": "Delete",
+    "mins": "mins",
+    "topSpeed": "Top speed",
+    "distance": "Distance",
+    "members": "members",
+    "leave": "Leave",
+    "nickname": "Nickname",
+    "kickMember": "Kick member",
+    "yourTeams": "Your teams",
+    "family": "Family",
+    "newTeam": "New team",
+    "nameTeam": "Name team",
+    "confirmLogout": "Are you sure you want to log out?",
+    "route": "Route",
+    "empty": "Empty",
+    "username": "User name",
+    "goodMorning": "Good Morning",
+    "goodAfternoon": "Good Afternoon",
+    "goodEvening": "Good Evening",
+    "goodNight": "Good Night",
+    "peopleNearby": "People Nearby",
+    "yourFamily": "Your Family",
+    "more": "more",
+    "teams": "Teams",
+    "noTeams": "No Teams",
+    "leaveTeam": "Leave Team"
 }

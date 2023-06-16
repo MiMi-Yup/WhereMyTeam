@@ -18,9 +18,9 @@ part 'welcome_state.dart';
 @injectable
 class WelcomeCubit extends Cubit<WelcomeState> {
   final LoginUseCases loginUseCases;
-  final TeamUsercase teamUsercase;
+  final TeamUseCases teamUseCases;
 
-  WelcomeCubit({required this.loginUseCases, required this.teamUsercase})
+  WelcomeCubit({required this.loginUseCases, required this.teamUseCases})
       : super(WelcomeState.initial());
 
   void init() async {

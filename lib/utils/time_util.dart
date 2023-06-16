@@ -14,3 +14,9 @@ extension ConvertTimestamp on Timestamp {
 extension ConvertString on String {
   DateTime get parseMinimalDate => ConvertTimestamp.formatDate.parse(this);
 }
+
+extension ConvertDateTime on DateTime{
+  static DateFormat formatDate = DateFormat('hh:mm:ss dd.MM.yy');
+
+  String get toVNFormat => formatDate.format(this);
+}

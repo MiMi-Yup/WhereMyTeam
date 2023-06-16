@@ -2,6 +2,8 @@ import 'package:configuration/style/style.dart';
 import 'package:flutter/material.dart';
 import 'package:where_my_team/common/widgets/m_route.dart';
 import 'package:where_my_team/models/model_location.dart';
+import 'package:where_my_team/utils/extensions/location_extension.dart';
+import 'package:where_my_team/utils/time_util.dart';
 
 import '../timelines/timelines.dart';
 
@@ -38,13 +40,15 @@ class TimelineRoute extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      '${routes[index].timestamp?.toDate().millisecond} - ${routes[index + 1].timestamp?.toDate().millisecond}',
+                      '${routes[index].timestamp?.toDate().toVNFormat} - ${routes[index + 1].timestamp?.toDate().toVNFormat}',
                       style: mST18M,
                     ),
                     Padding(
                       padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
                       child: MRoute(
-                          distance: 3.2, speed: 45.6, location: 'API Location'),
+                          distance: routes[index].distance(routes[index + 1]),
+                          speed: routes[index + 1].speed ?? 0.0,
+                          location: 'API Location'),
                     )
                   ],
                 ),

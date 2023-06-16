@@ -16,7 +16,7 @@ class MRoute extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('${distance}km - ${speed}km/h'),
+        Text('${distance.toStringAsFixed(2)}m - ${speed.toStringAsFixed(2)}m/s'),
         SizedBox(
           height: 10.0,
         ),

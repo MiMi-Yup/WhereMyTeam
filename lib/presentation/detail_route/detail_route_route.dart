@@ -16,7 +16,7 @@ class DetailRouteRoute extends RouteDefine {
             providers: [
               BlocProvider<DetailRouteCubit>(
                 create: (_) => DetailRouteCubit(
-                    routeUsercase: getIt<RouteUsercase>(),
+                    usecase: getIt<RouteUseCases>(),
                     route: arguments?['route']),
               ),
             ],

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 import 'package:location_platform_interface/location_platform_interface.dart';
 import 'package:where_my_team/data/data_source/remote/firebase_auth_service.dart';
@@ -9,6 +10,7 @@ import 'package:where_my_team/domain/repositories/location_repository.dart';
 import 'package:where_my_team/domain/repositories/route_repository.dart';
 import 'package:where_my_team/models/model.dart';
 import 'package:where_my_team/models/model_location.dart';
+import 'package:where_my_team/models/model_route.dart';
 
 @Injectable(as: LocationRepository)
 class LocationRepositoryImpl extends LocationRepository {
@@ -82,17 +84,20 @@ class LocationRepositoryImpl extends LocationRepository {
   }
 
   @override
-  Future<List<ModelLocation>?> getDetailRoute({required String id}) async {
+  Future<List<ModelLocation>?> getDetailRoute(ModelRoute model) async {
     try {
       QuerySnapshot<ModelLocation> snapshot = await firestore.service
-          .collection(getPath(user?.uid))
-          .where("route", isEqualTo: routeRepo.getRefById(id))
+          .collection(getPath(model.user!.id))
+          .where("route",
+              isEqualTo: routeRepo.getRefEx(
+                  idUser: model.user!.id, idRouter: model.id!))
           .withConverter(
               fromFirestore: ModelLocation.fromFirestore,
               toFirestore: (ModelLocation model, _) => model.toFirestore())
           .get();
       return snapshot.docs.map((e) => e.data()).toList();
-    } on FirebaseException {
+    } on FirebaseException catch (e) {
+      debugPrint(e.toString());
       return null;
     }
   }

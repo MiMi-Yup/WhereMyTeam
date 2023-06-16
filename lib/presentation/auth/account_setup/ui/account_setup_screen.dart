@@ -1,14 +1,11 @@
 import 'dart:io';
 
 import 'package:configuration/l10n/l10n.dart';
-import 'package:configuration/route/xmd_router.dart';
 import 'package:configuration/style/style.dart';
-import 'package:configuration/utility/constants/asset_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:where_my_team/common/widgets/m_primary_button.dart';
 import 'package:where_my_team/common/widgets/m_text_field.dart';
-import 'package:where_my_team/models/model_user.dart';
 import 'package:where_my_team/presentation/auth/account_setup/cubit/account_setup_cubit.dart';
 import 'package:where_my_team/utils/alert_util.dart';
 import 'package:image_picker/image_picker.dart';
@@ -60,7 +57,7 @@ class AccountSetupScreen extends StatelessWidget {
                                     image: DecorationImage(
                                         fit: BoxFit.cover,
                                         image: state.avatar == null
-                                            ? const AssetImage(mAGoogle)
+                                            ? NetworkImage(state.initAvatar)
                                             : FileImage(File(state.avatar!))
                                                 as ImageProvider),
                                     color: Colors.grey),
@@ -100,15 +97,12 @@ class AccountSetupScreen extends StatelessWidget {
                 onPressed: () async {
                   final state = context.read<AccountSetupCubit>().state;
                   if (state.isFormValid) {
-                    XMDRouter.pop(
-                        result: ModelUser(
-                            id: null,
-                            email: null,
-                            name: state.fullname,
-                            phoneNumber: state.phoneNumber,
-                            avatar: state.avatar));
+                    AlertUtil.showLoading();
+                    await context.read<AccountSetupCubit>().updateProfile();
+                    AlertUtil.hideLoading();
                   } else {
-                    AlertUtil.showToast('Invalid form');
+                    AlertUtil.showToast(
+                        MultiLanguage.of(context).missingSomething);
                   }
                 }),
           )

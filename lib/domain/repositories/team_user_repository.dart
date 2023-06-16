@@ -11,5 +11,7 @@ abstract class TeamUserRepository extends GenericRepository {
 
   Future<bool> addFavourite({required ModelTeam team, List<ModelUser>? users});
   Future<bool> removeFavourite(
-      {required String teamId, required ModelUser user});
+      {required ModelTeam team, required ModelUser user});
+  Future<bool> unFavourite({required ModelTeam team, required ModelUser user});
+  Future<bool> deleteTeam({required ModelTeam team});
 }

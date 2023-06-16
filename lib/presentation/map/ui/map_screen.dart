@@ -1,15 +1,18 @@
 import 'dart:async';
 
+import 'package:configuration/l10n/l10n.dart';
 import 'package:configuration/route/xmd_router.dart';
 import 'package:configuration/style/style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:searchable_paginated_dropdown/searchable_paginated_dropdown.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:where_my_team/common/widgets/m_member_route_component.dart';
 import 'package:where_my_team/common/widgets/m_team_component.dart';
+import 'package:where_my_team/data/services/reverse_geo_service.dart';
 import 'package:where_my_team/manifest.dart';
 import 'package:where_my_team/models/model_member.dart';
 import 'package:where_my_team/models/model_team.dart';
@@ -77,6 +80,7 @@ class _MapScreenState extends State<MapScreen>
               mapType: MapType.hybrid,
               initialCameraPosition: _kGooglePlex,
               myLocationEnabled: true,
+              myLocationButtonEnabled: false,
               onMapCreated: (GoogleMapController controller) async {
                 _controller.complete(controller);
                 bool allow = await context.read<MapCubit>().checkPermission();
@@ -95,11 +99,12 @@ class _MapScreenState extends State<MapScreen>
                 borderRadius: BorderRadius.only(
                     bottomLeft: Radius.circular(16),
                     bottomRight: Radius.circular(16)),
-                color: Colors.grey.withAlpha(240)),
+                color:
+                    Theme.of(context).scaffoldBackgroundColor.withAlpha(180)),
             child: BlocBuilder<TeamMapCubit, TeamMapState>(
               builder: (context, state) => SearchableDropdown<ModelTeam>.future(
                 leadingIcon: Icon(Icons.search),
-                hintText: const Text('Your teams'),
+                hintText: Text(MultiLanguage.of(context).yourTeams),
                 margin: const EdgeInsets.all(15),
                 futureRequest: () async {
                   List<ModelTeam>? teams =
@@ -145,7 +150,7 @@ class _MapScreenState extends State<MapScreen>
                   child: Container(
                     padding: EdgeInsets.all(10.0),
                     decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: Theme.of(context).scaffoldBackgroundColor,
                         borderRadius: BorderRadius.circular(10.0)),
                     child: Icon(Icons.my_location),
                   ),
@@ -157,7 +162,7 @@ class _MapScreenState extends State<MapScreen>
             child: Container(
               padding: EdgeInsets.only(top: 10.0, left: 10.0, right: 10.0),
               decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: Theme.of(context).scaffoldBackgroundColor,
                   borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(10.0),
                       topRight: Radius.circular(10.0))),
@@ -181,12 +186,21 @@ class _MapScreenState extends State<MapScreen>
                               current.currentTeam?.id,
                           builder: (context, state) => Text(
                               state.currentTeam?.name ?? "",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.deepPurple,
-                                  fontSize: 18))),
+                              style: mST18M.copyWith(color: mCPrimary))),
                       TextButton(
-                          onPressed: null,
+                          onPressed: () async {
+                            LocationData? coordinate =
+                                context.read<MapCubit>().currentLocation;
+                            if (coordinate != null) {
+                              List<Placemark> marks = await ReverseGeoService()
+                                  .getAddress(
+                                      latitude: coordinate.latitude!,
+                                      longitude: coordinate.longitude!);
+                              for (var element in marks) {
+                                debugPrint(element.name);
+                              }
+                            }
+                          },
                           // onPressed: context.read<MapCubit>().showRoute,
                           child: Container(
                             padding: EdgeInsets.all(8.0),
@@ -219,7 +233,7 @@ class _MapScreenState extends State<MapScreen>
                           future: state.currentTeam?.getNumberOfMembers,
                           builder: (context, snapshot) => snapshot.hasData
                               ? Text(
-                                  "${snapshot.data ?? 1} members",
+                                  "${snapshot.data ?? 1} ${MultiLanguage.of(context).members}",
                                   style: mST10R,
                                 )
                               : const SizedBox.shrink())),
@@ -228,7 +242,7 @@ class _MapScreenState extends State<MapScreen>
                     builder: (context, state) => MediaQuery.removeViewPadding(
                       removeTop: true,
                       context: context,
-                      child: ListView.separated(
+                      child: ListView.builder(
                           physics: const BouncingScrollPhysics(),
                           itemBuilder: (context, index) {
                             return FutureBuilder<Map<String, Object?>?>(
@@ -272,12 +286,6 @@ class _MapScreenState extends State<MapScreen>
                                             }),
                                       )
                                     : const LinearProgressIndicator());
-                          },
-                          separatorBuilder: (context, index) {
-                            return Divider(
-                              color: Colors.grey.withAlpha(100),
-                              thickness: 1.0,
-                            );
                           },
                           itemCount: state.teamMembers?.length ?? 0),
                     ),

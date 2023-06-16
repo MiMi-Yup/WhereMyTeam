@@ -21,7 +21,7 @@ class BottomBarRoute extends RouteDefine {
               BlocProvider(create: (_) => getIt<TeamMapCubit>()),
               BlocProvider<MapCubit>(
                 create: (context) => MapCubit(
-                    mapUseCases: getIt<MapUsercase>(),
+                    usecase: getIt<MapUseCases>(),
                     userCubit: BlocProvider.of<TeamMapCubit>(context)),
               ),
             ],

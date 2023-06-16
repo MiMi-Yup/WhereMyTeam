@@ -12,9 +12,9 @@ part 'detail_route_state.dart';
 
 @injectable
 class DetailRouteCubit extends Cubit<DetailRouteState> {
-  final RouteUsercase routeUsercase;
+  final RouteUseCases usecase;
   final ModelRoute route;
-  DetailRouteCubit({required this.routeUsercase, required this.route})
+  DetailRouteCubit({required this.usecase, required this.route})
       : super(DetailRouteState.initial());
 
   Future<bool> loadRoute() async {

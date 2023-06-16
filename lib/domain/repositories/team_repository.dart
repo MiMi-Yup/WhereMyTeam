@@ -6,6 +6,7 @@ import 'package:where_my_team/models/model_team.dart';
 abstract class TeamRepository extends GenericRepository {
   Future<ModelTeam?> getTeam({required String teamId});
   Future<List<ModelMember>?> getMembers({required String teamId});
+  Future<ModelMember?> adminOfTeam({required ModelTeam team});
   Stream<QuerySnapshot<ModelMember>> getStream({required ModelTeam team});
   Future<int> getNumberOfMembers({required String teamId});
 

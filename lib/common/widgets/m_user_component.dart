@@ -37,7 +37,12 @@ class MUserComponent extends StatelessWidget {
                               MemoryImage(snapshot.data!, scale: 1.0))
                       : const SizedBox.shrink()),
             ),
-            Expanded(child: Text(name, style: mST16R, overflow: TextOverflow.ellipsis,)),
+            Expanded(
+                child: Text(
+              name,
+              style: mST16R,
+              overflow: TextOverflow.ellipsis,
+            )),
             if (title != null)
               Expanded(
                 child: Text(

@@ -16,7 +16,7 @@ class RouteRoute extends RouteDefine {
             providers: [
               BlocProvider<RouteCubit>(
                 create: (_) => RouteCubit(
-                    routeUsercase: getIt<RouteUsercase>(),
+                    usecase: getIt<RouteUseCases>(),
                     user: arguments?['user']),
               ),
             ],

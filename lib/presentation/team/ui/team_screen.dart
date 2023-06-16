@@ -1,11 +1,12 @@
-import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:configuration/l10n/l10n.dart';
 import 'package:configuration/route/xmd_router.dart';
 import 'package:configuration/style/style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:where_my_team/common/widgets/m_confirm_bottom_modal.dart';
 import 'package:where_my_team/common/widgets/m_section.dart';
 import 'package:where_my_team/common/widgets/m_team_component.dart';
 import 'package:where_my_team/common/widgets/m_user_component.dart';
@@ -17,6 +18,7 @@ import 'package:where_my_team/models/model_member.dart';
 import 'package:where_my_team/models/model_team.dart';
 import 'package:where_my_team/models/model_team_user.dart';
 import 'package:where_my_team/models/model_user.dart';
+import 'package:where_my_team/presentation/add_member/add_member_route.dart';
 import 'package:where_my_team/presentation/bottom_bar/cubit/bottom_bar_cubit.dart';
 import 'package:where_my_team/presentation/detail_team/detail_team_route.dart';
 import 'package:where_my_team/presentation/map/cubit/map_cubit.dart';
@@ -34,6 +36,14 @@ class TeamScreen extends StatefulWidget {
 
 class _TeamScreenState extends State<TeamScreen>
     with AutomaticKeepAliveClientMixin {
+  String greetingTime(MultiLanguage language) {
+    final hour = DateTime.now().hour;
+    if (hour <= 12) return language.goodMorning;
+    if (hour <= 16) return language.goodAfternoon;
+    if (hour <= 20) return language.goodEvening;
+    return language.goodNight;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -67,11 +77,12 @@ class _TeamScreenState extends State<TeamScreen>
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "Good morning",
+                            greetingTime(MultiLanguage.of(context)),
                             style: mST16R.copyWith(color: Colors.grey),
                           ),
                           Text(
-                            snapshot.data?.name ?? '',
+                            //user name ??
+                            MultiLanguage.of(context).username,
                             style: mST18M,
                           )
                         ],
@@ -91,7 +102,7 @@ class _TeamScreenState extends State<TeamScreen>
         physics: BouncingScrollPhysics(),
         slivers: [
           MSection(
-              title: "People Nearby",
+              title: MultiLanguage.of(context).peopleNearby,
               headerColor: Theme.of(context).scaffoldBackgroundColor,
               titleColor: Theme.of(context).brightness == Brightness.dark
                   ? Colors.white
@@ -117,13 +128,13 @@ class _TeamScreenState extends State<TeamScreen>
                         name: 'John')),
               )).builder(),
           MSection(
-              title: "Your family",
+              title: MultiLanguage.of(context).yourFamily,
               headerColor: Theme.of(context).scaffoldBackgroundColor,
               titleColor: Theme.of(context).brightness == Brightness.dark
                   ? Colors.white
                   : Colors.black,
               headerPressable: false,
-              action: Text('more'),
+              action: Text(MultiLanguage.of(context).more),
               onPressed: () {
                 ModelTeam? familyTeam =
                     context.read<TeamCubit>().state.familyTeam;
@@ -187,7 +198,7 @@ class _TeamScreenState extends State<TeamScreen>
                     }
                   })).builder(),
           MSection(
-              title: "Teams",
+              title: MultiLanguage.of(context).teams,
               headerColor: Theme.of(context).scaffoldBackgroundColor,
               titleColor: Theme.of(context).brightness == Brightness.dark
                   ? Colors.white
@@ -199,7 +210,8 @@ class _TeamScreenState extends State<TeamScreen>
                     List<ModelTeamUser>? teams =
                         snapshot.data?.docs.map((e) => e.data()).toList();
                     if (teams == null || teams.length == 0) {
-                      return const Center(child: Text("No teams"));
+                      return Center(
+                          child: Text(MultiLanguage.of(context).noTeams));
                     }
 
                     return FutureBuilder<List<TeamModel?>>(
@@ -218,8 +230,8 @@ class _TeamScreenState extends State<TeamScreen>
                                 .toList();
                             return ListView.separated(
                                 physics: const BouncingScrollPhysics(),
-                                padding:
-                                    const EdgeInsets.only(left: 10, right: 10),
+                                padding: const EdgeInsets.only(
+                                    left: 10, right: 10),
                                 shrinkWrap: true,
                                 itemCount: models.length,
                                 separatorBuilder: (context, index) =>
@@ -232,6 +244,26 @@ class _TeamScreenState extends State<TeamScreen>
                                           .changeTeam(models[index].team);
                                       BlocProvider.of<MapCubit>(context)
                                           .changeTeam(models[index].team);
+                                    },
+                                    inviteSlidableAction:
+                                        (_) =>
+                                            XMDRouter.pushNamed(
+                                                routerIds[AddMemberRoute]!,
+                                                arguments: {
+                                                  'team': models[index].team
+                                                }),
+                                    leaveSlidableAction: (_) async {
+                                      bool? result =
+                                          await showConfirmBottomModal(
+                                              context,
+                                              MultiLanguage.of(context)
+                                                  .leaveTeam);
+                                      if (result == true) {
+                                        await context
+                                            .read<TeamCubit>()
+                                            .leaveTeam(models[index].team);
+                                      }
+                                      return result ?? false;
                                     },
                                     avatar: models[index].team.avatar ??
                                         'avatar/fqAueJqQeKcgMJwJFCjsC2atiHj2/image.png',

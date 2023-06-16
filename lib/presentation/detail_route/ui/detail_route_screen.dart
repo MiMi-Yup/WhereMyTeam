@@ -1,16 +1,17 @@
 import 'dart:async';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:configuration/l10n/l10n.dart';
 import 'package:configuration/style/style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
-import 'package:where_my_team/common/widgets/timeline_modified_transaction.dart';
-import 'package:where_my_team/models/model_location.dart';
+import 'package:where_my_team/models/model_route.dart';
+import 'package:where_my_team/models/model_type_route.dart';
 import 'package:where_my_team/presentation/detail_route/cubit/detail_route_cubit.dart';
 import 'package:where_my_team/utils/extensions/context_extension.dart';
 import 'package:where_my_team/utils/time_util.dart';
+import 'package:where_my_team/common/widgets/m_timeline_route.dart';
 
 class DetailRouteScreen extends StatelessWidget {
   DetailRouteScreen({super.key});
@@ -30,7 +31,8 @@ class DetailRouteScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         elevation: 0.0,
-        title: Text("Route #03"),
+        title: Text(MultiLanguage.of(context)
+            .routerName(context.read<DetailRouteCubit>().route.name ?? '')),
         actions: [
           IconButton(onPressed: () => null, icon: Icon(Icons.qr_code)),
           PopupMenuButton<int>(
@@ -48,7 +50,7 @@ class DetailRouteScreen extends StatelessWidget {
                     SizedBox(
                       width: 10.0,
                     ),
-                    Text("Hide")
+                    Text(MultiLanguage.of(context).hide)
                   ],
                 ),
               ),
@@ -63,7 +65,7 @@ class DetailRouteScreen extends StatelessWidget {
                     SizedBox(
                       width: 10.0,
                     ),
-                    Text("Delete")
+                    Text(MultiLanguage.of(context).delete)
                   ],
                 ),
               )
@@ -81,7 +83,7 @@ class DetailRouteScreen extends StatelessWidget {
         backdropEnabled: true,
         backdropColor: Colors.black,
         borderRadius: const BorderRadius.vertical(top: Radius.circular(10)),
-        color: Colors.white,
+        color: Theme.of(context).scaffoldBackgroundColor,
         body: BlocConsumer<DetailRouteCubit, DetailRouteState>(
           listenWhen: (previous, current) =>
               previous.cameraUpdate != current.cameraUpdate ||
@@ -95,7 +97,8 @@ class DetailRouteScreen extends StatelessWidget {
           builder: (context, state) => GoogleMap(
             mapType: MapType.hybrid,
             initialCameraPosition: _kGooglePlex,
-            myLocationEnabled: true,
+            myLocationEnabled: false,
+            myLocationButtonEnabled: false,
             onMapCreated: (GoogleMapController controller) {
               _controller.complete(controller);
               context.read<DetailRouteCubit>().loadRoute();
@@ -120,15 +123,35 @@ class DetailRouteScreen extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Icon(
-                    Icons.motorcycle,
-                    size: 48,
+                  SizedBox(
+                    height: 48,
+                    width: 48,
+                    child: FutureBuilder<ModelTypeRoute?>(
+                        future:
+                            context.read<DetailRouteCubit>().route.typeRouteEx,
+                        builder: (context, snapshot) {
+                          switch (snapshot.data?.name) {
+                            case 'walk':
+                              return const Icon(Icons.directions_walk,
+                                  size: 48);
+                            case 'cycle':
+                              return const Icon(Icons.directions_bike,
+                                  size: 48);
+                            case 'bike':
+                              return const Icon(Icons.motorcycle, size: 48);
+                            case 'roll':
+                              return const Icon(Icons.directions_car, size: 48);
+                            case 'nothing':
+                            default:
+                              return const SizedBox.shrink();
+                          }
+                        }),
                   ),
                   Expanded(
                     child: Column(
                       children: [
                         Text(
-                          "${state.route?.endTime?.toDate().difference(state.route!.startTime!.toDate()).inMinutes} mins Drive",
+                          "${state.route?.endTime?.toDate().difference(state.route!.startTime!.toDate()).inMinutes} ${MultiLanguage.of(context).mins}",
                           style: mST18M,
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -143,18 +166,19 @@ class DetailRouteScreen extends StatelessWidget {
                       margin: const EdgeInsets.all(10.0),
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10.0),
-                          border: Border.all()),
+                          border: Border.all(color: Colors.grey)),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Column(
                             children: [
-                              Text("Top speed"),
+                              Text(MultiLanguage.of(context).topSpeed),
                               SizedBox(
                                 height: 10.0,
                               ),
-                              Text("${state.route?.maxSpeed}km/h")
+                              Text(
+                                  "${state.route?.maxSpeed.toStringAsFixed(2)}m/s")
                             ],
                           ),
                           VerticalDivider(
@@ -164,11 +188,12 @@ class DetailRouteScreen extends StatelessWidget {
                           ),
                           Column(
                             children: [
-                              Text("Distance"),
+                              Text(MultiLanguage.of(context).distance),
                               SizedBox(
                                 height: 10.0,
                               ),
-                              Text("${state.route?.distance}km")
+                              Text(
+                                  "${state.route?.distance.toStringAsFixed(2)}m")
                             ],
                           ),
                         ],

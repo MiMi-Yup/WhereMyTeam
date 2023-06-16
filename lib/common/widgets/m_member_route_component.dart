@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:configuration/style/style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:where_my_team/common/widgets/m_toggle_icon_button.dart';
@@ -94,15 +95,15 @@ class _MMemberRouteComponentState extends State<MMemberRouteComponent>
                   Align(
                     alignment: Alignment.bottomCenter,
                     child: Container(
-                      padding: EdgeInsets.only(left: 2.0, right: 2.0),
+                      padding: EdgeInsets.only(left: 4.0, right: 4.0),
                       decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: Theme.of(context).scaffoldBackgroundColor,
                           borderRadius: BorderRadius.all(Radius.circular(8.0)),
                           boxShadow: [
                             BoxShadow(
                               color: Colors.grey,
                               blurRadius: 4,
-                              offset: Offset(2, 2), // Shadow position
+                              offset: Offset(1, 1), // Shadow position
                             )
                           ]),
                       child: Row(
@@ -121,23 +122,13 @@ class _MMemberRouteComponentState extends State<MMemberRouteComponent>
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Text(widget.name,
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                          color: Colors.deepPurple)),
+                  Text(widget.name, style: mST16M.copyWith(color: mCPrimary)),
                   if (widget.nickname != null)
-                    Text(widget.nickname!,
-                        style:
-                            TextStyle(fontSize: 16, color: Colors.deepPurple)),
+                    Text(widget.nickname!, style: mST14R),
                   if (widget.location != null)
-                    Text(widget.location!,
-                        style:
-                            TextStyle(fontSize: 16, color: Colors.deepPurple)),
+                    Text(widget.location!, style: mST14R),
                   if (widget.lastOnline != null)
-                    Text(widget.lastOnline!,
-                        style:
-                            TextStyle(fontSize: 16, color: Colors.deepPurple))
+                    Text(widget.lastOnline!, style: mST14R)
                 ],
               )
             ],
