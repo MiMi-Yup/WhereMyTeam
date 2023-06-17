@@ -1,16 +1,36 @@
-import 'package:where_my_team/presentation/auth/login/login_page_route.dart';
-import 'package:where_my_team/presentation/start_page/start_page_route.dart';
-
-import 'presentation/home_page/home_page_route.dart';
+import 'package:where_my_team/presentation/add_member/add_member_route.dart';
+import 'package:where_my_team/presentation/auth/account_setup/account_setup_route.dart';
+import 'package:where_my_team/presentation/auth/login/login_route.dart';
+import 'package:where_my_team/presentation/bottom_bar/bottom_bar_route.dart';
+import 'package:where_my_team/presentation/detail_route/detail_route_route.dart';
+import 'package:where_my_team/presentation/detail_team/detail_team_route.dart';
+import 'package:where_my_team/presentation/introduction/introduction_route.dart';
+import 'package:where_my_team/presentation/new_team/new_team_route.dart';
+import 'package:where_my_team/presentation/route/route_route.dart';
+import 'package:where_my_team/presentation/welcome/welcome_route.dart';
 
 const routerIds = {
-  HomePageRoute: 'HomePageRoute',
-  StartPageRoute: 'StartPageRoute',
-  LoginPageRoute: 'LoginPageRoute'
+  WelcomeRoute: 'WelcomeRoute',
+  LoginRoute: 'LoginRoute',
+  IntroductionRoute: 'IntroductionRoute',
+  BottomBarRoute: 'BottomBarRoute',
+  DetailTeamRoute: 'DetailTeamRoute',
+  RouteRoute: 'RouteRoute',
+  DetailRouteRoute: 'DetailRouteRoute',
+  NewTeamRoute: 'NewTeamRoute',
+  AccountSetupRoute: "AccountSetupRoute",
+  AddMemberRoute: "AddMemberRoute"
 };
 
 void generateRoutes() {
-  HomePageRoute();
-  StartPageRoute();
-  LoginPageRoute();
+  WelcomeRoute();
+  LoginRoute();
+  IntroductionRoute();
+  BottomBarRoute();
+  DetailTeamRoute();
+  RouteRoute();
+  DetailRouteRoute();
+  NewTeamRoute();
+  AccountSetupRoute();
+  AddMemberRoute();
 }

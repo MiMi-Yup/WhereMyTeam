@@ -5,7 +5,9 @@ Color mBarrierDialogColor = Colors.grey.withOpacity(0.4);
 /// Brand
 // Primary color: The predominant color in UI and is normally connected with the main color of the brand.
 // Secondary color: Complement the primary color.
-final Color mCPrimary = HexColor.fromHex('#1971FF');
+final Color mCPrimary = HexColor.fromHex('#067346');
+final Color mCDarkBackground = Colors.black;
+final Color mCLightBackground = Colors.white;
 final Color mCSecondary = HexColor.fromHex('#3B0696');
 final Color mCSmartOne = HexColor.fromHex('#922028');
 
@@ -51,6 +53,13 @@ final Color mCRed400 = HexColor.fromHex('#FB5049');
 final Color mCRed300 = HexColor.fromHex('#FEB4B4');
 final Color mCRed200 = HexColor.fromHex('#FFDCDC');
 final Color mCRed100 = HexColor.fromHex('#FFEFEF');
+
+// gray
+final Color mCGray100 = HexColor.fromHex('#d1d5db');
+final Color mCGray200 = HexColor.fromHex('#9ca3af');
+final Color mCGray300 = HexColor.fromHex('#6b7280');
+final Color mCGray400 = HexColor.fromHex('#4b5563');
+final Color mCGray500 = HexColor.fromHex('#374151');
 
 // shadow
 final Color mCShadow = HexColor.fromHex('#011222');

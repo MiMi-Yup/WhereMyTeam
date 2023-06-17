@@ -1,36 +1,53 @@
 import 'package:configuration/l10n/l10n.dart';
 import 'package:configuration/route/route_define.dart';
+import 'package:configuration/style/style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
+import 'package:where_my_team/di/di.dart';
+import 'package:where_my_team/domain/repositories/shared_preferences_repository.dart';
 import 'package:where_my_team/manifest.dart';
-import 'package:where_my_team/presentation/start_page/start_page_route.dart';
+import 'package:where_my_team/presentation/welcome/welcome_route.dart';
 
 final GlobalKey<ScaffoldMessengerState> rootScaffoldMessengerKey =
     GlobalKey<ScaffoldMessengerState>();
 
+class _LoadPref {
+  final ThemeMode mode;
+  final Locale? locale;
+  _LoadPref({required this.mode, required this.locale});
+}
+
 class MainApplication extends StatefulWidget {
-  final Type startRoute;
-  const MainApplication({Key? key, required this.startRoute}) : super(key: key);
+  const MainApplication({Key? key}) : super(key: key);
   @override
-  _MainApplicationState createState() => _MainApplicationState();
+  State<MainApplication> createState() => _MainApplicationState();
 }
 
 class _MainApplicationState extends State<MainApplication>
     with WidgetsBindingObserver {
   bool canPopDialog = false;
 
+  final route = routerIds[WelcomeRoute];
+
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance?.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
+    final sharedRepo = getIt<SharedPreferencesRepository>();
+    sharedRepo.getTheme.then((value) => Get.changeThemeMode(value));
+    sharedRepo.getLanguage.then((value) {
+      if (value != null) Get.updateLocale(value);
+    });
   }
 
   @override
   void dispose() {
-    WidgetsBinding.instance?.removeObserver(this);
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
+
+  Type initRoute = WelcomeRoute;
 
   /// inactive - The application is in an inactive state and is not receiving user input. iOS only
   /// paused - The application is not currently visible to the user, not responding to user input, and running in the background.
@@ -67,12 +84,28 @@ class _MainApplicationState extends State<MainApplication>
       debugShowCheckedModeBanner: false,
       locale: Get.deviceLocale,
       fallbackLocale: const Locale('en'),
-      initialRoute: routerIds[widget.startRoute],
-      onGenerateRoute: (settings) =>
-          manifest(
-            generateRoutes,
-            settings,
+      darkTheme: ThemeData.dark().copyWith(
+          scaffoldBackgroundColor: mCDarkBackground,
+          appBarTheme: AppBarTheme(color: mCDarkBackground),
+          iconTheme: IconThemeData(color: Colors.grey),
+          bottomNavigationBarTheme:
+              BottomNavigationBarThemeData(backgroundColor: mCDarkBackground)),
+      theme: ThemeData(
+          primarySwatch: Colors.blueGrey,
+          scaffoldBackgroundColor: mCLightBackground,
+          appBarTheme: AppBarTheme(
+            color: mCLightBackground,
+            foregroundColor: Colors.black,
           ),
+          bottomNavigationBarTheme:
+              BottomNavigationBarThemeData(backgroundColor: mCLightBackground)),
+      //change ThemeMode to change theme
+      themeMode: ThemeMode.system,
+      initialRoute: route,
+      onGenerateRoute: (settings) => manifest(
+        generateRoutes,
+        settings,
+      ),
     );
   }
 }

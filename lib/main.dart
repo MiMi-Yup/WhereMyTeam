@@ -4,12 +4,11 @@ import 'package:configuration/environment/build_config.dart';
 import 'package:configuration/environment/env.dart';
 import 'package:configuration/route/route_define.dart';
 import 'package:configuration/style/style.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:where_my_team/di/di.dart';
-import 'package:where_my_team/domain/repositories/unit_of_work.dart';
-import 'package:where_my_team/presentation/home_page/home_page_route.dart';
-import 'package:where_my_team/presentation/start_page/start_page_route.dart';
+import 'package:where_my_team/presentation/welcome/welcome_route.dart';
 import 'manifest.dart';
 import 'presentation/main/main_application.dart';
 
@@ -26,20 +25,16 @@ class SetupEnv extends Env {
     configureDependencies(env: env);
   }
 
-  Type startRoute = StartPageRoute;
+  Type startRoute = WelcomeRoute;
 
   @override
   FutureOr<void> onCreate() async {
     initRoute(routerIds);
+    await Firebase.initializeApp();
     await SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
     ]);
     setStyleDefault();
-    final UnitOfWork unitOfWork = getIt<UnitOfWork>();
-    String? token = await unitOfWork.preferences.getToken();
-    if (token != null) {
-      startRoute = HomePageRoute;
-    }
   }
 
   @override
@@ -48,6 +43,6 @@ class SetupEnv extends Env {
       Zone.current.handleUncaughtError(details.exception, details.stack!);
       return Container(color: Colors.transparent);
     };
-    return MainApplication(startRoute: startRoute);
+    return const MainApplication();
   }
 }

@@ -1,3 +1,4 @@
+import 'package:configuration/style/style.dart';
 import 'package:flutter/material.dart';
 
 class MTextField extends StatefulWidget {
@@ -38,7 +39,8 @@ class _MTextFieldState extends State<MTextField> {
         prefixIcon: widget.preIcon != null ? Icon(widget.preIcon) : null,
         suffixIcon: widget.obscureText
             ? GestureDetector(
-                child: const Icon(Icons.remove_red_eye),
+                child: Icon(
+                    isPassword ? Icons.remove_red_eye : Icons.visibility_off),
                 onTap: () {
                   setState(() {
                     isPassword = !isPassword;
@@ -46,9 +48,16 @@ class _MTextFieldState extends State<MTextField> {
                 },
               )
             : null,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10.0),
-        ),
+        border:
+            OutlineInputBorder(borderRadius: BorderRadius.circular(mPadding)),
+        enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(mPadding),
+            borderSide: const BorderSide(style: BorderStyle.none)),
+        focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(mPadding),
+            borderSide: const BorderSide(style: BorderStyle.none)),
+        filled: true,
+        fillColor: Colors.grey.withAlpha(25),
         hintText: widget.hintText,
       ),
       obscureText: isPassword,

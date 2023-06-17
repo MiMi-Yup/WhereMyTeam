@@ -40,17 +40,27 @@ dependencies:
   injectable: ^2.1.1
   get_it: ^7.2.0
   location: ^4.4.0
-  geocoding: ^2.0.5
+  geocoding: ^2.1.0
   sliding_up_panel: ^2.0.0+1
   searchable_paginated_dropdown: ^1.0.0
   google_maps_flutter: ^2.2.5
-  retrofit: ^4.0.1
   configuration:
     path: ./configuration
   flutter_bloc: ^8.1.2
   equatable: ^2.0.5
   flutter_secure_storage: ^8.0.0
   pin_code_fields: ^7.4.0
+  firebase_core: ^2.9.0
+  cloud_firestore: ^4.5.0
+  firebase_auth: ^4.4.0
+  google_sign_in: ^6.1.0
+  smooth_page_indicator: ^1.0.1
+  image_picker: ^0.8.7+1
+  battery_plus: ^3.0.4
+  sliver_tools: ^0.2.10
+  flutter_slidable: ^2.0.0
+  shared_preferences: ^2.1.1
+  firebase_storage: ^11.2.1
 
 dev_dependencies:
   flutter_test:
@@ -62,8 +72,6 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
-  retrofit_generator: ^6.0.0+1
-  json_serializable: ^6.6.1
   injectable_generator: ^2.1.5
   build_runner: ^2.3.3
 
