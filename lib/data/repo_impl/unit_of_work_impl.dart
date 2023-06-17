@@ -6,6 +6,7 @@ import 'package:where_my_team/domain/repositories/member_repository.dart';
 import 'package:where_my_team/domain/repositories/preferences_repository.dart';
 import 'package:where_my_team/domain/repositories/role_repository.dart';
 import 'package:where_my_team/domain/repositories/route_repository.dart';
+import 'package:where_my_team/domain/repositories/shared_preferences_repository.dart';
 import 'package:where_my_team/domain/repositories/team_user_repository.dart';
 import 'package:where_my_team/domain/repositories/team_repository.dart';
 import 'package:where_my_team/domain/repositories/type_route_repository.dart';
@@ -47,6 +48,9 @@ class UnitOfWorkImpl implements UnitOfWork {
   @override
   final TypeRouteRepository typeRoute;
 
+  @override
+  final SharedPreferencesRepository sharedPref;
+
   UnitOfWorkImpl(
       {required this.location,
       required this.user,
@@ -58,5 +62,6 @@ class UnitOfWorkImpl implements UnitOfWork {
       required this.teamUser,
       required this.memberTeam,
       required this.route,
-      required this.typeRoute});
+      required this.typeRoute,
+      required this.sharedPref});
 }

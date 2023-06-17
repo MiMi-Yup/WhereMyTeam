@@ -1,22 +1,24 @@
+import 'dart:typed_data';
+
 import 'package:configuration/l10n/l10n.dart';
 import 'package:configuration/route/xmd_router.dart';
 import 'package:configuration/style/style.dart';
-import 'package:configuration/utility/constants/asset_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:where_my_team/common/widgets/m_button_setting.dart';
 import 'package:where_my_team/common/widgets/m_confirm_bottom_modal.dart';
 import 'package:where_my_team/di/di.dart';
-import 'package:where_my_team/domain/repositories/shared_preferences_repository.dart';
-import 'package:get/get.dart';
 import 'package:where_my_team/domain/repositories/user_repository.dart';
 import 'package:where_my_team/domain/use_cases/login_page_usecases.dart';
+import 'package:where_my_team/domain/use_cases/user_usecases.dart';
 import 'package:where_my_team/manifest.dart';
+import 'package:where_my_team/models/model_user.dart';
 import 'package:where_my_team/presentation/auth/account_setup/account_setup_route.dart';
 import 'package:where_my_team/presentation/auth/login/login_route.dart';
+import 'package:get/get.dart';
 
 class ProfileScreen extends StatelessWidget {
-  final SharedPreferencesRepository prefsRepo;
-  const ProfileScreen({super.key, required this.prefsRepo});
+  final UserUseCases usecase;
+  const ProfileScreen({super.key, required this.usecase});
 
   @override
   Widget build(BuildContext context) {
@@ -75,15 +77,17 @@ class ProfileScreen extends StatelessWidget {
                     Stack(
                       alignment: Alignment.bottomRight,
                       children: [
-                        Container(
+                        SizedBox(
                           height: 75,
                           width: 75,
-                          padding: EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              image:
-                                  DecorationImage(image: AssetImage(mAGoogle)),
-                              color: Colors.grey),
+                          child: FutureBuilder<Uint8List?>(
+                              future: usecase.getAvatar(),
+                              builder: (context, snapshot) => snapshot.hasData
+                                  ? CircleAvatar(
+                                      foregroundImage: MemoryImage(
+                                          snapshot.data!,
+                                          scale: 1.0))
+                                  : const SizedBox.shrink()),
                         ),
                         Container(
                           padding: EdgeInsets.all(2),
@@ -102,21 +106,26 @@ class ProfileScreen extends StatelessWidget {
                       width: 10.0,
                     ),
                     Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Text(
-                            "Andrew Ainsley",
-                            style: mST20M,
-                          ),
-                          Text(
-                            "doanxemnaobro@gmail.comkfjsdhfkjh",
-                            style: mST16M,
-                            overflow: TextOverflow.ellipsis,
-                          )
-                        ],
-                      ),
+                      child: FutureBuilder<ModelUser?>(
+                          future: usecase.unitOfWork.user.getCurrentUser(),
+                          builder: (context, snapshot) => snapshot.hasData
+                              ? Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    Text(
+                                      snapshot.data?.name ?? '',
+                                      style: mST20M,
+                                    ),
+                                    Text(
+                                      snapshot.data?.email ?? '',
+                                      style: mST16M,
+                                      overflow: TextOverflow.ellipsis,
+                                    )
+                                  ],
+                                )
+                              : const SizedBox.shrink()),
                     ),
                   ],
                 ),
@@ -149,7 +158,7 @@ class ProfileScreen extends StatelessWidget {
                             return ListTile(
                               onTap: () {
                                 XMDRouter.pop();
-                                prefsRepo.setLanguage(itemLocale);
+                                usecase.setLanguage(itemLocale);
                                 Get.updateLocale(itemLocale);
                               },
                               trailing: locales[index].languageCode ==
@@ -175,7 +184,7 @@ class ProfileScreen extends StatelessWidget {
                 initState: Theme.of(context).brightness == Brightness.dark,
                 onPressed: (p0) {
                   final mode = p0 == true ? ThemeMode.dark : ThemeMode.light;
-                  prefsRepo.setTheme(mode);
+                  usecase.setTheme(mode);
                   Get.changeThemeMode(mode);
                 },
               ),

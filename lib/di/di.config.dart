@@ -171,6 +171,7 @@ extension GetItInjectableX on _i1.GetIt {
           memberTeam: gh<_i29.MemberRepository>(),
           route: gh<_i11.RouteRepository>(),
           typeRoute: gh<_i17.TypeRouteRepository>(),
+          sharedPref: gh<_i25.SharedPreferencesRepository>(),
         ));
     gh.factory<_i35.UserUseCases>(
         () => _i35.UserUseCases(unitOfWork: gh<_i33.UnitOfWork>()));
