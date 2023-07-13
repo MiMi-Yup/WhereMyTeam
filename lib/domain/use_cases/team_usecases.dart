@@ -3,16 +3,16 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:injectable/injectable.dart';
-import 'package:where_my_team/data/data_source/remote/cloud_storage_service.dart';
-import 'package:where_my_team/di/di.dart';
-import 'package:where_my_team/domain/repositories/unit_of_work.dart';
-import 'package:where_my_team/domain/use_cases/login_page_usecases.dart';
-import 'package:where_my_team/models/model.dart';
-import 'package:where_my_team/models/model_member.dart';
-import 'package:where_my_team/models/model_role.dart';
-import 'package:where_my_team/models/model_team.dart';
-import 'package:where_my_team/models/model_team_user.dart';
-import 'package:where_my_team/models/model_user.dart';
+import 'package:wmteam/data/data_source/remote/cloud_storage_service.dart';
+import 'package:wmteam/di/di.dart';
+import 'package:wmteam/domain/repositories/unit_of_work.dart';
+import 'package:wmteam/domain/use_cases/login_page_usecases.dart';
+import 'package:wmteam/models/model.dart';
+import 'package:wmteam/models/model_member.dart';
+import 'package:wmteam/models/model_role.dart';
+import 'package:wmteam/models/model_team.dart';
+import 'package:wmteam/models/model_team_user.dart';
+import 'package:wmteam/models/model_user.dart';
 
 @injectable
 class TeamUseCases {
@@ -51,19 +51,19 @@ class TeamUseCases {
     final queryLower = query.toLowerCase();
     RegExp regex = RegExp(r"^\d+$");
     if (regex.hasMatch(query)) {
-      return result
-          .where((element) =>
-              element.phoneNumber?.startsWith(queryLower, 0) == true)
-          .toList();
+      result.retainWhere(
+          (element) => element.phoneNumber?.startsWith(queryLower, 0) == true);
+    } else {
+      result.retainWhere((element) =>
+          element.name
+              ?.toLowerCase()
+              .split(' ')
+              .any((element) => element.startsWith(queryLower, 0) == true) ==
+          true);
     }
-    return result
-        .where((element) =>
-            element.name
-                ?.toLowerCase()
-                .split(' ')
-                .any((element) => element.startsWith(queryLower, 0) == true) ==
-            true)
-        .toList();
+    final currentUser = await getCurrentUser();
+    result.removeWhere((element) => element.id == currentUser?.id);
+    return result;
   }
 
   Stream<QuerySnapshot<ModelTeamUser>> getStream() {

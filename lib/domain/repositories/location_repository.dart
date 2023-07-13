@@ -1,5 +1,5 @@
-import 'package:where_my_team/models/model_location.dart';
-import 'package:where_my_team/models/model_route.dart';
+import 'package:wmteam/models/model_location.dart';
+import 'package:wmteam/models/model_route.dart';
 
 import 'generic_repository.dart';
 

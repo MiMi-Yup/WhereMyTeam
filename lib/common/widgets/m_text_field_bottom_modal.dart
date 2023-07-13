@@ -2,8 +2,8 @@ import 'package:configuration/l10n/l10n.dart';
 import 'package:configuration/route/xmd_router.dart';
 import 'package:configuration/style/style.dart';
 import 'package:flutter/material.dart';
-import 'package:where_my_team/common/widgets/m_primary_button.dart';
-import 'package:where_my_team/common/widgets/m_text_field.dart';
+import 'package:wmteam/common/widgets/m_primary_button.dart';
+import 'package:wmteam/common/widgets/m_text_field.dart';
 
 Future<String?> showTextFieldBottomModal(
     BuildContext context, String title, TextEditingController controller,

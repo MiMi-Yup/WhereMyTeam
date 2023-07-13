@@ -1,10 +1,10 @@
 import 'dart:async';
 
 import 'package:injectable/injectable.dart';
-import 'package:where_my_team/data/data_source/local/battery_service.dart'
+import 'package:wmteam/data/data_source/local/battery_service.dart'
     as services;
-import 'package:where_my_team/domain/repositories/unit_of_work.dart';
-import 'package:where_my_team/domain/services/battery_service.dart' as logic;
+import 'package:wmteam/domain/repositories/unit_of_work.dart';
+import 'package:wmteam/domain/services/battery_service.dart' as logic;
 
 @lazySingleton
 @Injectable(as: logic.BatteryService)

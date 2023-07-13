@@ -4,10 +4,10 @@ import 'package:configuration/style/style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
-import 'package:where_my_team/di/di.dart';
-import 'package:where_my_team/domain/repositories/shared_preferences_repository.dart';
-import 'package:where_my_team/manifest.dart';
-import 'package:where_my_team/presentation/welcome/welcome_route.dart';
+import 'package:wmteam/di/di.dart';
+import 'package:wmteam/domain/repositories/shared_preferences_repository.dart';
+import 'package:wmteam/manifest.dart';
+import 'package:wmteam/presentation/welcome/welcome_route.dart';
 
 final GlobalKey<ScaffoldMessengerState> rootScaffoldMessengerKey =
     GlobalKey<ScaffoldMessengerState>();

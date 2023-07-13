@@ -2,25 +2,22 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
-import 'package:where_my_team/domain/use_cases/team_usecases.dart';
-import 'package:where_my_team/models/model_user.dart';
+import 'package:wmteam/domain/use_cases/team_usecases.dart';
+import 'package:wmteam/domain/use_cases/user_usecases.dart';
+import 'package:wmteam/models/model_user.dart';
 
 part 'new_team_state.dart';
 
 @injectable
 class NewTeamCubit extends Cubit<NewTeamState> {
   final TeamUseCases usecase;
+  final UserUseCases userUseCases;
 
-  NewTeamCubit({
-    required this.usecase,
-  }) : super(NewTeamState.initial());
+  NewTeamCubit({required this.usecase, required this.userUseCases})
+      : super(NewTeamState.initial());
 
-  void searchUser(String? search) {
-    emit(state.copyWith(state: NewTeamEnum.searching, search: search));
-  }
-
-  Future<List<ModelUser>> searchResult() {
-    return usecase.searchUser(state.search);
+  void init() async {
+    emit(state.copyWith(friends: await userUseCases.getFriend()));
   }
 
   void changeAvatar(String avatar) {
@@ -32,17 +29,17 @@ class NewTeamCubit extends Cubit<NewTeamState> {
   }
 
   void addMember(ModelUser user) {
-    if (!state.members.contains(user)) {
-      emit(state.copyWith(
-          members: List.from(state.members)..add(user),
-          search: '',
-          state: NewTeamEnum.completed));
-    }
+    emit(state.copyWith(
+        members: List.from(state.members)..add(user),
+        friends: List.from(state.friends)..remove(user),
+        state: NewTeamEnum.completed));
   }
 
   void removeMember(ModelUser user) {
-    final find = state.members.firstWhere((element) => element.id == user.id);
-    emit(state.copyWith(members: List.from(state.members)..remove(find)));
+    emit(state.copyWith(
+      members: List.from(state.members)..remove(user),
+      friends: List.from(state.friends)..add(user),
+    ));
   }
 
   Future createTeam() {

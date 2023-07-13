@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:where_my_team/data/data_source/remote/cloud_storage_service.dart';
+import 'package:wmteam/data/data_source/remote/cloud_storage_service.dart';
 
 class MSearchComponent extends StatelessWidget {
   final String avatar;

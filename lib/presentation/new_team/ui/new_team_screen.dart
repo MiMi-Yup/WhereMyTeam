@@ -6,12 +6,12 @@ import 'package:configuration/utility/constants/asset_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:where_my_team/common/widgets/m_search_component.dart';
-import 'package:where_my_team/common/widgets/m_text_field.dart';
-import 'package:where_my_team/common/widgets/m_user_component.dart';
-import 'package:where_my_team/models/model_user.dart';
-import 'package:where_my_team/presentation/new_team/cubit/new_team_cubit.dart';
-import 'package:where_my_team/utils/alert_util.dart';
+import 'package:wmteam/common/widgets/m_search_component.dart';
+import 'package:wmteam/common/widgets/m_text_field.dart';
+import 'package:wmteam/common/widgets/m_user_component.dart';
+import 'package:wmteam/models/model_user.dart';
+import 'package:wmteam/presentation/new_team/cubit/new_team_cubit.dart';
+import 'package:wmteam/utils/alert_util.dart';
 
 class NewTeamScreen extends StatefulWidget {
   const NewTeamScreen({super.key});
@@ -33,8 +33,8 @@ class _NewTeamScreenState extends State<NewTeamScreen> {
 
     _nameController.addListener(
         () => context.read<NewTeamCubit>().changeName(_nameController.text));
-    _searchController.addListener(
-        () => context.read<NewTeamCubit>().searchUser(_searchController.text));
+
+    context.read<NewTeamCubit>().init();
   }
 
   @override
@@ -58,7 +58,7 @@ class _NewTeamScreenState extends State<NewTeamScreen> {
                 AlertUtil.hideLoading();
                 XMDRouter.pop();
               },
-              icon: Icon(Icons.done))
+              icon: const Icon(Icons.done))
         ],
       ),
       body: Column(
@@ -79,7 +79,7 @@ class _NewTeamScreenState extends State<NewTeamScreen> {
                     builder: (context, state) => Container(
                           height: 100,
                           width: 100,
-                          padding: EdgeInsets.all(10),
+                          padding: const EdgeInsets.all(10),
                           decoration: BoxDecoration(
                               shape: BoxShape.circle,
                               image: DecorationImage(
@@ -91,16 +91,16 @@ class _NewTeamScreenState extends State<NewTeamScreen> {
                               color: Colors.grey),
                         )),
                 Container(
-                  padding: EdgeInsets.all(2),
+                  padding: const EdgeInsets.all(2),
                   decoration: BoxDecoration(
                       color: Color.fromARGB(255, 165, 51, 255),
                       borderRadius: BorderRadius.circular(10)),
-                  child: Icon(Icons.edit),
+                  child: const Icon(Icons.edit),
                 )
               ],
             ),
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           BlocListener<NewTeamCubit, NewTeamState>(
               listener: (context, state) {
                 if (state.name != _nameController.text) {
@@ -113,7 +113,7 @@ class _NewTeamScreenState extends State<NewTeamScreen> {
                 controller: _nameController,
                 hintText: MultiLanguage.of(context).nameTeam,
               )),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           BlocBuilder<NewTeamCubit, NewTeamState>(
               buildWhen: (previous, current) =>
                   previous.members != current.members,
@@ -134,55 +134,32 @@ class _NewTeamScreenState extends State<NewTeamScreen> {
                           name: state.members[index].name ?? ''),
                     ),
                   )),
-          BlocListener<NewTeamCubit, NewTeamState>(
-              listener: (context, state) {
-                if (state.search != _searchController.text) {
-                  _searchController.text = state.search ?? '';
-                  _searchController.selection = TextSelection.collapsed(
-                      offset: state.search?.length ?? 0);
-                }
-              },
-              child: MTextField(
-                controller: _searchController,
-                hintText: MultiLanguage.of(context).searchPerson,
-              )),
-          SizedBox(
-            height: 10,
-          ),
           BlocBuilder<NewTeamCubit, NewTeamState>(
               buildWhen: (previous, current) =>
-                  previous.search != current.search,
-              builder: (context, state) => FutureBuilder<List<ModelUser>>(
-                  future: context.read<NewTeamCubit>().searchResult(),
-                  builder: (context, snapshot) => snapshot.hasData
-                      ? (snapshot.data!.isEmpty
-                          ? Center(
-                              child: Text(MultiLanguage.of(context).notFound),
-                            )
-                          : Expanded(
-                              child: ListView.builder(
-                                  physics: BouncingScrollPhysics(),
-                                  shrinkWrap: true,
-                                  itemCount: snapshot.data?.length,
-                                  itemBuilder: (context, index) =>
-                                      MSearchComponent(
-                                          onPressed: () {
-                                            final ModelUser? selectedUser =
-                                                snapshot.data?[index];
-                                            if (selectedUser != null) {
-                                              context
-                                                  .read<NewTeamCubit>()
-                                                  .addMember(selectedUser);
-                                            }
-                                          },
-                                          avatar: snapshot
-                                                  .data?[index].avatar ??
-                                              'avatar/fqAueJqQeKcgMJwJFCjsC2atiHj2/image.png',
-                                          name: snapshot.data?[index].name ??
-                                              '')),
-                            ))
-                      : const SizedBox(
-                          height: 4, child: LinearProgressIndicator())))
+                  previous.friends != current.friends,
+              builder: (context, state) => state.friends.isEmpty
+                  ? Center(
+                      child: Text(MultiLanguage.of(context).notFound),
+                    )
+                  : Expanded(
+                      child: ListView.builder(
+                          physics: const BouncingScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount: state.friends.length,
+                          itemBuilder: (context, index) => MSearchComponent(
+                              onPressed: () {
+                                final ModelUser? selectedUser =
+                                    state.friends[index];
+                                if (selectedUser != null) {
+                                  context
+                                      .read<NewTeamCubit>()
+                                      .addMember(selectedUser);
+                                }
+                              },
+                              avatar: state.friends[index].avatar ??
+                                  'avatar/fqAueJqQeKcgMJwJFCjsC2atiHj2/image.png',
+                              name: state.friends[index].name ?? '')),
+                    ))
         ],
       ),
     );

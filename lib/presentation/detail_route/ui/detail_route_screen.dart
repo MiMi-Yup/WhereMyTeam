@@ -6,12 +6,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
-import 'package:where_my_team/models/model_route.dart';
-import 'package:where_my_team/models/model_type_route.dart';
-import 'package:where_my_team/presentation/detail_route/cubit/detail_route_cubit.dart';
-import 'package:where_my_team/utils/extensions/context_extension.dart';
-import 'package:where_my_team/utils/time_util.dart';
-import 'package:where_my_team/common/widgets/m_timeline_route.dart';
+import 'package:wmteam/models/model_route.dart';
+import 'package:wmteam/models/model_type_route.dart';
+import 'package:wmteam/presentation/detail_route/cubit/detail_route_cubit.dart';
+import 'package:wmteam/utils/extensions/context_extension.dart';
+import 'package:wmteam/utils/time_util.dart';
+import 'package:wmteam/common/widgets/m_timeline_route.dart';
 
 class DetailRouteScreen extends StatelessWidget {
   DetailRouteScreen({super.key});
@@ -34,20 +34,20 @@ class DetailRouteScreen extends StatelessWidget {
         title: Text(MultiLanguage.of(context)
             .routerName(context.read<DetailRouteCubit>().route.name ?? '')),
         actions: [
-          IconButton(onPressed: () => null, icon: Icon(Icons.qr_code)),
+          IconButton(onPressed: () => null, icon: const Icon(Icons.qr_code)),
           PopupMenuButton<int>(
-            shape: RoundedRectangleBorder(
+            shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(10))),
             itemBuilder: (context) => [
               PopupMenuItem(
                 value: 0,
                 child: Row(
                   children: [
-                    Icon(
+                    const Icon(
                       Icons.visibility_off,
                       color: Colors.grey,
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 10.0,
                     ),
                     Text(MultiLanguage.of(context).hide)
@@ -58,11 +58,11 @@ class DetailRouteScreen extends StatelessWidget {
                 value: 1,
                 child: Row(
                   children: [
-                    Icon(
+                    const Icon(
                       Icons.delete,
                       color: Colors.grey,
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 10.0,
                     ),
                     Text(MultiLanguage.of(context).delete)
@@ -70,9 +70,9 @@ class DetailRouteScreen extends StatelessWidget {
                 ),
               )
             ],
-            offset: Offset(0, 50),
+            offset: const Offset(0, 50),
             onSelected: null,
-            icon: Icon(Icons.more_horiz),
+            icon: const Icon(Icons.more_horiz),
           )
         ],
       ),
@@ -174,14 +174,14 @@ class DetailRouteScreen extends StatelessWidget {
                           Column(
                             children: [
                               Text(MultiLanguage.of(context).topSpeed),
-                              SizedBox(
+                              const SizedBox(
                                 height: 10.0,
                               ),
                               Text(
                                   "${state.route?.maxSpeed.toStringAsFixed(2)}m/s")
                             ],
                           ),
-                          VerticalDivider(
+                          const VerticalDivider(
                             thickness: 2.0,
                             color: Colors.grey,
                             width: 30,
@@ -189,7 +189,7 @@ class DetailRouteScreen extends StatelessWidget {
                           Column(
                             children: [
                               Text(MultiLanguage.of(context).distance),
-                              SizedBox(
+                              const SizedBox(
                                 height: 10.0,
                               ),
                               Text(
@@ -202,10 +202,10 @@ class DetailRouteScreen extends StatelessWidget {
                   ),
                 ],
               ),
-              if (state.timeline.length > 0)
+              if (state.timeline.isNotEmpty)
                 Expanded(
                     child: SingleChildScrollView(
-                  physics: BouncingScrollPhysics(),
+                  physics: const BouncingScrollPhysics(),
                   child: TimelineRoute(routes: state.timeline),
                 ))
             ],

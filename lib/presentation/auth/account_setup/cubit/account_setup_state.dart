@@ -11,8 +11,7 @@ class AccountSetupState extends Equatable {
   final Status state;
   final bool signUp;
 
-  bool get isFormValid =>
-      avatar != null && fullname != null && phoneNumber?.length == 10;
+  bool get isFormValid => fullname != null && phoneNumber?.length == 10;
 
   const AccountSetupState(
       {required this.fullname,
@@ -23,7 +22,8 @@ class AccountSetupState extends Equatable {
       required this.avatar,
       this.signUp = false});
 
-  factory AccountSetupState.initial({bool signUp = false}) {
+  factory AccountSetupState.initial(
+      {bool signUp = false, bool isFireStorageImage = true}) {
     return AccountSetupState(
         fullname: null,
         phoneNumber: null,

@@ -2,7 +2,7 @@ import 'package:configuration/l10n/l10n.dart';
 import 'package:configuration/style/style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:where_my_team/presentation/bottom_bar/cubit/bottom_bar_cubit.dart';
+import 'package:wmteam/presentation/bottom_bar/cubit/bottom_bar_cubit.dart';
 
 class BottomBarScreen extends StatelessWidget {
   BottomBarScreen({Key? key}) : super(key: key);

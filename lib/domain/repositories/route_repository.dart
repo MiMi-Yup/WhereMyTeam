@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:where_my_team/models/model.dart';
-import 'package:where_my_team/models/model_route.dart';
-import 'package:where_my_team/models/model_user.dart';
+import 'package:wmteam/models/model.dart';
+import 'package:wmteam/models/model_route.dart';
 
 import 'generic_repository.dart';
 

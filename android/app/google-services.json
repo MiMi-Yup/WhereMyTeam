@@ -7,18 +7,26 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:927445916283:android:b586b026c203ae5de4e0de",
+        "mobilesdk_app_id": "1:927445916283:android:119a4c5f54802fc9e4e0de",
         "android_client_info": {
-          "package_name": "com.example.where_my_team"
+          "package_name": "com.tess.wmteam"
         }
       },
       "oauth_client": [
         {
-          "client_id": "927445916283-e42i81qnd3spu8h0h3c2r42nb4cmd55j.apps.googleusercontent.com",
+          "client_id": "927445916283-aekkphkgog0ejlbmtdu0pjrmejmva58s.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.where_my_team",
-            "certificate_hash": "57888cdf2940ec7aa937a587c668ebe135a552fd"
+            "package_name": "com.tess.wmteam",
+            "certificate_hash": "6f04fd0e51ef8dde9897c04cb95f9e7e99b0eaa5"
+          }
+        },
+        {
+          "client_id": "927445916283-vruoapblnnq9lpfr5dcdarnv0renhle1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.tess.wmteam",
+            "certificate_hash": "41e259065c9ae0b2fa50f9553b8405d4a35ef6ef"
           }
         },
         {

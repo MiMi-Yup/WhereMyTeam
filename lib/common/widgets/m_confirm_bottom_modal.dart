@@ -15,7 +15,7 @@ Future<bool?> showConfirmBottomModal(BuildContext context, String title,
               padding: const EdgeInsets.all(10.0),
               child: Column(mainAxisSize: MainAxisSize.min, children: [
                 Text(title, style: mST18M),
-                SizedBox(
+                const SizedBox(
                   height: 10.0,
                 ),
                 Row(
@@ -26,7 +26,10 @@ Future<bool?> showConfirmBottomModal(BuildContext context, String title,
                         child: MPrimaryButton(
                           text: MultiLanguage.of(context).cancel,
                           onPressed: () => XMDRouter.pop(result: false),
-                          background: const Color.fromARGB(255, 245, 231, 255),
+                          background:
+                              Theme.of(context).brightness == Brightness.dark
+                                  ? Colors.black
+                                  : Colors.white,
                           textColor: const Color.fromARGB(255, 165, 51, 255),
                         ),
                       ),

@@ -5,9 +5,9 @@ import 'package:configuration/route/xmd_router.dart';
 import 'package:configuration/style/style.dart';
 import 'package:configuration/utility/constants/asset_constants.dart';
 import 'package:flutter/material.dart';
-import 'package:where_my_team/common/widgets/m_primary_button.dart';
-import 'package:where_my_team/manifest.dart';
-import 'package:where_my_team/presentation/auth/login/login_route.dart';
+import 'package:wmteam/common/widgets/m_primary_button.dart';
+import 'package:wmteam/manifest.dart';
+import 'package:wmteam/presentation/auth/login/login_route.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class IntroductionModel {
@@ -32,12 +32,12 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
   int currentPosition = 0;
 
   final List<IntroductionModel> introductions = [
-    IntroductionModel(mAIntroduction1, "Gain total control",
-        "Listen to the best podcasts every day with WeTalk now"),
     IntroductionModel(
-        mAIntroduction2, "Know where your", "Track your transaction easily"),
+        mAIntroduction1, "Discover your team", "Now you can see where my team"),
     IntroductionModel(
-        mAIntroduction3, "Planing ahead", "Setup your budget for each category")
+        mAIntroduction2, "Know where your", "Track your location easily"),
+    IntroductionModel(
+        mAIntroduction3, "Planing ahead", "Setup your router for each step")
   ];
 
   @override
@@ -91,13 +91,13 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
                     height: mPaddingLarge * 4,
                     child: Text.rich(
                         TextSpan(children: [
-                          TextSpan(
+                          const TextSpan(
                               text:
                                   "Listen to the best podcasts every day with "),
                           TextSpan(
-                              text: "WeTalk",
+                              text: "WMTeam",
                               style: mST32M.copyWith(color: mCPrimary)),
-                          TextSpan(text: " now!")
+                          const TextSpan(text: " now!")
                         ]),
                         style: mST32M,
                         textAlign: TextAlign.center),
@@ -124,11 +124,10 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
           Container(
             width: double.maxFinite,
             height: 50,
-            margin: EdgeInsets.all(10),
+            margin: const EdgeInsets.all(10),
             child: MPrimaryButton(
                 text: MultiLanguage.of(context).login,
-                onPressed: () =>
-                    XMDRouter.pushNamed(routerIds[LoginRoute]!),
+                onPressed: () => XMDRouter.pushNamed(routerIds[LoginRoute]!),
                 background: mCPrimary),
           )
         ],

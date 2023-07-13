@@ -1,9 +1,8 @@
-import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:configuration/style/style.dart';
 import 'package:flutter/material.dart';
-import 'package:where_my_team/data/data_source/remote/cloud_storage_service.dart';
+import 'package:wmteam/data/data_source/remote/cloud_storage_service.dart';
 
 class MUserComponent extends StatelessWidget {
   final String avatar;

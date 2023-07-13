@@ -2,13 +2,12 @@ import 'package:configuration/l10n/l10n.dart';
 import 'package:configuration/route/xmd_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:where_my_team/common/widgets/m_search_component.dart';
-import 'package:where_my_team/common/widgets/m_text_field.dart';
-import 'package:where_my_team/common/widgets/m_user_component.dart';
-import 'package:where_my_team/models/model_user.dart';
-import 'package:where_my_team/presentation/add_member/cubit/add_member_cubit.dart';
-import 'package:where_my_team/utils/alert_util.dart';
+import 'package:wmteam/common/widgets/m_search_component.dart';
+import 'package:wmteam/common/widgets/m_text_field.dart';
+import 'package:wmteam/common/widgets/m_user_component.dart';
+import 'package:wmteam/models/model_user.dart';
+import 'package:wmteam/presentation/add_member/cubit/add_member_cubit.dart';
+import 'package:wmteam/utils/alert_util.dart';
 
 class AddMemberScreen extends StatefulWidget {
   const AddMemberScreen({super.key});
@@ -19,7 +18,6 @@ class AddMemberScreen extends StatefulWidget {
 
 class _AddMemberScreenState extends State<AddMemberScreen> {
   late TextEditingController _searchController;
-  final ImagePicker _picker = ImagePicker();
 
   @override
   void initState() {
@@ -50,7 +48,7 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
                 AlertUtil.hideLoading();
                 XMDRouter.pop();
               },
-              icon: Icon(Icons.done))
+              icon: const Icon(Icons.done))
         ],
       ),
       body: FutureBuilder<bool>(
@@ -92,7 +90,7 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
                           controller: _searchController,
                           hintText: MultiLanguage.of(context).searchPerson,
                         )),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     BlocBuilder<AddMemberCubit, AddMemberState>(
@@ -110,7 +108,8 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
                                       )
                                     : Expanded(
                                         child: ListView.builder(
-                                            physics: BouncingScrollPhysics(),
+                                            physics:
+                                                const BouncingScrollPhysics(),
                                             shrinkWrap: true,
                                             itemCount: snapshot.data?.length,
                                             itemBuilder: (context, index) =>

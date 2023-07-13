@@ -7,8 +7,8 @@ import 'package:configuration/style/style.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:where_my_team/di/di.dart';
-import 'package:where_my_team/presentation/welcome/welcome_route.dart';
+import 'package:wmteam/di/di.dart';
+import 'package:wmteam/presentation/welcome/welcome_route.dart';
 import 'manifest.dart';
 import 'presentation/main/main_application.dart';
 

@@ -3,8 +3,8 @@ import 'dart:typed_data';
 import 'package:configuration/style/style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:where_my_team/common/widgets/m_toggle_icon_button.dart';
-import 'package:where_my_team/data/data_source/remote/cloud_storage_service.dart';
+import 'package:wmteam/common/widgets/m_toggle_icon_button.dart';
+import 'package:wmteam/data/data_source/remote/cloud_storage_service.dart';
 
 class MMemberRouteComponent extends StatefulWidget {
   final void Function()? onTap;
@@ -95,11 +95,12 @@ class _MMemberRouteComponentState extends State<MMemberRouteComponent>
                   Align(
                     alignment: Alignment.bottomCenter,
                     child: Container(
-                      padding: EdgeInsets.only(left: 4.0, right: 4.0),
+                      padding: const EdgeInsets.only(left: 4.0, right: 4.0),
                       decoration: BoxDecoration(
                           color: Theme.of(context).scaffoldBackgroundColor,
-                          borderRadius: BorderRadius.all(Radius.circular(8.0)),
-                          boxShadow: [
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(8.0)),
+                          boxShadow: const [
                             BoxShadow(
                               color: Colors.grey,
                               blurRadius: 4,
@@ -108,7 +109,7 @@ class _MMemberRouteComponentState extends State<MMemberRouteComponent>
                           ]),
                       child: Row(
                         children: [
-                          Icon(Icons.battery_5_bar),
+                          const Icon(Icons.battery_5_bar),
                           Text('${widget.batteryLevel}%')
                         ],
                       ),
@@ -116,7 +117,7 @@ class _MMemberRouteComponentState extends State<MMemberRouteComponent>
                   )
                 ],
               ),
-              SizedBox(width: 10.0),
+              const SizedBox(width: 10.0),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.max,
@@ -162,7 +163,7 @@ class _MMemberRouteComponentState extends State<MMemberRouteComponent>
                   children: [
                     SlidableAction(
                         onPressed: widget.routeSlidableAction,
-                        backgroundColor: Color(0xFF0392CF),
+                        backgroundColor: const Color(0xFF0392CF),
                         foregroundColor: Colors.white,
                         icon: Icons.route,
                         borderRadius: BorderRadius.circular(10.0)),

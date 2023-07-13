@@ -1,6 +1,6 @@
 import 'package:configuration/route/route_define.dart';
 import 'package:configuration/route/xmd_router.dart';
-import 'package:where_my_team/manifest.dart';
+import 'package:wmteam/manifest.dart';
 
 import 'introduction_screen.dart';
 

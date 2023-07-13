@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:where_my_team/di/di.dart';
-import 'package:where_my_team/domain/repositories/team_repository.dart';
-import 'package:where_my_team/domain/repositories/team_user_repository.dart';
-import 'package:where_my_team/models/model_team.dart';
-import 'package:where_my_team/models/model_user.dart';
+import 'package:wmteam/di/di.dart';
+import 'package:wmteam/domain/repositories/team_repository.dart';
+import 'package:wmteam/domain/repositories/team_user_repository.dart';
+import 'package:wmteam/models/model_team.dart';
+import 'package:wmteam/models/model_user.dart';
 import 'model.dart';
 
 class ModelTeamUser extends IModel {

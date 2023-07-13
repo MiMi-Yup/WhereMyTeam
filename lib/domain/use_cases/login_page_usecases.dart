@@ -2,11 +2,11 @@ import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:injectable/injectable.dart';
-import 'package:where_my_team/data/data_source/remote/cloud_storage_service.dart';
-import 'package:where_my_team/data/data_source/remote/firebase_auth_service.dart';
-import 'package:where_my_team/domain/repositories/unit_of_work.dart';
-import 'package:where_my_team/domain/use_cases/team_usecases.dart';
-import 'package:where_my_team/models/model_user.dart';
+import 'package:wmteam/data/data_source/remote/cloud_storage_service.dart';
+import 'package:wmteam/data/data_source/remote/firebase_auth_service.dart';
+import 'package:wmteam/domain/repositories/unit_of_work.dart';
+import 'package:wmteam/domain/use_cases/team_usecases.dart';
+import 'package:wmteam/models/model_user.dart';
 
 @injectable
 class LoginUseCases {
@@ -114,16 +114,18 @@ class LoginUseCases {
     return check.exists;
   }
 
-  Future<void> initUser(ModelUser? user) async {
-    if (user != null && !await checkAlreadyUser(user.id!)) {
-      final newAvatarPath = 'avatar/${user.id}/image.png';
-      if (user.avatar?.isNotEmpty == true) {
-        await CloudStorageService.uploadFile(File(user.avatar!), newAvatarPath);
-        user.avatar = newAvatarPath;
-      }
+  Future<bool> initUser(ModelUser? user) async {
+    if (user != null &&
+        !await checkAlreadyUser(user.id!) &&
+        user.avatar?.isNotEmpty == true) {
+      final avatar = user.avatar;
+      user.avatar = 'avatar/${user.id}/image.png';
+      await CloudStorageService.uploadFile(File(avatar!), user.avatar!);
+
       await unitOfWork.user.insert(user);
       await teamUsercase.createTeam(
-          isFamilyTeam: true, name: 'Family', avatar: newAvatarPath);
+          isFamilyTeam: true, name: 'Family', avatar: avatar);
     }
+    return false;
   }
 }

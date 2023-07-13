@@ -1,4 +1,4 @@
-import 'package:where_my_team/models/model_role.dart';
+import 'package:wmteam/models/model_role.dart';
 
 import 'generic_repository.dart';
 

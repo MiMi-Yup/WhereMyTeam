@@ -24,9 +24,12 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+        "accept": MessageLookupByLibrary.simpleMessage("Chấp nhận"),
+        "addFriend": MessageLookupByLibrary.simpleMessage("Thêm bạn bè"),
         "addMember": MessageLookupByLibrary.simpleMessage("Thêm thành viên"),
         "cancel": MessageLookupByLibrary.simpleMessage("Hủy"),
         "cancelled": MessageLookupByLibrary.simpleMessage("Đã hủy"),
+        "complete": MessageLookupByLibrary.simpleMessage("Hoàn tất"),
         "confirm": MessageLookupByLibrary.simpleMessage("Xác nhận"),
         "confirmLogout":
             MessageLookupByLibrary.simpleMessage("Bạn muốn đăng xuất?"),
@@ -36,15 +39,21 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Không có kết nối mạng"),
         "connectionProblemDesc": MessageLookupByLibrary.simpleMessage(
             "Vui lòng kiểm tra lại tín hiệu Wifi hoặc 3G/4G của bạn."),
+        "contentPermission": MessageLookupByLibrary.simpleMessage(
+            "WMTeam thu thập dữ liệu vị trí để kích hoạt các lộ trình tính toán và chia sẻ dữ liệu đó với bạn bè của bạn ngay cả khi ứng dụng đã đóng hoặc không được sử dụng. Nếu không được cấp quyền, ứng dụng sẽ bị đóng"),
         "darkTheme": MessageLookupByLibrary.simpleMessage("Chủ đề tối"),
         "databaseException": MessageLookupByLibrary.simpleMessage("Lỗi CSDL"),
         "delete": MessageLookupByLibrary.simpleMessage("Xóa"),
+        "denied": MessageLookupByLibrary.simpleMessage("Từ chối"),
         "distance": MessageLookupByLibrary.simpleMessage("Độ dài"),
         "editProfile":
             MessageLookupByLibrary.simpleMessage("Chỉnh sửa thông tin"),
         "email": MessageLookupByLibrary.simpleMessage("Email"),
         "empty": MessageLookupByLibrary.simpleMessage("Trống"),
         "family": MessageLookupByLibrary.simpleMessage("Gia đình"),
+        "friend": MessageLookupByLibrary.simpleMessage("Bạn bè"),
+        "friendRequest":
+            MessageLookupByLibrary.simpleMessage("Yêu cầu kết bạn"),
         "getSetting": MessageLookupByLibrary.simpleMessage("Cài đặt"),
         "goodAfternoon":
             MessageLookupByLibrary.simpleMessage("Chào buổi chiều"),
@@ -83,11 +92,16 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("hoặc đăng nhập bằng"),
         "password": MessageLookupByLibrary.simpleMessage("Mật khẩu"),
         "peopleNearby": MessageLookupByLibrary.simpleMessage("Gần đây"),
+        "phoneNumber": MessageLookupByLibrary.simpleMessage("Số điện thoại"),
+        "places": MessageLookupByLibrary.simpleMessage("Nơi"),
         "profile": MessageLookupByLibrary.simpleMessage("Cá nhân"),
         "receiveTimeout":
             MessageLookupByLibrary.simpleMessage("Kết nối thất bại"),
         "rememberAccount":
             MessageLookupByLibrary.simpleMessage("Ghi nhớ tài khoản"),
+        "request": MessageLookupByLibrary.simpleMessage("yêu cầu"),
+        "requestPermission":
+            MessageLookupByLibrary.simpleMessage("Yêu cầu quyền vị trí"),
         "route": MessageLookupByLibrary.simpleMessage("Lộ trình"),
         "routerName": m0,
         "searchPerson": MessageLookupByLibrary.simpleMessage("Tìm người"),

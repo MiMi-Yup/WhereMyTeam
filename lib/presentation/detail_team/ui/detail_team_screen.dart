@@ -4,16 +4,16 @@ import 'package:configuration/route/xmd_router.dart';
 import 'package:configuration/style/style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:where_my_team/common/widgets/m_confirm_bottom_modal.dart';
-import 'package:where_my_team/common/widgets/m_member_component.dart';
-import 'package:where_my_team/common/widgets/m_text_field_bottom_modal.dart';
-import 'package:where_my_team/manifest.dart';
-import 'package:where_my_team/models/model_member.dart';
-import 'package:where_my_team/models/model_team.dart';
-import 'package:where_my_team/models/model_user.dart';
-import 'package:where_my_team/presentation/add_member/add_member_route.dart';
-import 'package:where_my_team/presentation/bottom_bar/bottom_bar_route.dart';
-import 'package:where_my_team/presentation/detail_team/cubit/detail_team_cubit.dart';
+import 'package:wmteam/common/widgets/m_confirm_bottom_modal.dart';
+import 'package:wmteam/common/widgets/m_member_component.dart';
+import 'package:wmteam/common/widgets/m_text_field_bottom_modal.dart';
+import 'package:wmteam/manifest.dart';
+import 'package:wmteam/models/model_member.dart';
+import 'package:wmteam/models/model_team.dart';
+import 'package:wmteam/models/model_user.dart';
+import 'package:wmteam/presentation/add_member/add_member_route.dart';
+import 'package:wmteam/presentation/bottom_bar/bottom_bar_route.dart';
+import 'package:wmteam/presentation/detail_team/cubit/detail_team_cubit.dart';
 
 class DetailTeamScreen extends StatelessWidget {
   const DetailTeamScreen({super.key});
@@ -32,11 +32,11 @@ class DetailTeamScreen extends StatelessWidget {
                         Text(state.team?.name ?? ""),
                         Row(
                           children: [
-                            Icon(
+                            const Icon(
                               Icons.notifications,
                               size: 16,
                             ),
-                            SizedBox(
+                            const SizedBox(
                               width: 4,
                             ),
                             FutureBuilder<int>(
@@ -56,20 +56,20 @@ class DetailTeamScreen extends StatelessWidget {
                           arguments: {
                             'team': context.read<DetailTeamCubit>().team
                           }),
-                  icon: Icon(Icons.add)),
+                  icon: const Icon(Icons.add)),
               PopupMenuButton<int>(
-                shape: RoundedRectangleBorder(
+                shape: const RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(10))),
                 itemBuilder: (context) => [
                   PopupMenuItem(
                     value: 0,
                     child: Row(
                       children: [
-                        Icon(
+                        const Icon(
                           Icons.logout,
                           color: Colors.grey,
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 10.0,
                         ),
                         Text(MultiLanguage.of(context).leave)
@@ -80,11 +80,11 @@ class DetailTeamScreen extends StatelessWidget {
                     value: 1,
                     child: Row(
                       children: [
-                        Icon(
+                        const Icon(
                           Icons.delete,
                           color: Colors.grey,
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 10.0,
                         ),
                         Text(MultiLanguage.of(context).delete)
@@ -92,7 +92,7 @@ class DetailTeamScreen extends StatelessWidget {
                     ),
                   )
                 ],
-                offset: Offset(0, 50),
+                offset: const Offset(0, 50),
                 onSelected: (index) {
                   switch (index) {
                     case 0:
@@ -108,7 +108,7 @@ class DetailTeamScreen extends StatelessWidget {
                     default:
                   }
                 },
-                icon: Icon(Icons.more_horiz),
+                icon: const Icon(Icons.more_horiz),
               )
             ]),
         body: StreamBuilder<QuerySnapshot<ModelMember>>(
@@ -121,8 +121,8 @@ class DetailTeamScreen extends StatelessWidget {
                   buildWhen: (previous, current) =>
                       previous.isAdminOfTeam != current.isAdminOfTeam,
                   builder: (context, state) => ListView.separated(
-                      physics: BouncingScrollPhysics(),
-                      padding: EdgeInsets.only(left: 10, right: 10),
+                      physics: const BouncingScrollPhysics(),
+                      padding: const EdgeInsets.only(left: 10, right: 10),
                       itemBuilder: (context, index) => FutureBuilder<
                               ModelUser?>(
                           future: members[index].userEx,
@@ -167,7 +167,7 @@ class DetailTeamScreen extends StatelessWidget {
                                   isAdmin: state.isAdminOfTeam,
                                 )
                               : const SizedBox.shrink()),
-                      separatorBuilder: (context, index) => SizedBox(
+                      separatorBuilder: (context, index) => const SizedBox(
                             height: 10,
                           ),
                       itemCount: members.length),

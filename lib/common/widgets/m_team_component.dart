@@ -4,7 +4,7 @@ import 'package:configuration/l10n/l10n.dart';
 import 'package:configuration/style/style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:where_my_team/data/data_source/remote/cloud_storage_service.dart';
+import 'package:wmteam/data/data_source/remote/cloud_storage_service.dart';
 
 class MTeamComponent extends StatefulWidget {
   final void Function()? onTap;
@@ -135,7 +135,7 @@ class _MTeamComponentState extends State<MTeamComponent>
                               backgroundColor: Color.fromARGB(255, 34, 72, 2),
                               foregroundColor: Colors.white,
                               icon: Icons.logout,
-                              borderRadius: BorderRadius.only(
+                              borderRadius: const BorderRadius.only(
                                   topLeft: Radius.circular(10),
                                   bottomLeft: Radius.circular(10))),
                           SlidableAction(
@@ -148,7 +148,7 @@ class _MTeamComponentState extends State<MTeamComponent>
                               backgroundColor: Color(0xFF0392CF),
                               foregroundColor: Colors.white,
                               icon: Icons.map,
-                              borderRadius: BorderRadius.only(
+                              borderRadius: const BorderRadius.only(
                                   topRight: Radius.circular(10),
                                   bottomRight: Radius.circular(10))),
                         ],

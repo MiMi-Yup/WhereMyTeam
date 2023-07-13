@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:where_my_team/di/di.dart';
-import 'package:where_my_team/domain/repositories/route_repository.dart';
-import 'package:where_my_team/domain/repositories/user_repository.dart';
-import 'package:where_my_team/models/model_route.dart';
-import 'package:where_my_team/models/model_user.dart';
+import 'package:wmteam/di/di.dart';
+import 'package:wmteam/domain/repositories/route_repository.dart';
+import 'package:wmteam/domain/repositories/user_repository.dart';
+import 'package:wmteam/models/model_route.dart';
+import 'package:wmteam/models/model_user.dart';
 import 'model.dart';
 
 class ModelLocation extends IModel {

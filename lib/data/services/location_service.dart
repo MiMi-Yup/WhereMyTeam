@@ -5,12 +5,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:location/location.dart';
-import 'package:where_my_team/domain/repositories/unit_of_work.dart';
-import 'package:where_my_team/domain/services/location_service.dart';
-import 'package:where_my_team/models/model_location.dart';
-import 'package:where_my_team/models/model_route.dart';
-import 'package:where_my_team/models/model_user.dart';
-import 'package:where_my_team/utils/extensions/location_extension.dart';
+import 'package:wmteam/domain/repositories/unit_of_work.dart';
+import 'package:wmteam/domain/services/location_service.dart';
+import 'package:wmteam/models/model_location.dart';
+import 'package:wmteam/models/model_route.dart';
+import 'package:wmteam/models/model_user.dart';
+import 'package:wmteam/utils/extensions/location_extension.dart';
 
 enum TypeRoute { nothing, walk, cycle, bike, roll }
 
@@ -44,12 +44,12 @@ class LocationServiceImpl implements LocationService {
   Future<void> _eventLocation(LocationData event) async {
     ModelUser? user = await unitOfWork.user.getCurrentUser();
     if (user != null) {
-      DocumentReference? routeRef =
-          currentRoute != null ? unitOfWork.route.getRef(currentRoute!) : null;
       ModelLocation location = ModelLocation(
           id: event.time?.toInt().toString(),
           user: unitOfWork.user.getRef(user),
-          route: routeRef,
+          route: _currentRoute == null
+              ? null
+              : unitOfWork.route.getRef(currentRoute!),
           timestamp: event.time == null
               ? Timestamp.now()
               : Timestamp.fromMillisecondsSinceEpoch(event.time!.toInt()),
@@ -58,19 +58,8 @@ class LocationServiceImpl implements LocationService {
           longitude: event.longitude,
           satelliteNumber: event.satelliteNumber,
           speed: event.speed);
-      unitOfWork.location.insert(location);
+      await unitOfWork.location.insert(location);
       unitOfWork.user.putLastLocation(lastLocation: location);
-      if (_currentRoute != null) {
-        ModelLocation? preLocation = await user.lastLocationEx;
-        double? distance = preLocation?.distance(location);
-        final updateCurrentRoute = _currentRoute!.copyWith(
-            distance: _currentRoute!.distance + (distance ?? 0),
-            maxSpeed: _currentRoute!.maxSpeed < (event.speed ?? 0)
-                ? event.speed
-                : _currentRoute!.maxSpeed);
-        await unitOfWork.route.update(_currentRoute!, updateCurrentRoute);
-        _currentRoute = updateCurrentRoute;
-      }
     }
   }
 
@@ -82,13 +71,15 @@ class LocationServiceImpl implements LocationService {
       {List<LocationData>? queueLocation}) async {
     final dbTypeRoute =
         await unitOfWork.typeRoute.getModelByName(name: type.name);
-    if (dbTypeRoute == null) return;
+    final user = await unitOfWork.user.getCurrentUser();
+    if (dbTypeRoute == null || user == null) return;
     _currentRoute = await unitOfWork.route.postRoute(
         newRoute: ModelRoute(
             id: null,
             startTime: Timestamp.now(),
             isShared: true,
-            typeRoute: unitOfWork.typeRoute.getRef(dbTypeRoute)));
+            typeRoute: unitOfWork.typeRoute.getRef(dbTypeRoute),
+            user: unitOfWork.user.getRef(user)));
     if (_currentRoute?.id == null) return;
     //update locations not yet has route.
     if (queueLocation != null && queueLocation.isNotEmpty) {
@@ -103,10 +94,21 @@ class LocationServiceImpl implements LocationService {
   }
 
   Future<void> _endRoute() async {
-    await unitOfWork.route.update(
-        _currentRoute!, _currentRoute!.copyWith(endTime: Timestamp.now()));
+    ModelRoute? route = _currentRoute;
     _currentRoute = null;
     queue.clear();
+    if (route != null) {
+      List<ModelLocation>? listCoordinates = await route.detailRouteEx;
+      List<double>? resultCal = listCoordinates == null
+          ? null
+          : await compute(_summaryRoute, listCoordinates);
+      await unitOfWork.route.update(
+          route,
+          route.copyWith(
+              endTime: Timestamp.now(),
+              distance: resultCal?[0],
+              maxSpeed: resultCal?[1]));
+    }
   }
 
   void _eventTimer(Timer timer) async {
@@ -116,7 +118,7 @@ class LocationServiceImpl implements LocationService {
             .compareTo(_checkDuration) >=
         0) {
       final List<LocationData> listCheck = queue.toList();
-      final resultCal = await compute(calRoute, listCheck);
+      final resultCal = await compute(_calRoute, listCheck);
       final avgSpeed = resultCal[0] / _checkDuration.inSeconds;
       //condition trigger
       if (resultCal[0] < _triggerDistance) {
@@ -125,7 +127,7 @@ class LocationServiceImpl implements LocationService {
         }
       } else if (_currentRoute == null) {
         final typeRoute = minSpeedOfTypeRoute.entries.lastWhere((element) =>
-            element.value < avgSpeed || element.value < resultCal[2]);
+            element.value < avgSpeed || element.value < resultCal[1]);
         if (typeRoute.key != TypeRoute.nothing) {
           //start route
           await _newRoute(typeRoute.key, queueLocation: listCheck);
@@ -176,7 +178,7 @@ class LocationServiceImpl implements LocationService {
 
   @override
   ModelRoute? get currentRoute => _currentRoute;
-  
+
   @override
   void userLogout() {
     dispose();
@@ -184,9 +186,8 @@ class LocationServiceImpl implements LocationService {
 }
 
 //top-level function to isolate computing
-FutureOr<List<double>> calRoute(List<LocationData> listCheck) {
+FutureOr<List<double>> _calRoute(List<LocationData> listCheck) {
   double distance = 0.0;
-  double avgSpeed = 0.0;
   double maxSpeed = 0.0;
   final length = listCheck.length - 1; //-1 becasuse [index + 1]
   for (int index = 0; index < length; index++) {
@@ -195,5 +196,28 @@ FutureOr<List<double>> calRoute(List<LocationData> listCheck) {
         ? listCheck[index].speed ?? 0
         : maxSpeed;
   }
-  return [distance, avgSpeed, maxSpeed];
+  return [distance, maxSpeed];
+}
+
+FutureOr<List<double>> _summaryRoute(List<ModelLocation> listCoordinates) {
+  double distance = 0.0;
+  double maxSpeedAvg = 0.0;
+  double maxSpeed = 0.0;
+  final length = listCoordinates.length - 1; //-1 becasuse [index + 1]
+  for (int index = 0; index < length; index++) {
+    ModelLocation cur = listCoordinates[index];
+    ModelLocation next = listCoordinates[index + 1];
+    double deltaDistance = cur.distance(next);
+    distance += deltaDistance;
+    maxSpeed = (cur.speed ?? 0) > maxSpeed ? cur.speed ?? 0 : maxSpeed;
+    Duration deltaTime = (next.timestamp ?? Timestamp.now())
+        .toDate()
+        .difference((cur.timestamp ?? Timestamp.now()).toDate());
+    if (deltaTime.inSeconds > 0) {
+      double speed = deltaDistance / deltaTime.inSeconds;
+      maxSpeedAvg = speed > maxSpeedAvg ? speed : maxSpeedAvg;
+    }
+  }
+  debugPrint('$distance, $maxSpeedAvg, $maxSpeed');
+  return [distance, maxSpeedAvg, maxSpeed];
 }

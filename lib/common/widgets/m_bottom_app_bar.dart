@@ -43,6 +43,7 @@ class MBottomAppBar {
                                       : Colors.grey,
                                 ),
                                 Visibility(
+                                  visible: currentIndex == e.value!.index,
                                   child: Text(
                                     e.value?.label ?? "",
                                     style: TextStyle(
@@ -50,7 +51,6 @@ class MBottomAppBar {
                                             ? Colors.black
                                             : Colors.grey),
                                   ),
-                                  visible: currentIndex == e.value!.index,
                                 ),
                               ],
                             ),

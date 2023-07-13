@@ -1,22 +1,25 @@
+import 'dart:typed_data';
+
 import 'package:configuration/l10n/l10n.dart';
 import 'package:configuration/route/xmd_router.dart';
 import 'package:configuration/style/style.dart';
-import 'package:configuration/utility/constants/asset_constants.dart';
 import 'package:flutter/material.dart';
-import 'package:where_my_team/common/widgets/m_button_setting.dart';
-import 'package:where_my_team/common/widgets/m_confirm_bottom_modal.dart';
-import 'package:where_my_team/di/di.dart';
-import 'package:where_my_team/domain/repositories/shared_preferences_repository.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:wmteam/common/widgets/m_button_setting.dart';
+import 'package:wmteam/common/widgets/m_confirm_bottom_modal.dart';
+import 'package:wmteam/di/di.dart';
+import 'package:wmteam/domain/repositories/user_repository.dart';
+import 'package:wmteam/domain/use_cases/login_page_usecases.dart';
+import 'package:wmteam/manifest.dart';
+import 'package:wmteam/models/model_user.dart';
+import 'package:wmteam/presentation/auth/account_setup/account_setup_route.dart';
+import 'package:wmteam/presentation/auth/login/login_route.dart';
 import 'package:get/get.dart';
-import 'package:where_my_team/domain/repositories/user_repository.dart';
-import 'package:where_my_team/domain/use_cases/login_page_usecases.dart';
-import 'package:where_my_team/manifest.dart';
-import 'package:where_my_team/presentation/auth/account_setup/account_setup_route.dart';
-import 'package:where_my_team/presentation/auth/login/login_route.dart';
+import 'package:wmteam/presentation/friend_request/friend_request_route.dart';
+import 'package:wmteam/presentation/profile/cubit/profile_cubit.dart';
 
 class ProfileScreen extends StatelessWidget {
-  final SharedPreferencesRepository prefsRepo;
-  const ProfileScreen({super.key, required this.prefsRepo});
+  const ProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -27,15 +30,15 @@ class ProfileScreen extends StatelessWidget {
             elevation: 0.0,
             actions: [
               PopupMenuButton<int>(
-                shape: RoundedRectangleBorder(
+                shape: const RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(10))),
                 itemBuilder: (context) => [
                   PopupMenuItem(
                     value: 0,
                     child: Row(
                       children: [
-                        Icon(Icons.logout),
-                        SizedBox(
+                        const Icon(Icons.logout),
+                        const SizedBox(
                           width: 10.0,
                         ),
                         Text(MultiLanguage.of(context).logout)
@@ -43,7 +46,7 @@ class ProfileScreen extends StatelessWidget {
                     ),
                   )
                 ],
-                offset: Offset(0, 50),
+                offset: const Offset(0, 50),
                 onSelected: (index) async {
                   switch (index) {
                     case 0:
@@ -59,7 +62,7 @@ class ProfileScreen extends StatelessWidget {
                       break;
                   }
                 },
-                icon: Icon(Icons.more_horiz),
+                icon: const Icon(Icons.more_horiz),
               )
             ]),
         body: SingleChildScrollView(
@@ -75,22 +78,27 @@ class ProfileScreen extends StatelessWidget {
                     Stack(
                       alignment: Alignment.bottomRight,
                       children: [
-                        Container(
+                        SizedBox(
                           height: 75,
                           width: 75,
-                          padding: EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              image:
-                                  DecorationImage(image: AssetImage(mAGoogle)),
-                              color: Colors.grey),
+                          child: FutureBuilder<Uint8List?>(
+                              future: context
+                                  .read<ProfileCubit>()
+                                  .userUseCases
+                                  .getAvatar(),
+                              builder: (context, snapshot) => snapshot.hasData
+                                  ? CircleAvatar(
+                                      foregroundImage: MemoryImage(
+                                          snapshot.data!,
+                                          scale: 1.0))
+                                  : const SizedBox.shrink()),
                         ),
                         Container(
-                          padding: EdgeInsets.all(2),
+                          padding: const EdgeInsets.all(2),
                           decoration: BoxDecoration(
-                              color: Color.fromARGB(255, 165, 51, 255),
+                              color: const Color.fromARGB(255, 165, 51, 255),
                               borderRadius: BorderRadius.circular(4)),
-                          child: Icon(
+                          child: const Icon(
                             Icons.edit,
                             size: 16,
                             color: Colors.white,
@@ -98,37 +106,64 @@ class ProfileScreen extends StatelessWidget {
                         )
                       ],
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 10.0,
                     ),
                     Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Text(
-                            "Andrew Ainsley",
-                            style: mST20M,
-                          ),
-                          Text(
-                            "doanxemnaobro@gmail.comkfjsdhfkjh",
-                            style: mST16M,
-                            overflow: TextOverflow.ellipsis,
-                          )
-                        ],
-                      ),
+                      child: FutureBuilder<ModelUser?>(
+                          future: context
+                              .read<ProfileCubit>()
+                              .userUseCases
+                              .unitOfWork
+                              .user
+                              .getCurrentUser(),
+                          builder: (context, snapshot) => snapshot.hasData
+                              ? Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    Text(
+                                      snapshot.data?.name ?? '',
+                                      style: mST20M,
+                                    ),
+                                    Text(
+                                      snapshot.data?.email ?? '',
+                                      style: mST16M,
+                                      overflow: TextOverflow.ellipsis,
+                                    )
+                                  ],
+                                )
+                              : const SizedBox.shrink()),
                     ),
                   ],
                 ),
               ),
               MButtonSetting(
                 title: MultiLanguage.of(context).editProfile,
-                icon: Icon(Icons.person_outline),
-                onPressed: (_) async => XMDRouter.pushNamed(
-                    routerIds[AccountSetupRoute]!,
-                    arguments: {
-                      'model': await getIt<UserRepository>().getCurrentUser()
-                    }),
+                icon: const Icon(Icons.person_outline),
+                onPressed: (_) async {
+                  final result = await XMDRouter.pushNamedForResult(
+                      routerIds[AccountSetupRoute]!,
+                      arguments: {
+                        'model': await getIt<UserRepository>().getCurrentUser()
+                      });
+                  if (result is ModelUser) {
+                    context.read<ProfileCubit>().updateProfile(result);
+                  }
+                },
+              ),
+              FutureBuilder<int>(
+                future: context.read<ProfileCubit>().getCountRequestsFriend(),
+                initialData: 0,
+                builder: (context, snapshot) => MButtonSetting(
+                  title: MultiLanguage.of(context).friendRequest,
+                  subTitlte:
+                      '${snapshot.data} ${MultiLanguage.of(context).request}',
+                  icon: const Icon(Icons.request_quote),
+                  onPressed: (_) => XMDRouter.pushNamedForResult(
+                      routerIds[FriendRequestRoute]!),
+                ),
               ),
               MButtonSetting(
                 title: MultiLanguage.of(context).language,
@@ -144,12 +179,15 @@ class ProfileScreen extends StatelessWidget {
                       return ListView.builder(
                           physics: const BouncingScrollPhysics(),
                           itemCount: locales.length,
-                          itemBuilder: (context, index) {
+                          itemBuilder: (_, index) {
                             final itemLocale = locales[index];
                             return ListTile(
                               onTap: () {
                                 XMDRouter.pop();
-                                prefsRepo.setLanguage(itemLocale);
+                                context
+                                    .read<ProfileCubit>()
+                                    .userUseCases
+                                    .setLanguage(itemLocale);
                                 Get.updateLocale(itemLocale);
                               },
                               trailing: locales[index].languageCode ==
@@ -170,18 +208,18 @@ class ProfileScreen extends StatelessWidget {
               ),
               MButtonSetting(
                 title: MultiLanguage.of(context).darkTheme,
-                icon: Icon(Icons.brightness_2),
+                icon: const Icon(Icons.brightness_2),
                 isSwitch: true,
                 initState: Theme.of(context).brightness == Brightness.dark,
                 onPressed: (p0) {
                   final mode = p0 == true ? ThemeMode.dark : ThemeMode.light;
-                  prefsRepo.setTheme(mode);
+                  context.read<ProfileCubit>().userUseCases.setTheme(mode);
                   Get.changeThemeMode(mode);
                 },
               ),
               MButtonSetting(
                 title: MultiLanguage.of(context).helpCenter,
-                icon: Icon(Icons.help_center),
+                icon: const Icon(Icons.help_center),
               ),
             ],
           ),

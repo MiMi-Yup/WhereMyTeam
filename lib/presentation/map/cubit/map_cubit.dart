@@ -6,14 +6,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:injectable/injectable.dart';
 import 'package:location/location.dart';
-import 'package:where_my_team/domain/use_cases/map_usecases.dart';
-import 'package:where_my_team/models/model_location.dart';
-import 'package:where_my_team/models/model_member.dart';
-import 'package:where_my_team/models/model_team.dart';
-import 'package:where_my_team/models/model_user.dart';
-import 'package:where_my_team/presentation/map/cubit/team_map_cubit.dart';
-import 'package:where_my_team/utils/alert_util.dart';
-import 'package:where_my_team/utils/latlngbounds_extension.dart';
+import 'package:wmteam/domain/use_cases/map_usecases.dart';
+import 'package:wmteam/models/model_location.dart';
+import 'package:wmteam/models/model_member.dart';
+import 'package:wmteam/models/model_team.dart';
+import 'package:wmteam/models/model_user.dart';
+import 'package:wmteam/presentation/map/cubit/team_map_cubit.dart';
+import 'package:wmteam/utils/alert_util.dart';
+import 'package:wmteam/utils/latlngbounds_extension.dart';
 
 part 'map_state.dart';
 

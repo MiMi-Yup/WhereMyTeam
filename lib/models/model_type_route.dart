@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:where_my_team/models/model.dart';
+import 'package:wmteam/models/model.dart';
 
 class ModelTypeRoute extends IModel {
   String? name;

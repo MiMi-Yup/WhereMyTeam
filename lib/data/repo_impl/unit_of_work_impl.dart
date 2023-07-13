@@ -1,16 +1,18 @@
 import 'package:injectable/injectable.dart';
-import 'package:where_my_team/domain/repositories/auth_repository.dart';
-import 'package:where_my_team/domain/repositories/gps_repository.dart';
-import 'package:where_my_team/domain/repositories/location_repository.dart';
-import 'package:where_my_team/domain/repositories/member_repository.dart';
-import 'package:where_my_team/domain/repositories/preferences_repository.dart';
-import 'package:where_my_team/domain/repositories/role_repository.dart';
-import 'package:where_my_team/domain/repositories/route_repository.dart';
-import 'package:where_my_team/domain/repositories/team_user_repository.dart';
-import 'package:where_my_team/domain/repositories/team_repository.dart';
-import 'package:where_my_team/domain/repositories/type_route_repository.dart';
-import 'package:where_my_team/domain/repositories/unit_of_work.dart';
-import 'package:where_my_team/domain/repositories/user_repository.dart';
+import 'package:wmteam/domain/repositories/auth_repository.dart';
+import 'package:wmteam/domain/repositories/friend_request_repository.dart';
+import 'package:wmteam/domain/repositories/gps_repository.dart';
+import 'package:wmteam/domain/repositories/location_repository.dart';
+import 'package:wmteam/domain/repositories/member_repository.dart';
+import 'package:wmteam/domain/repositories/preferences_repository.dart';
+import 'package:wmteam/domain/repositories/role_repository.dart';
+import 'package:wmteam/domain/repositories/route_repository.dart';
+import 'package:wmteam/domain/repositories/shared_preferences_repository.dart';
+import 'package:wmteam/domain/repositories/team_user_repository.dart';
+import 'package:wmteam/domain/repositories/team_repository.dart';
+import 'package:wmteam/domain/repositories/type_route_repository.dart';
+import 'package:wmteam/domain/repositories/unit_of_work.dart';
+import 'package:wmteam/domain/repositories/user_repository.dart';
 
 @Injectable(as: UnitOfWork)
 class UnitOfWorkImpl implements UnitOfWork {
@@ -47,6 +49,12 @@ class UnitOfWorkImpl implements UnitOfWork {
   @override
   final TypeRouteRepository typeRoute;
 
+  @override
+  final SharedPreferencesRepository sharedPref;
+
+  @override
+  final FriendRequestRepository friends;
+
   UnitOfWorkImpl(
       {required this.location,
       required this.user,
@@ -58,5 +66,7 @@ class UnitOfWorkImpl implements UnitOfWork {
       required this.teamUser,
       required this.memberTeam,
       required this.route,
-      required this.typeRoute});
+      required this.typeRoute,
+      required this.sharedPref,
+      required this.friends});
 }

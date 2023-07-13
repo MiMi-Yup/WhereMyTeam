@@ -1,11 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:where_my_team/di/di.dart';
-import 'package:where_my_team/domain/repositories/location_repository.dart';
-import 'package:where_my_team/domain/repositories/route_repository.dart';
-import 'package:where_my_team/domain/repositories/team_user_repository.dart';
-import 'package:where_my_team/models/model_location.dart';
-import 'package:where_my_team/models/model_route.dart';
-import 'package:where_my_team/models/model_team_user.dart';
+import 'package:wmteam/di/di.dart';
+import 'package:wmteam/domain/repositories/location_repository.dart';
+import 'package:wmteam/domain/repositories/route_repository.dart';
+import 'package:wmteam/domain/repositories/team_user_repository.dart';
+import 'package:wmteam/domain/repositories/user_repository.dart';
+import 'package:wmteam/models/model_location.dart';
+import 'package:wmteam/models/model_route.dart';
+import 'package:wmteam/models/model_team_user.dart';
 import 'model.dart';
 
 class ModelUser extends IModel {
@@ -17,6 +18,7 @@ class ModelUser extends IModel {
   bool? shareNotification;
   String? avatar;
   int? percentBatteryDevice;
+  List<DocumentReference>? friends;
 
   ModelUser(
       {required super.id,
@@ -27,7 +29,8 @@ class ModelUser extends IModel {
       this.shareNotification,
       this.avatar,
       this.lastLocation,
-      this.percentBatteryDevice});
+      this.percentBatteryDevice,
+      this.friends});
 
   ModelUser.fromFirestore(
       DocumentSnapshot<Map<String, dynamic>> snapshot, SnapshotOptions? options)
@@ -41,6 +44,10 @@ class ModelUser extends IModel {
     shareNotification = data?['shareNotification'];
     avatar = data?['avatar'];
     percentBatteryDevice = data?['percentBatteryDevice'];
+    if (data?['friends'] != null &&
+        data!['friends'] is List<dynamic>) {
+      friends = (data['friends'] as List<dynamic>).cast<DocumentReference<Object?>>();
+    }
   }
 
   @override
@@ -52,7 +59,8 @@ class ModelUser extends IModel {
         'phoneNumber': phoneNumber,
         'shareNotification': shareNotification,
         'avatar': avatar,
-        'percentBatteryDevice': percentBatteryDevice
+        'percentBatteryDevice': percentBatteryDevice,
+        'friends': friends
       };
   @override
   Map<String, dynamic> updateFirestore() => {
@@ -62,7 +70,8 @@ class ModelUser extends IModel {
         'phoneNumber': phoneNumber,
         'shareNotification': shareNotification,
         'avatar': avatar,
-        'percentBatteryDevice': percentBatteryDevice
+        'percentBatteryDevice': percentBatteryDevice,
+        'friends': friends
       };
 
   @override
@@ -80,7 +89,8 @@ class ModelUser extends IModel {
           String? phoneNumber,
           bool? shareNotification,
           String? avatar,
-          int? percentBatteryDevice}) =>
+          int? percentBatteryDevice,
+          List<DocumentReference>? friends}) =>
       ModelUser(
           id: id ?? this.id,
           email: email,
@@ -91,7 +101,8 @@ class ModelUser extends IModel {
           avatar: avatar ?? this.avatar,
           lastLocation: lastLocation ?? this.lastLocation,
           percentBatteryDevice:
-              percentBatteryDevice ?? this.percentBatteryDevice);
+              percentBatteryDevice ?? this.percentBatteryDevice,
+          friends: friends ?? this.friends);
 }
 
 extension ModelUserExtension on ModelUser {
@@ -105,4 +116,7 @@ extension ModelUserExtension on ModelUser {
 
   Future<List<ModelRoute>?> get routesEx =>
       getIt<RouteRepository>().getRoutes(id: id);
+
+  Future<List<ModelUser>?> get getFriends =>
+      getIt<UserRepository>().getFriend();
 }

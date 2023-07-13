@@ -6,36 +6,40 @@ enum NewTeamEnum { init, searching, completed }
 class NewTeamState extends Equatable {
   final String? avatar;
   final String? name;
-  final String? search;
   final List<ModelUser> members;
+  final List<ModelUser> friends;
   final NewTeamEnum state;
 
   const NewTeamState(
       {required this.avatar,
       required this.name,
-      this.search = '',
       required this.members,
-      required this.state});
+      required this.state,
+      required this.friends});
 
   factory NewTeamState.initial() => const NewTeamState(
-      avatar: null, name: null, members: [], state: NewTeamEnum.init);
+      avatar: null,
+      name: null,
+      members: [],
+      state: NewTeamEnum.init,
+      friends: []);
 
   @override
   bool? get stringify => true;
 
   @override
-  List<Object?> get props => [avatar, name, search, members, state];
+  List<Object?> get props => [avatar, name, members, state, friends];
 
   NewTeamState copyWith(
           {String? avatar,
           String? name,
-          String? search,
           List<ModelUser>? members,
+          List<ModelUser>? friends,
           NewTeamEnum? state}) =>
       NewTeamState(
           avatar: avatar ?? this.avatar,
           name: name ?? this.name,
-          search: search ?? this.search,
           members: members ?? this.members,
+          friends: friends ?? this.friends,
           state: state ?? this.state);
 }
