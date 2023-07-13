@@ -4,11 +4,11 @@ import 'package:configuration/l10n/l10n.dart';
 import 'package:configuration/style/style.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:where_my_team/models/model_route.dart';
-import 'package:where_my_team/models/model_type_route.dart';
-import 'package:where_my_team/utils/extensions/context_extension.dart';
-import 'package:where_my_team/utils/latlngbounds_extension.dart';
-import 'package:where_my_team/utils/time_util.dart';
+import 'package:wmteam/models/model_route.dart';
+import 'package:wmteam/models/model_type_route.dart';
+import 'package:wmteam/utils/extensions/context_extension.dart';
+import 'package:wmteam/utils/latlngbounds_extension.dart';
+import 'package:wmteam/utils/time_util.dart';
 
 class MRouteOverview extends StatefulWidget {
   final List<LatLng> coordinates;
@@ -36,7 +36,7 @@ class _MRouteOverviewState extends State<MRouteOverview>
     return Column(
       children: [
         Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-          SizedBox(
+          const SizedBox(
             width: 10.0,
           ),
           SizedBox(
@@ -60,7 +60,7 @@ class _MRouteOverviewState extends State<MRouteOverview>
                   }
                 }),
           ),
-          SizedBox(
+          const SizedBox(
             width: 10.0,
           ),
           Column(
@@ -89,13 +89,13 @@ class _MRouteOverviewState extends State<MRouteOverview>
                 Column(
                   children: [
                     Text(MultiLanguage.of(context).topSpeed),
-                    SizedBox(
+                    const SizedBox(
                       height: 10.0,
                     ),
                     Text("${widget.route.maxSpeed.toStringAsFixed(2)}m/s")
                   ],
                 ),
-                VerticalDivider(
+                const VerticalDivider(
                   thickness: 2.0,
                   color: Colors.grey,
                   width: 30,
@@ -103,7 +103,7 @@ class _MRouteOverviewState extends State<MRouteOverview>
                 Column(
                   children: [
                     Text(MultiLanguage.of(context).distance),
-                    SizedBox(
+                    const SizedBox(
                       height: 10.0,
                     ),
                     Text("${widget.route.distance.toStringAsFixed(2)}m")

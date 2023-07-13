@@ -1,10 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:injectable/injectable.dart';
-import 'package:where_my_team/data/data_source/remote/firestore_service.dart';
-import 'package:where_my_team/domain/repositories/role_repository.dart';
-import 'package:where_my_team/models/model_role.dart';
-import 'package:where_my_team/models/model.dart';
+import 'package:wmteam/data/data_source/remote/firestore_service.dart';
+import 'package:wmteam/domain/repositories/role_repository.dart';
+import 'package:wmteam/models/model_role.dart';
+import 'package:wmteam/models/model.dart';
 
 @Injectable(as: RoleRepository)
 class RoleRepositoryImpl extends RoleRepository {

@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:where_my_team/models/model.dart';
+import 'package:wmteam/models/model.dart';
 
 abstract class GenericRepository {
   FirebaseFirestore get firestoreService;

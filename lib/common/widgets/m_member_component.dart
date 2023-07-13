@@ -3,8 +3,8 @@ import 'dart:typed_data';
 import 'package:configuration/style/style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:where_my_team/common/widgets/m_toggle_icon_button.dart';
-import 'package:where_my_team/data/data_source/remote/cloud_storage_service.dart';
+import 'package:wmteam/common/widgets/m_toggle_icon_button.dart';
+import 'package:wmteam/data/data_source/remote/cloud_storage_service.dart';
 
 class MMemberComponent extends StatefulWidget {
   final void Function()? onTap;
@@ -107,7 +107,7 @@ class _MMemberComponentState extends State<MMemberComponent>
                       decoration: BoxDecoration(
                           color: Theme.of(context).scaffoldBackgroundColor,
                           borderRadius: BorderRadius.all(Radius.circular(8.0)),
-                          boxShadow: [
+                          boxShadow: const [
                             BoxShadow(
                               color: Colors.grey,
                               blurRadius: 4,
@@ -116,7 +116,7 @@ class _MMemberComponentState extends State<MMemberComponent>
                           ]),
                       child: Row(
                         children: [
-                          Icon(Icons.battery_5_bar),
+                          const Icon(Icons.battery_5_bar),
                           Text('${widget.batteryLevel}%')
                         ],
                       ),
@@ -124,7 +124,7 @@ class _MMemberComponentState extends State<MMemberComponent>
                   )
                 ],
               ),
-              SizedBox(width: 10.0),
+              const SizedBox(width: 10.0),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.max,
@@ -185,28 +185,29 @@ class _MMemberComponentState extends State<MMemberComponent>
                                     _controller?.forward();
                                   }
                                 },
-                                backgroundColor: Color.fromARGB(255, 34, 72, 2),
+                                backgroundColor:
+                                    const Color.fromARGB(255, 34, 72, 2),
                                 foregroundColor: Colors.white,
                                 icon: Icons.logout,
-                                borderRadius: BorderRadius.only(
+                                borderRadius: const BorderRadius.only(
                                     topLeft: Radius.circular(10),
                                     bottomLeft: Radius.circular(10))),
                           SlidableAction(
                               onPressed: widget.changeNicknameSlidableAction,
-                              backgroundColor: Color(0xFF7BC043),
+                              backgroundColor: const Color(0xFF7BC043),
                               foregroundColor: Colors.white,
                               icon: Icons.edit,
                               borderRadius: widget.isAdmin
                                   ? BorderRadius.zero
-                                  : BorderRadius.only(
+                                  : const BorderRadius.only(
                                       topLeft: Radius.circular(10),
                                       bottomLeft: Radius.circular(10))),
                           SlidableAction(
                               onPressed: widget.hideNotifiSlidableAction,
-                              backgroundColor: Color(0xFF0392CF),
+                              backgroundColor: const Color(0xFF0392CF),
                               foregroundColor: Colors.white,
                               icon: Icons.notifications_off,
-                              borderRadius: BorderRadius.only(
+                              borderRadius: const BorderRadius.only(
                                   topRight: Radius.circular(10),
                                   bottomRight: Radius.circular(10))),
                         ],

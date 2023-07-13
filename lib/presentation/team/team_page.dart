@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:where_my_team/di/di.dart';
-import 'package:where_my_team/presentation/team/cubit/team_cubit.dart';
-import 'package:where_my_team/presentation/team/ui/team_screen.dart';
+import 'package:wmteam/di/di.dart';
+import 'package:wmteam/presentation/team/cubit/team_cubit.dart';
+import 'package:wmteam/presentation/team/ui/team_screen.dart';
 
 class TeamPage extends StatelessWidget {
   

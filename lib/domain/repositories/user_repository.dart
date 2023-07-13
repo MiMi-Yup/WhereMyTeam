@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:where_my_team/models/model_location.dart';
-import 'package:where_my_team/models/model_team_user.dart';
-import 'package:where_my_team/models/model_user.dart';
+import 'package:wmteam/models/model_location.dart';
+import 'package:wmteam/models/model_team_user.dart';
+import 'package:wmteam/models/model_user.dart';
 
 import 'generic_repository.dart';
 
@@ -21,4 +21,8 @@ abstract class UserRepository extends GenericRepository {
   Future<bool> putAvatar({required String path});
   Future<bool> putUserInitial(
       {required String phoneNumber, String? avatar, String? name});
+
+  Future<List<ModelUser>?> getFriend();
+  Future<bool> addFriend({required String ownerUserId, required String userId});
+  Future<bool> unFriend({required String ownerUserId, required String userId});
 }

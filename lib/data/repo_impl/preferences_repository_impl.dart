@@ -2,8 +2,8 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:injectable/injectable.dart';
-import 'package:where_my_team/data/data_source/local/secure_preferences_service.dart';
-import 'package:where_my_team/domain/repositories/preferences_repository.dart';
+import 'package:wmteam/data/data_source/local/secure_preferences_service.dart';
+import 'package:wmteam/domain/repositories/preferences_repository.dart';
 
 @Injectable(as: PreferencesRepository)
 class PreferencesRepositoryImpl implements PreferencesRepository {

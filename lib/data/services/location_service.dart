@@ -5,12 +5,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:location/location.dart';
-import 'package:where_my_team/domain/repositories/unit_of_work.dart';
-import 'package:where_my_team/domain/services/location_service.dart';
-import 'package:where_my_team/models/model_location.dart';
-import 'package:where_my_team/models/model_route.dart';
-import 'package:where_my_team/models/model_user.dart';
-import 'package:where_my_team/utils/extensions/location_extension.dart';
+import 'package:wmteam/domain/repositories/unit_of_work.dart';
+import 'package:wmteam/domain/services/location_service.dart';
+import 'package:wmteam/models/model_location.dart';
+import 'package:wmteam/models/model_route.dart';
+import 'package:wmteam/models/model_user.dart';
+import 'package:wmteam/utils/extensions/location_extension.dart';
 
 enum TypeRoute { nothing, walk, cycle, bike, roll }
 

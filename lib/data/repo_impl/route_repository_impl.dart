@@ -1,13 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:injectable/injectable.dart';
-import 'package:where_my_team/data/data_source/remote/firebase_auth_service.dart';
-import 'package:where_my_team/data/data_source/remote/firestore_service.dart';
-import 'package:where_my_team/domain/repositories/route_repository.dart';
-import 'package:where_my_team/models/model_route.dart';
-import 'package:where_my_team/models/model_location.dart';
-import 'package:where_my_team/models/model.dart';
-import 'package:where_my_team/models/model_user.dart';
+import 'package:wmteam/data/data_source/remote/firebase_auth_service.dart';
+import 'package:wmteam/data/data_source/remote/firestore_service.dart';
+import 'package:wmteam/domain/repositories/route_repository.dart';
+import 'package:wmteam/models/model_route.dart';
+import 'package:wmteam/models/model_location.dart';
+import 'package:wmteam/models/model.dart';
+import 'package:wmteam/models/model_user.dart';
 
 @Injectable(as: RouteRepository)
 class RouteRepositoryImpl extends RouteRepository {

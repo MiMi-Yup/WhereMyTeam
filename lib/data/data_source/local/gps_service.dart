@@ -6,15 +6,19 @@ class GPSService {
   final Location _gpsService = Location();
 
   Future<bool> checkPermission() async {
-    PermissionStatus _permissionGranted = await _gpsService.hasPermission();
-    if (_permissionGranted == PermissionStatus.denied) {
-      _permissionGranted = await _gpsService.requestPermission();
-      if (_permissionGranted != PermissionStatus.granted) {
+    if (await isGranted) {
+      final permissionGranted = await _gpsService.requestPermission();
+      if (permissionGranted != PermissionStatus.granted) {
         return false;
       }
     }
     _gpsService.changeSettings(interval: 10000, distanceFilter: 10);
     return true;
+  }
+
+  Future<bool> get isGranted async {
+    PermissionStatus permission = await _gpsService.hasPermission();
+    return permission == PermissionStatus.denied;
   }
 
   Stream<LocationData> get getStream => _gpsService.onLocationChanged;

@@ -24,9 +24,12 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+        "accept": MessageLookupByLibrary.simpleMessage("Accept"),
+        "addFriend": MessageLookupByLibrary.simpleMessage("Add Friend"),
         "addMember": MessageLookupByLibrary.simpleMessage("Add Member"),
         "cancel": MessageLookupByLibrary.simpleMessage("Cancel"),
         "cancelled": MessageLookupByLibrary.simpleMessage("Cancelled"),
+        "complete": MessageLookupByLibrary.simpleMessage("Complete"),
         "confirm": MessageLookupByLibrary.simpleMessage("Confirm"),
         "confirmLogout": MessageLookupByLibrary.simpleMessage(
             "Are you sure you want to log out?"),
@@ -36,15 +39,19 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Không có kết nối mạng"),
         "connectionProblemDesc": MessageLookupByLibrary.simpleMessage(
             "Vui lòng kiểm tra lại tín hiệu Wifi hoặc 3G/4G của bạn."),
+        "contentPermission": MessageLookupByLibrary.simpleMessage("denied"),
         "darkTheme": MessageLookupByLibrary.simpleMessage("Dark theme"),
         "databaseException":
             MessageLookupByLibrary.simpleMessage("Database exception"),
         "delete": MessageLookupByLibrary.simpleMessage("Delete"),
+        "denied": MessageLookupByLibrary.simpleMessage("Denied"),
         "distance": MessageLookupByLibrary.simpleMessage("Distance"),
         "editProfile": MessageLookupByLibrary.simpleMessage("Edit Profile"),
         "email": MessageLookupByLibrary.simpleMessage("Email"),
         "empty": MessageLookupByLibrary.simpleMessage("Empty"),
         "family": MessageLookupByLibrary.simpleMessage("Family"),
+        "friend": MessageLookupByLibrary.simpleMessage("Friend"),
+        "friendRequest": MessageLookupByLibrary.simpleMessage("Friend request"),
         "getSetting": MessageLookupByLibrary.simpleMessage("Get setting"),
         "goodAfternoon": MessageLookupByLibrary.simpleMessage("Good Afternoon"),
         "goodEvening": MessageLookupByLibrary.simpleMessage("Good Evening"),
@@ -80,10 +87,15 @@ class MessageLookup extends MessageLookupByLibrary {
         "otherLogin": MessageLookupByLibrary.simpleMessage("or continue with"),
         "password": MessageLookupByLibrary.simpleMessage("Password"),
         "peopleNearby": MessageLookupByLibrary.simpleMessage("People Nearby"),
+        "phoneNumber": MessageLookupByLibrary.simpleMessage("Phone number"),
+        "places": MessageLookupByLibrary.simpleMessage("Places"),
         "profile": MessageLookupByLibrary.simpleMessage("Profile"),
         "receiveTimeout":
             MessageLookupByLibrary.simpleMessage("Receive timeout"),
         "rememberAccount": MessageLookupByLibrary.simpleMessage("Remember me"),
+        "request": MessageLookupByLibrary.simpleMessage("request(s)"),
+        "requestPermission": MessageLookupByLibrary.simpleMessage(
+            "WMTeam collects location data to enable calculation routes and share it to your friend even when the app is closed or ot in use. If permission not granted, application will be closed"),
         "route": MessageLookupByLibrary.simpleMessage("Route"),
         "routerName": m0,
         "searchPerson": MessageLookupByLibrary.simpleMessage("Search person"),

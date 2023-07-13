@@ -719,6 +719,116 @@ class MultiLanguage {
       args: [],
     );
   }
+
+  /// `Friend`
+  String get friend {
+    return Intl.message(
+      'Friend',
+      name: 'friend',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Add Friend`
+  String get addFriend {
+    return Intl.message(
+      'Add Friend',
+      name: 'addFriend',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Phone number`
+  String get phoneNumber {
+    return Intl.message(
+      'Phone number',
+      name: 'phoneNumber',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Friend request`
+  String get friendRequest {
+    return Intl.message(
+      'Friend request',
+      name: 'friendRequest',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Places`
+  String get places {
+    return Intl.message(
+      'Places',
+      name: 'places',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `request(s)`
+  String get request {
+    return Intl.message(
+      'request(s)',
+      name: 'request',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Complete`
+  String get complete {
+    return Intl.message(
+      'Complete',
+      name: 'complete',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `WMTeam collects location data to enable calculation routes and share it to your friend even when the app is closed or ot in use. If permission not granted, application will be closed`
+  String get requestPermission {
+    return Intl.message(
+      'WMTeam collects location data to enable calculation routes and share it to your friend even when the app is closed or ot in use. If permission not granted, application will be closed',
+      name: 'requestPermission',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `denied`
+  String get contentPermission {
+    return Intl.message(
+      'denied',
+      name: 'contentPermission',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Denied`
+  String get denied {
+    return Intl.message(
+      'Denied',
+      name: 'denied',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Accept`
+  String get accept {
+    return Intl.message(
+      'Accept',
+      name: 'accept',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<MultiLanguage> {

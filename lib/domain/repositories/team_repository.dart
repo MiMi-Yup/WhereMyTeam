@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:where_my_team/domain/repositories/generic_repository.dart';
-import 'package:where_my_team/models/model_member.dart';
-import 'package:where_my_team/models/model_team.dart';
+import 'package:wmteam/domain/repositories/generic_repository.dart';
+import 'package:wmteam/models/model_member.dart';
+import 'package:wmteam/models/model_team.dart';
 
 abstract class TeamRepository extends GenericRepository {
   Future<ModelTeam?> getTeam({required String teamId});

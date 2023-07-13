@@ -1,4 +1,4 @@
-package com.example.where_my_team
+package com.tess.wmteam
 
 import io.flutter.embedding.android.FlutterActivity
 

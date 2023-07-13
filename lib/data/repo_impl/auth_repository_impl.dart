@@ -2,8 +2,8 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:injectable/injectable.dart';
-import 'package:where_my_team/data/data_source/remote/firebase_auth_service.dart';
-import 'package:where_my_team/domain/repositories/auth_repository.dart';
+import 'package:wmteam/data/data_source/remote/firebase_auth_service.dart';
+import 'package:wmteam/domain/repositories/auth_repository.dart';
 
 @Injectable(as: AuthRepository)
 class AuthRepositoryImpl implements AuthRepository {

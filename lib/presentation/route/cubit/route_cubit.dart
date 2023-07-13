@@ -3,10 +3,10 @@ import 'dart:collection';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
-import 'package:where_my_team/domain/use_cases/route_usecases.dart';
-import 'package:where_my_team/models/model_route.dart';
-import 'package:where_my_team/models/model_user.dart';
-import 'package:where_my_team/utils/time_util.dart';
+import 'package:wmteam/domain/use_cases/route_usecases.dart';
+import 'package:wmteam/models/model_route.dart';
+import 'package:wmteam/models/model_user.dart';
+import 'package:wmteam/utils/time_util.dart';
 
 part 'route_state.dart';
 

@@ -1,29 +1,17 @@
-import 'dart:async';
-
 import 'package:configuration/l10n/l10n.dart';
 import 'package:configuration/route/xmd_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:where_my_team/common/widgets/m_route_overview.dart';
-import 'package:where_my_team/common/widgets/m_section.dart';
-import 'package:where_my_team/manifest.dart';
-import 'package:where_my_team/models/model_location.dart';
-import 'package:where_my_team/models/model_route.dart';
-import 'package:where_my_team/presentation/detail_route/detail_route_route.dart';
-import 'package:where_my_team/presentation/route/cubit/route_cubit.dart';
+import 'package:wmteam/common/widgets/m_route_overview.dart';
+import 'package:wmteam/common/widgets/m_section.dart';
+import 'package:wmteam/manifest.dart';
+import 'package:wmteam/models/model_location.dart';
+import 'package:wmteam/models/model_route.dart';
+import 'package:wmteam/presentation/detail_route/detail_route_route.dart';
+import 'package:wmteam/presentation/route/cubit/route_cubit.dart';
 
 class RouteScreen extends StatelessWidget {
-  RouteScreen({super.key});
-
-  final Map<String, Completer<GoogleMapController>> _controllers = {};
-
-  int count = 0;
-
-  static const CameraPosition _kGooglePlex = CameraPosition(
-    target: LatLng(37.42796133580664, -122.085749655962),
-    zoom: 15,
-  );
+  const RouteScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

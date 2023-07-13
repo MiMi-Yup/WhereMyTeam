@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:configuration/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
-import 'package:where_my_team/data/data_source/local/shared_preferences_service.dart';
-import 'package:where_my_team/domain/repositories/shared_preferences_repository.dart';
+import 'package:wmteam/data/data_source/local/shared_preferences_service.dart';
+import 'package:wmteam/domain/repositories/shared_preferences_repository.dart';
 import 'package:collection/src/iterable_extensions.dart';
 
 @Injectable(as: SharedPreferencesRepository)

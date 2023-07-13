@@ -54,7 +54,7 @@ class _MButtonLabel extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
               Text(title, style: mST16M),
-              SizedBox(
+              const SizedBox(
                 height: 8.0,
               ),
               Text(subTitlte!, style: mST14R)
@@ -79,7 +79,7 @@ class _MButtonLabel extends StatelessWidget {
           Row(
             children: [
               if (icon != null) icon!,
-              SizedBox(
+              const SizedBox(
                 width: 10.0,
               ),
               renderTitle
@@ -121,7 +121,7 @@ class _MButtonSwitch extends StatelessWidget {
           Row(
             children: [
               if (icon != null) icon!,
-              SizedBox(
+              const SizedBox(
                 width: 10.0,
               ),
               Text(

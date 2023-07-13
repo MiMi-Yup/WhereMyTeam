@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'package:injectable/injectable.dart';
 import 'package:location/location.dart';
-import 'package:where_my_team/data/data_source/local/gps_service.dart';
-import 'package:where_my_team/domain/repositories/gps_repository.dart';
+import 'package:wmteam/data/data_source/local/gps_service.dart';
+import 'package:wmteam/domain/repositories/gps_repository.dart';
 
 @Injectable(as: GPSRepository)
 class GPSRepositoryImpl implements GPSRepository {

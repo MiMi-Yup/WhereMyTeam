@@ -4,12 +4,12 @@ import 'package:configuration/utility/constants/asset_constants.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:where_my_team/common/widgets/m_primary_button.dart';
-import 'package:where_my_team/common/widgets/m_secondary_button.dart';
-import 'package:where_my_team/common/widgets/m_text_field.dart';
-import 'package:where_my_team/presentation/auth/login/cubit/login_cubit.dart';
-import 'package:where_my_team/utils/alert_util.dart';
-import 'package:where_my_team/utils/extensions/context_extension.dart';
+import 'package:wmteam/common/widgets/m_primary_button.dart';
+import 'package:wmteam/common/widgets/m_secondary_button.dart';
+import 'package:wmteam/common/widgets/m_text_field.dart';
+import 'package:wmteam/presentation/auth/login/cubit/login_cubit.dart';
+import 'package:wmteam/utils/alert_util.dart';
+import 'package:wmteam/utils/extensions/context_extension.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});

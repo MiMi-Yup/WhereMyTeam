@@ -1,6 +1,6 @@
 import 'dart:math';
 import 'package:location/location.dart';
-import 'package:where_my_team/models/model_location.dart';
+import 'package:wmteam/models/model_location.dart';
 
 double _calculate(double? sLat, double? sLon, double? eLat, double? eLon) {
   if (sLat == null || sLon == null || eLat == null || eLon == null) return 0.0;

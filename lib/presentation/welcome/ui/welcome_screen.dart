@@ -3,8 +3,8 @@ import 'package:configuration/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:configuration/style/style.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:where_my_team/presentation/welcome/cubit/welcome_cubit.dart';
-import 'package:where_my_team/utils/alert_util.dart';
+import 'package:wmteam/presentation/welcome/cubit/welcome_cubit.dart';
+import 'package:wmteam/utils/alert_util.dart';
 
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({Key? key}) : super(key: key);
@@ -60,19 +60,19 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           body: Container(
             decoration: BoxDecoration(color: mCLightBackground),
             child: AnimatedOpacity(
-                duration: Duration(seconds: 2),
+                duration: const Duration(seconds: 2),
                 opacity: opacityLevel,
                 child: Center(
                   child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Image(
+                        const Image(
                           image: AssetImage("assets/img/logo.png"),
                           width: 75,
                         ),
                         SizedBox(width: mSpacing),
-                        Text(
-                          "WeTalk",
+                        const Text(
+                          "WMTeam",
                           style: mST32M,
                         )
                       ]),

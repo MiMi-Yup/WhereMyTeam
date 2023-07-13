@@ -6,26 +6,27 @@ import 'package:configuration/route/xmd_router.dart';
 import 'package:configuration/style/style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:where_my_team/common/widgets/m_confirm_bottom_modal.dart';
-import 'package:where_my_team/common/widgets/m_section.dart';
-import 'package:where_my_team/common/widgets/m_team_component.dart';
-import 'package:where_my_team/common/widgets/m_user_component.dart';
-import 'package:where_my_team/data/data_source/remote/cloud_storage_service.dart';
-import 'package:where_my_team/di/di.dart';
-import 'package:where_my_team/domain/repositories/user_repository.dart';
-import 'package:where_my_team/manifest.dart';
-import 'package:where_my_team/models/model_member.dart';
-import 'package:where_my_team/models/model_team.dart';
-import 'package:where_my_team/models/model_team_user.dart';
-import 'package:where_my_team/models/model_user.dart';
-import 'package:where_my_team/presentation/add_member/add_member_route.dart';
-import 'package:where_my_team/presentation/bottom_bar/cubit/bottom_bar_cubit.dart';
-import 'package:where_my_team/presentation/detail_team/detail_team_route.dart';
-import 'package:where_my_team/presentation/map/cubit/map_cubit.dart';
-import 'package:where_my_team/presentation/map/cubit/team_map_cubit.dart';
-import 'package:where_my_team/presentation/new_team/new_team_route.dart';
-import 'package:where_my_team/presentation/team/cubit/team_cubit.dart';
-import 'package:where_my_team/utils/extensions/context_extension.dart';
+import 'package:wmteam/common/widgets/m_confirm_bottom_modal.dart';
+import 'package:wmteam/common/widgets/m_section.dart';
+import 'package:wmteam/common/widgets/m_team_component.dart';
+import 'package:wmteam/common/widgets/m_user_component.dart';
+import 'package:wmteam/data/data_source/remote/cloud_storage_service.dart';
+import 'package:wmteam/di/di.dart';
+import 'package:wmteam/domain/repositories/user_repository.dart';
+import 'package:wmteam/manifest.dart';
+import 'package:wmteam/models/model_member.dart';
+import 'package:wmteam/models/model_team.dart';
+import 'package:wmteam/models/model_team_user.dart';
+import 'package:wmteam/models/model_user.dart';
+import 'package:wmteam/presentation/add_member/add_member_route.dart';
+import 'package:wmteam/presentation/bottom_bar/cubit/bottom_bar_cubit.dart';
+import 'package:wmteam/presentation/detail_team/detail_team_route.dart';
+import 'package:wmteam/presentation/friend_list/friend_list_route.dart';
+import 'package:wmteam/presentation/map/cubit/map_cubit.dart';
+import 'package:wmteam/presentation/map/cubit/team_map_cubit.dart';
+import 'package:wmteam/presentation/new_team/new_team_route.dart';
+import 'package:wmteam/presentation/team/cubit/team_cubit.dart';
+import 'package:wmteam/utils/extensions/context_extension.dart';
 
 class TeamScreen extends StatefulWidget {
   const TeamScreen({super.key});
@@ -34,8 +35,7 @@ class TeamScreen extends StatefulWidget {
   State<TeamScreen> createState() => _TeamScreenState();
 }
 
-class _TeamScreenState extends State<TeamScreen>
-    with AutomaticKeepAliveClientMixin {
+class _TeamScreenState extends State<TeamScreen> {
   String greetingTime(MultiLanguage language) {
     final hour = DateTime.now().hour;
     if (hour <= 12) return language.goodMorning;
@@ -70,7 +70,7 @@ class _TeamScreenState extends State<TeamScreen>
                                         .scaffoldBackgroundColor,
                                   ))
                               : const SizedBox.shrink()),
-                      SizedBox(
+                      const SizedBox(
                         width: 10.0,
                       ),
                       Column(
@@ -93,47 +93,57 @@ class _TeamScreenState extends State<TeamScreen>
         actions: [
           IconButton(
               onPressed: () => XMDRouter.pushNamed(routerIds[NewTeamRoute]!),
-              icon: Icon(Icons.add)),
+              icon: const Icon(Icons.add)),
           IconButton(onPressed: () => null, icon: Icon(Icons.qr_code)),
           IconButton(onPressed: () => null, icon: Icon(Icons.notifications))
         ],
       ),
       body: CustomScrollView(
-        physics: BouncingScrollPhysics(),
+        physics: const BouncingScrollPhysics(),
         slivers: [
           MSection(
-              title: MultiLanguage.of(context).peopleNearby,
+              title: MultiLanguage.of(context).friend,
+              onPressed: () => XMDRouter.pushNamed(routerIds[FriendListRoute]!),
+              action: Text(MultiLanguage.of(context).more),
               headerColor: Theme.of(context).scaffoldBackgroundColor,
               titleColor: Theme.of(context).brightness == Brightness.dark
                   ? Colors.white
                   : Colors.black,
-              headerPressable: false,
-              content: SizedBox(
-                height: 120,
-                width: context.screenSize.width,
-                child: ListView.separated(
-                    physics: BouncingScrollPhysics(),
-                    padding: EdgeInsets.only(left: 10, right: 10),
-                    shrinkWrap: true,
-                    scrollDirection: Axis.horizontal,
-                    itemCount: 10,
-                    separatorBuilder: (context, index) => SizedBox(width: 20),
-                    itemBuilder: (context, index) => MUserComponent(
-                        onPressed: () {
-                          BlocProvider.of<MapCubit>(context).focusToUser(null);
-                          BlocProvider.of<BottomBarCubit>(context)
-                              .changePage(1);
-                        },
-                        avatar: 'avatar/fqAueJqQeKcgMJwJFCjsC2atiHj2/image.png',
-                        name: 'John')),
-              )).builder(),
+              headerPressable: true,
+              content: FutureBuilder<List<ModelUser>?>(
+                  future: context.read<TeamCubit>().getFriend(),
+                  builder: (context, snapshot) => snapshot.hasData
+                      ? SizedBox(
+                          height: 120,
+                          width: context.screenSize.width,
+                          child: ListView.separated(
+                              physics: const BouncingScrollPhysics(),
+                              padding:
+                                  const EdgeInsets.only(left: 10, right: 10),
+                              shrinkWrap: true,
+                              scrollDirection: Axis.horizontal,
+                              itemCount: snapshot.data?.length ?? 0,
+                              separatorBuilder: (context, index) =>
+                                  const SizedBox(width: 20),
+                              itemBuilder: (context, index) => MUserComponent(
+                                  onPressed: () {
+                                    BlocProvider.of<MapCubit>(context)
+                                        .focusToUser(null);
+                                    BlocProvider.of<BottomBarCubit>(context)
+                                        .changePage(1);
+                                  },
+                                  avatar: snapshot.data![index].avatar ??
+                                      'avatar/fqAueJqQeKcgMJwJFCjsC2atiHj2/image.png',
+                                  name: snapshot.data![index].name!)),
+                        )
+                      : const SizedBox.shrink())).builder(),
           MSection(
               title: MultiLanguage.of(context).yourFamily,
               headerColor: Theme.of(context).scaffoldBackgroundColor,
               titleColor: Theme.of(context).brightness == Brightness.dark
                   ? Colors.white
                   : Colors.black,
-              headerPressable: false,
+              headerPressable: true,
               action: Text(MultiLanguage.of(context).more),
               onPressed: () {
                 ModelTeam? familyTeam =
@@ -235,7 +245,7 @@ class _TeamScreenState extends State<TeamScreen>
                                 shrinkWrap: true,
                                 itemCount: models.length,
                                 separatorBuilder: (context, index) =>
-                                    SizedBox(width: 20),
+                                    const SizedBox(width: 20),
                                 itemBuilder: (context, index) => MTeamComponent(
                                     viewInMapSlidableAction: (_) {
                                       BlocProvider.of<BottomBarCubit>(context)
@@ -286,9 +296,6 @@ class _TeamScreenState extends State<TeamScreen>
       ),
     );
   }
-
-  @override
-  bool get wantKeepAlive => true;
 }
 
 class TeamModel {

@@ -73,5 +73,16 @@
     "more": "chi tiết",
     "teams": "Nhóm",
     "noTeams": "Không có nhóm",
-    "leaveTeam": "Rời nhóm"
+    "leaveTeam": "Rời nhóm",
+    "friend": "Bạn bè",
+    "addFriend": "Thêm bạn bè",
+    "phoneNumber": "Số điện thoại",
+    "friendRequest": "Yêu cầu kết bạn",
+    "places": "Nơi",
+    "request": "yêu cầu",
+    "complete": "Hoàn tất",
+    "requestPermission": "Yêu cầu quyền vị trí",
+    "contentPermission": "WMTeam thu thập dữ liệu vị trí để kích hoạt các lộ trình tính toán và chia sẻ dữ liệu đó với bạn bè của bạn ngay cả khi ứng dụng đã đóng hoặc không được sử dụng. Nếu không được cấp quyền, ứng dụng sẽ bị đóng",
+    "denied": "Từ chối",
+    "accept": "Chấp nhận"
 }

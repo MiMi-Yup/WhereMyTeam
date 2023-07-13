@@ -73,5 +73,16 @@
     "more": "more",
     "teams": "Teams",
     "noTeams": "No Teams",
-    "leaveTeam": "Leave Team"
+    "leaveTeam": "Leave Team",
+    "friend": "Friend",
+    "addFriend": "Add Friend",
+    "phoneNumber": "Phone number",
+    "friendRequest": "Friend request",
+    "places": "Places",
+    "request": "request(s)",
+    "complete": "Complete",
+    "requestPermission": "WMTeam collects location data to enable calculation routes and share it to your friend even when the app is closed or ot in use. If permission not granted, application will be closed",
+    "contentPermission": "denied",
+    "denied": "Denied",
+    "accept": "Accept"
 }

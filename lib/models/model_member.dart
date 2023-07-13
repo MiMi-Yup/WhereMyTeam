@@ -1,11 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:where_my_team/di/di.dart';
-import 'package:where_my_team/domain/repositories/role_repository.dart';
-import 'package:where_my_team/domain/repositories/team_repository.dart';
-import 'package:where_my_team/domain/repositories/user_repository.dart';
-import 'package:where_my_team/models/model_role.dart';
-import 'package:where_my_team/models/model_team.dart';
-import 'package:where_my_team/models/model_user.dart';
+import 'package:wmteam/di/di.dart';
+import 'package:wmteam/domain/repositories/role_repository.dart';
+import 'package:wmteam/domain/repositories/team_repository.dart';
+import 'package:wmteam/domain/repositories/user_repository.dart';
+import 'package:wmteam/models/model_role.dart';
+import 'package:wmteam/models/model_team.dart';
+import 'package:wmteam/models/model_user.dart';
 import 'model.dart';
 
 class ModelMember extends IModel {
